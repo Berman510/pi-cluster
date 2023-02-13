@@ -1,0 +1,38 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: unbound
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: pihole
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://savepointsam.github.io/charts'
+    targetRevision: 1.0.0
+    chart: unbound
+    helm:
+      parameters:
+        - name: unbound.port
+          value: '8053'
+        - name: clusterDomain
+          value: {{ domain }}
+      values: |
+        nodeSelector:
+          kubernetes.io/hostname: {{ pihole_node }}
+        service:
+          type: LoadBalancer
+          ports:
+            dns: 8053
+          loadBalancerIP: "{{ pihole_node_ip }}"
+  sources: []
+  project: home
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

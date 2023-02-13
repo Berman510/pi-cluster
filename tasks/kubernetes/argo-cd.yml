@@ -1,0 +1,81 @@
+---
+- name: Configure Argo-CD.
+  hosts: control_plane
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - ../../config.yml
+
+  environment:
+    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+
+  tasks:
+    - name: Create Argo-CD namespace.
+      k8s:
+        name: argo-cd
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Add Argo-CD chart repo.
+      kubernetes.core.helm_repository:
+        name: argo
+        repo_url: "https://argoproj.github.io/argo-helm"
+
+    - name: Deploy Argo-CD Helm chart.
+      kubernetes.core.helm:
+        name: argo-cd
+        chart_ref: argo/argo-cd
+        release_namespace: argo-cd
+        state: present
+        values:
+          params:
+            server.insecure: true
+            nodeSelector:
+              kubernetes.io/hostname: nanopi02
+          alertmanager:
+            enabled: false
+          controller:
+            metrics:
+              serviceMonitor:
+                enabled: true
+          configs:
+            secret:
+              argocdServerAdminPassword: "{{ argo_cd_admin_password }}"
+          server:
+            extraArgs:
+            - --insecure
+            service:
+              externalIPs:
+                - "{{ argo_cd_host_ip }}"
+              loadBalancerIP: "{{ argo_cd_host_ip }}"
+              type: "NodePort"
+            metrics:
+              serviceMonitor:
+                enabled: true
+            ingress:
+              enabled: true
+              hosts:
+                - "argocd.{{ domain }}"
+              paths:
+                - /
+              pathType: Prefix
+              https: false
+
+    - name: Deploy Argo Projects
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "../../templates/argo-cd/projects/home.yaml"
+    - name: Deploy Argo Apps
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "../../templates/argo-cd/applications/openspeedtest.yaml"
+        - "../../templates/argo-cd/applications/pihole.yaml"
+        - "../../templates/argo-cd/applications/unbound.yaml"
+        - "../../templates/argo-cd/applications/plex.yaml"

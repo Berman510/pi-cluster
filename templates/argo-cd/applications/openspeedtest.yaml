@@ -1,0 +1,36 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openspeedtest
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: openspeedtest
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://openspeedtest.github.io/Helm-chart'
+    targetRevision: 0.1.0
+    chart: openspeedtest
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          hosts:
+            - host: speedtest.{{ domain }}
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+        nodeSelector:
+          kubernetes.io/hostname: {{ openspeedtest_node }}
+  sources: []
+  project: home
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

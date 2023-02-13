@@ -1,0 +1,40 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: plex
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: plex
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://utkuozdemir.org/helm-charts'
+    targetRevision: 2.1.1
+    chart: plex
+    helm:
+      values: |
+        env:
+          TZ: PST
+        ingress:
+          enabled: true
+          hosts:
+            - host: plex.{{ domain }}
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+        nodeSelector:
+          kubernetes.io/hostname: {{ plex_node }}
+        service:
+          type: LoadBalancer
+
+  sources: []
+  project: home
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

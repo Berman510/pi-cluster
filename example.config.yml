@@ -1,0 +1,23 @@
+---
+storage_type: filesystem
+storage_nfs_dir: "srv"
+storage_nfs_share_name: nfsshare
+
+domain: "" # local domain
+gateway: "" # gateway ipv4 address
+subnet_cidr: ".0" # subnet cidr
+subnet_full_cidr: ".0.0.0/8" # full /8 to support IoT network VLAN
+
+argo_cd_host_name: # hostname of node for argo
+argo_cd_host_ip: # ipv4 address of node for argo host
+argo_cd_admin_password: $2y$10$SHW2FPelFcufdrA8OpclaOkLn3zMWhjdUJDj492idat4aARx3waxG # base64 "admin"
+argo_cd_repo: https://github.com/Berman510/pi-cluster.git
+argo_cd_repo_privatekey: # base64 encoded ssh private key
+
+plex_node: # hostname of node for plex
+
+pihole_node: # hostname of node for pihole
+pihole_node_ip: # ipv4 address of node for pihole
+pihole_passwd: admin
+
+openspeedtest_node: # hostname of node for openspeedtest
