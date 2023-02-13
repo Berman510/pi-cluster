@@ -79,3 +79,4 @@
         - "../../templates/argo-cd/applications/pihole.yaml"
         - "../../templates/argo-cd/applications/unbound.yaml"
         - "../../templates/argo-cd/applications/plex.yaml"
+        - "../../templates/argo-cd/applications/iperf.yaml"
