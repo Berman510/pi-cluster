@@ -1,0 +1,50 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homeassistant
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: homeassistant
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://k8s-at-home.com/charts/'
+    targetRevision: 13.4.2
+    chart: home-assistant
+    helm:
+      values: |
+        env:
+          TZ: PDT
+        nodeSelector:
+          kubernetes.io/hostname: {{ homeassistant_node }}
+        service:
+          main:
+            ports:
+              http:
+                port: 8123
+            type: LoadBalancer
+        ingress:
+          main:
+            enabled: true
+            hosts:
+              - host: homeassistant.bermanoc.net
+                paths:
+                  - path: /
+        persistence:
+          config:
+            enabled: false
+        metrics:
+          enabled: true
+          prometheusRule:
+            enabled: true
+  sources: []
+  project: home
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
