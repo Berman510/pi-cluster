@@ -19,10 +19,21 @@
     - name: Install common utils
       ansible.builtin.package:
         name:
+          - ca-certificates
           - nfs-common
           - vim
           - build-essential
           - lm-sensors
+          - python3-pip
+          - python3-setuptools
+          - python3-cryptography
+        state: present
+      become: true
+    - name: Ensure required Python libraries are installed.
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
         state: present
       become: true
     - name: Download K3s install script.
@@ -37,6 +48,82 @@
         state: present
         commands: ALL
         nopassword: true
+
+- name: Generate wildcard certificate
+  hosts: cluster
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Generate private key
+      openssl_privatekey:
+        path: "/etc/ssl/private/root.key"
+    - name: Generate CSR
+      openssl_csr:
+        path: "/etc/ssl/private/root.csr"
+        privatekey_path: "/etc/ssl/private/root.key"
+        country_name: US
+        organization_name: "Home"
+        common_name: "{{ domain }}"
+        subject_alt_name: "DNS:{{ master_node }},DNS:{{ master_node }}.{{ domain }}"
+    - name: Pull CSR
+      fetch: 
+        src: "/etc/ssl/private/root.csr"
+        dest: "{{ certs_dir }}/{{ inventory_hostname }}_root.csr"
+        flat: true
+
+- name: Sign wildcard certificate
+  hosts: local
+  gather_facts: true
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Sign CSR with CA key
+      connection: local
+      delegate_to: localhost
+      openssl_certificate:
+        path: "{{ certs_dir }}/root.crt"
+        csr_path: "{{ certs_dir }}/{{ inventory_hostname }}_root.csr"
+        ownca_path: "{{ certs_dir }}/root.crt"
+        ownca_privatekey_path: "{{ certs_dir }}/root.key"
+        provider: ownca
+
+- name: Push wildcard certificate
+  hosts: cluster
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Push certificate
+      copy:
+        src: "{{ certs_dir }}/root.crt"
+        dest: "/etc/ssl/certs/root.crt"
+    - name: Push CA
+      copy: 
+        src: "{{ certs_dir }}/root.crt"
+        dest: "/etc/ssl/private/root.pem"
+    - name: Update CA Trust
+      become: true
+      command: "update-ca-certificates"
+    - name: Build PKCS12 file containing key and cert
+      become: true
+      openssl_pkcs12:
+        action: export
+        path: "/etc/ssl/private/root.p12"
+        friendly_name: "{{ domain }}"
+        privatekey_path: "/etc/ssl/private/root.key"
+        certificate_path: "/etc/ssl/certs/root.crt"
+        other_certificates: "/etc/ssl/private/root.pem"
+        state: present
 
 - name: Configure storage node.
   hosts: storage
@@ -78,34 +165,27 @@
         - "cgroup_memory=1"
         - "cgroup_enable=memory"
       notify: reboot-pi
-
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
         ~/k3s_install.sh >> ~/k3s_install_log.txt
       args:
         chdir: "~"
         creates: /var/lib/rancher/k3s/server/node-token
-
     - name: Get node token.
       ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
       changed_when: false 
       register: node_token_output
-
     - name: Set node_token fact.
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
-
     - name: Ensure required dependencies are installed.
       ansible.builtin.package:
         name:
-          - python3-pip
-          - python3-setuptools
           - build-essential
           - golang
           - git
         state: present
       become: true
-
     - name: Ensure required Python libraries are installed.
       ansible.builtin.pip:
         name:
