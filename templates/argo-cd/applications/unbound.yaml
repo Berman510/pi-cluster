@@ -16,15 +16,11 @@ spec:
     chart: unbound
     helm:
       parameters:
-        - name: service.type
-          value: 'NodePort'
-        - name: service.ports.dns
-          value: '8053'
         - name: clusterDomain
           value: '{{ domain }}'
-        - name: unbound.port
-          value: '53'
       values: |
+        service:
+          clusterIP: '10.43.4.123'
         unbound:
           nodeSelector:
             kubernetes.io/hostname: {{ unbound_node }}

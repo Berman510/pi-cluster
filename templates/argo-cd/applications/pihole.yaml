@@ -17,11 +17,11 @@ spec:
     helm:
       parameters:
         - name: adminPassword
-          value: {{ pihole_passwd }}
+          value: '{{ pihole_passwd }}'
         - name: DNS1
-          value: unbound#53
-        #- name: DNS2
-        #  value: '/'
+          value: '10.43.4.123'
+        - name: DNS2
+          value: '/'
         - name: hostname
           value: pihole
         - name: image.tag
