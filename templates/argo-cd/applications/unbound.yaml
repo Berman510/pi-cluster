@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: pihole
+    namespace: dns
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://savepointsam.github.io/charts'
@@ -16,18 +16,18 @@ spec:
     chart: unbound
     helm:
       parameters:
-        - name: unbound.port
+        - name: service.type
+          value: 'NodePort'
+        - name: service.ports.dns
           value: '8053'
         - name: clusterDomain
-          value: {{ domain }}
+          value: '{{ domain }}'
+        - name: unbound.port
+          value: '53'
       values: |
-        nodeSelector:
-          kubernetes.io/hostname: {{ pihole_node }}
-        service:
-          type: LoadBalancer
-          ports:
-            dns: 8053
-          loadBalancerIP: "{{ pihole_node_ip }}"
+        unbound:
+          nodeSelector:
+            kubernetes.io/hostname: {{ unbound_node }}
   sources: []
   project: home
   syncPolicy:

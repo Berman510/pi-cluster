@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: pihole
+    namespace: dns
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://mojo2600.github.io/pihole-kubernetes'
@@ -19,7 +19,9 @@ spec:
         - name: adminPassword
           value: {{ pihole_passwd }}
         - name: DNS1
-          value: {{ pihole_node_ip }}#8053
+          value: unbound#53
+        #- name: DNS2
+        #  value: '/'
         - name: hostname
           value: pihole
         - name: image.tag
@@ -27,7 +29,7 @@ spec:
         - name: ingress.enabled
           value: 'true'
         - name: ingress.path
-          value: '/admin'
+          value: '/'
         - name: 'ingress.hosts[0]'
           value: 'pihole.{{ domain }}'
         - name: virtualHost
@@ -41,6 +43,10 @@ spec:
         - name: monitoring.sidecar.enabled
           value: 'true'
       values: |
+        image:
+          repository: "pihole/pihole"
+          tag: 2023.02.2
+          pullPolicy: IfNotPresent
         serviceDns:
           type: LoadBalancer
           loadBalancerIP: "{{ pihole_node_ip }}"
@@ -65,6 +71,7 @@ spec:
                 memory: 128Mi
         persistentVolumeClaim:
           enabled: true
+          storageClass: nfs-client
         dnsmasq:
             additionalHostsEntries:
                 - 10.17.84.2      rpi rpi.bermanoc.net
