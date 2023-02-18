@@ -19,10 +19,21 @@
     - name: Install common utils
       ansible.builtin.package:
         name:
+          - ca-certificates
           - nfs-common
           - vim
           - build-essential
           - lm-sensors
+          - python3-pip
+          - python3-setuptools
+          - python3-cryptography
+        state: present
+      become: true
+    - name: Ensure required Python libraries are installed.
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
         state: present
       become: true
     - name: Download K3s install script.
@@ -37,6 +48,10 @@
         state: present
         commands: ALL
         nopassword: true
+
+- name: Set up Certificates
+  import_playbook: tasks/certs/ca-root.yml
+  tags: ['certs']
 
 - name: Configure storage node.
   hosts: storage
@@ -78,34 +93,27 @@
         - "cgroup_memory=1"
         - "cgroup_enable=memory"
       notify: reboot-pi
-
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
         ~/k3s_install.sh >> ~/k3s_install_log.txt
       args:
         chdir: "~"
         creates: /var/lib/rancher/k3s/server/node-token
-
     - name: Get node token.
       ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
       changed_when: false 
       register: node_token_output
-
     - name: Set node_token fact.
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
-
     - name: Ensure required dependencies are installed.
       ansible.builtin.package:
         name:
-          - python3-pip
-          - python3-setuptools
           - build-essential
           - golang
           - git
         state: present
       become: true
-
     - name: Ensure required Python libraries are installed.
       ansible.builtin.pip:
         name:

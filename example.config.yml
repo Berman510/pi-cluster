@@ -3,21 +3,29 @@ storage_type: filesystem
 storage_nfs_dir: "srv"
 storage_nfs_share_name: nfsshare
 
-domain: "" # local domain
-gateway: "" # gateway ipv4 address
-subnet_cidr: ".0" # subnet cidr
-subnet_full_cidr: ".0.0.0/8" # full /8 to support IoT network VLAN
+master_node: 'node01'
+certs_dir: '/foo/bar/certs'
+domain: 'example.net'
+gateway: '192.168.1.1'
+subnet_cidr: "192.168.1.0/24"
+subnet_full_cidr: "192.0.0.0/8"
 
-argo_cd_host_name: # hostname of node for argo
-argo_cd_host_ip: # ipv4 address of node for argo host
-argo_cd_admin_password: $2y$10$SHW2FPelFcufdrA8OpclaOkLn3zMWhjdUJDj492idat4aARx3waxG # base64 "admin"
-argo_cd_repo: https://github.com/Berman510/pi-cluster.git
-argo_cd_repo_privatekey: # base64 encoded ssh private key
+argo_cd_host_name: node02
+argo_cd_host_ip: 192.168.1.2
+argo_cd_admin_password: $2y$10$SHW2FPelFcufdrA8OpclaOkLn3zMWhjdUJDj492idat4aARx3waxG # "admin"
 
-plex_node: # hostname of node for plex
+plex_node: node02
 
-pihole_node: # hostname of node for pihole
-pihole_node_ip: # ipv4 address of node for pihole
+pihole_node: node01
+pihole_node_ip: 192.168.1.11
 pihole_passwd: admin
 
-openspeedtest_node: # hostname of node for openspeedtest
+unbound_node: node01
+unbound_node_ip: 192.168.1.11
+
+openspeedtest_node: node01
+
+iperf_node: node02
+
+homeassistant_node: node01
+homeassistant_node_ip: 192.168.1.11
