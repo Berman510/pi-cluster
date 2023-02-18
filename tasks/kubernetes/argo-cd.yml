@@ -81,4 +81,6 @@
         - "../../templates/argo-cd/applications/plex.yaml"
         - "../../templates/argo-cd/applications/iperf.yaml"
         - "../../templates/argo-cd/applications/homeassistant.yaml"
-#        - "../../templates/argo-cd/applications/cert-manager.yaml"
+        - "../../templates/argo-cd/applications/cert-manager.yaml"
+        - "../../templates/argo-cd/applications/ca-issuer.yaml"
+        - "../../templates/argo-cd/applications/cert.yaml"

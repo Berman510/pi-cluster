@@ -1,0 +1,52 @@
+---
+- name: Generate wildcard certificate
+  hosts: cluster
+  gather_facts: true
+  become: true
+
+  vars_files:
+    - ../../config.yml
+
+  tasks:
+    - name: Check if certificate and key files exist
+      stat:
+        path: "/etc/ssl/certs/{{ domain }}.crt"
+      register: cert_file_stat
+
+    - name: Generate private key and CSR if files do not exist
+      block:
+        - name: Generate private key
+          openssl_privatekey:
+            path: "/etc/ssl/private/{{ domain }}.key"
+        - name: Generate CSR
+          openssl_csr:
+            path: "/etc/ssl/private/{{ domain }}.csr"
+            privatekey_path: "/etc/ssl/private/{{ domain }}.key"
+            country_name: US
+            organization_name: "Home"
+            common_name: "{{ domain }}"
+            subject_alt_name: "DNS:{{ inventory_hostname }},DNS:{{ ansible_fqdn }}"
+        - name: Pull CSR
+          fetch: 
+            src: "/etc/ssl/private/{{ domain }}.csr"
+            dest: "{{ certs_dir }}/{{ inventory_hostname }}.{{ domain }}.csr"
+            flat: true
+        - name: Sign CSR with CA key
+          connection: local
+          delegate_to: localhost
+          command: openssl x509 -req -in {{ certs_dir }}/{{ inventory_hostname }}.{{ domain }}.csr -CA {{ certs_dir }}/root.crt -CAkey {{ certs_dir }}/root.key -CAcreateserial -out {{ certs_dir }}/{{ inventory_hostname }}.{{ domain }}.crt -days 3650
+        - name: Push certificate
+          copy:
+            src: "{{ certs_dir }}/{{ inventory_hostname }}.{{ domain }}.crt"
+            dest: "/etc/ssl/certs/{{ domain }}.crt"
+        - name: Push CA
+          copy: 
+            src: "{{ certs_dir }}/root.crt"
+            dest: "/etc/ssl/private/root.pem"
+        - name: Update CA Trust
+          become: true
+          command: "update-ca-certificates"
+        - name: Build PKCS12 file containing key and cert
+          become: true
+          command: 'nohup openssl pkcs12 -export -in /etc/ssl/certs/{{ domain }}.crt -inkey /etc/ssl/private/{{ domain }}.key -certfile /etc/ssl/private/root.pem -out /etc/ssl/private/{{ domain }}.p12 -nodes --password pass:'
+      when: not cert_file_stat.stat.exists
