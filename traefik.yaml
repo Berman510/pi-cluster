@@ -2,18 +2,10 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: traefik-crd
-  namespace: kube-system
-spec:
-  chart: https://%{KUBERNETES_API}%/static/charts/traefik-crd-20.3.1+up20.3.0.tgz
----
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
-metadata:
   name: traefik
   namespace: kube-system
 spec:
-  chart: https://%{KUBERNETES_API}%/static/charts/traefik-20.3.1+up20.3.0.tgz
+  chart: https://%{KUBERNETES_API}%/static/charts/traefik-21.1.0.tgz
   set:
     global.systemDefaultRegistry: ""
   valuesContent: |-

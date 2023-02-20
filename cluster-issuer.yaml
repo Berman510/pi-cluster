@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+  namespace: cert-manager
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: "cberman@gmail.com"
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - selector:
+        dnsZones:
+          - "bermanoc.net"
+      dns01:
+        route53:
+          region: us-west-2
+          accessKeyID: AKIAUVV6APDXQWJ3K2KF
+          secretAccessKeySecretRef:
+            name: acme-route53
+            key: secret-access-key

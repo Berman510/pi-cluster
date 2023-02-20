@@ -1,0 +1,43 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-monitoring
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cluster-monitoring
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 45.1.1
+    chart: kube-prometheus-stack
+    helm:
+      values: |
+          alertmanager:
+            enabled: false
+          ingress:
+            enabled: true
+            hosts:
+              - prometheus.bermanoc.net
+            path: /
+          grafana:
+            ingress:
+              enabled: true
+              hosts:
+                - grafana.bermanoc.net
+              path: /
+          sidecar:
+            dashboards:
+              enabled: true
+
+  sources: []
+  project: home
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
