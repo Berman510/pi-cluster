@@ -23,9 +23,6 @@
         state: present
         definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
       with_fileglob:
-        #- "../../templates/argo-cd/applications/traefik-crd.yaml"
-        #- "../../templates/argo-cd/applications/traefik.yaml"
-        #- "../../templates/argo-cd/applications/cluster-monitoring.yaml"
         - "../../templates/argo-cd/applications/openspeedtest.yaml"
         - "../../templates/argo-cd/applications/pihole.yaml"
         - "../../templates/argo-cd/applications/unbound.yaml"
@@ -35,3 +32,6 @@
         - "../../templates/argo-cd/applications/cert-manager.yaml"
         #- "../../templates/argo-cd/applications/ca-issuer.yaml"
         #- "../../templates/argo-cd/applications/cert.yaml"
+        #- "../../templates/argo-cd/applications/traefik-crd.yaml"
+        #- "../../templates/argo-cd/applications/traefik.yaml"
+        #- "../../templates/argo-cd/applications/cluster-monitoring.yaml"

@@ -21,7 +21,7 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
-            - host: speedtest.bermanoc.com
+            - host: speedtest.{{ domain }}
               paths:
                 - path: /
                   pathType: ImplementationSpecific
