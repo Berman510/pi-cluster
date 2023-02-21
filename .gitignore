@@ -1,3 +1,4 @@
 config.yml
-hosts.ini
+hosts.yml
 certs
+personal/**

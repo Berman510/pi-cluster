@@ -30,13 +30,13 @@
           ingress:
             enabled: true
             hosts:
-              - prometheus.bermanoc.net
+              - prometheus.{{ domain }}
             path: /
           grafana:
             ingress:
               enabled: true
               hosts:
-                - grafana.bermanoc.net
+                - grafana.{{ domain }}
               path: /
           sidecar:
             dashboards:

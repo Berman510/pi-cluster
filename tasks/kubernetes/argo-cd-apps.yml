@@ -1,0 +1,37 @@
+---
+- name: Configure Argo-CD.
+  hosts: control_plane
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - ../../config.yml
+
+  environment:
+    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+
+  tasks:
+    - name: Deploy Argo Projects
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "../../templates/argo-cd/projects/home.yaml"
+    - name: Deploy Argo Apps
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+      with_fileglob:
+        - "../../templates/argo-cd/applications/openspeedtest.yaml"
+        - "../../templates/argo-cd/applications/pihole.yaml"
+        - "../../templates/argo-cd/applications/unbound.yaml"
+        - "../../templates/argo-cd/applications/plex.yaml"
+        - "../../templates/argo-cd/applications/iperf.yaml"
+        - "../../templates/argo-cd/applications/homeassistant.yaml"
+        - "../../templates/argo-cd/applications/cert-manager.yaml"
+        #- "../../templates/argo-cd/applications/ca-issuer.yaml"
+        #- "../../templates/argo-cd/applications/cert.yaml"
+        #- "../../templates/argo-cd/applications/traefik-crd.yaml"
+        #- "../../templates/argo-cd/applications/traefik.yaml"
+        #- "../../templates/argo-cd/applications/cluster-monitoring.yaml"

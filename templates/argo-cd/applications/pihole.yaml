@@ -75,20 +75,25 @@ spec:
         dnsmasq:
             additionalHostsEntries:
                 - 10.17.84.2      rpi rpi.bermanoc.net
+                - 10.17.84.2      homeassistant.bermanoc.net homeassistant.bermanoc.com
                 - 10.17.84.3      controller controller.bermanoc.net
                 - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+                - 10.17.84.21     speedtest.bermanoc.net speedtest.bermanoc.com
+                - 10.17.84.21     grafana.bermanoc.net grafana.bermanoc.com
                 - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+                - 10.17.84.22     argocd.bermanoc.net argocd.bermanoc.com
+                - 10.17.84.22     plex.bermanoc.net plex.bermanoc.com
+                - 10.17.84.22     pihole.bermanoc.net pihole.bermanoc.com
                 - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
                 - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+                - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
                 - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
-                - 10.0.69.35      nicole-galaxy nicole-galaxy.bermanoc.net
-            customCnameEntries:
-                - cname=speedtest.bermanoc.net,nanopi02.bermanoc.net
-                - cname=pihole.bermanoc.net,nanopi02.bermanoc.net
-                - cname=rtorrent.bermanoc.net,nanopi01.bermanoc.net
-                - cname=argocd.bermanoc.net,nanopi01.bermanoc.net
-                - cname=plex.bermanoc.net,nanopi01.bermanoc.net
-                - cname=homeassistant.bermanoc.net,rpi.bermanoc.net
+                - 10.17.84.151    hue hue.bermanoc.net
+                - 10.17.84.162    lgtv lgtv.bermanoc.net
+                - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+                - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+                - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+                - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
         whitelist:
             - 0.client-channel.google.com
             - 1drv.com

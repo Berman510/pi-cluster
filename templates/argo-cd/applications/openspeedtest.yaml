@@ -18,6 +18,8 @@ spec:
       values: |
         ingress:
           enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
             - host: speedtest.{{ domain }}
               paths:

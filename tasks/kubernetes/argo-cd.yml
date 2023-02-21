@@ -64,23 +64,3 @@
               pathType: Prefix
               https: false
 
-    - name: Deploy Argo Projects
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-      with_fileglob:
-        - "../../templates/argo-cd/projects/home.yaml"
-    - name: Deploy Argo Apps
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-      with_fileglob:
-        - "../../templates/argo-cd/applications/openspeedtest.yaml"
-        - "../../templates/argo-cd/applications/pihole.yaml"
-        - "../../templates/argo-cd/applications/unbound.yaml"
-        - "../../templates/argo-cd/applications/plex.yaml"
-        - "../../templates/argo-cd/applications/iperf.yaml"
-        - "../../templates/argo-cd/applications/homeassistant.yaml"
-        - "../../templates/argo-cd/applications/cert-manager.yaml"
-        - "../../templates/argo-cd/applications/ca-issuer.yaml"
-        - "../../templates/argo-cd/applications/cert.yaml"
