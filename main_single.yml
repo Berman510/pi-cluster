@@ -1,0 +1,148 @@
+---
+- name: Set up cluster-wide configuration.
+  hosts: control_plane
+  gather_facts: false
+  become: true
+
+  handlers:
+    - name: reboot-pi
+      ansible.builtin.reboot:
+    - name: restart-nfs
+      ansible.builtin.service:
+        name: nfs-server
+        state: restarted
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Install common utils
+      ansible.builtin.package:
+        name:
+          - ca-certificates
+          - nfs-common
+          - vim
+          - build-essential
+          - lm-sensors
+          - python3-pip
+          - python3-setuptools
+          - python3-cryptography
+        state: present
+      become: true
+    - name: Ensure required Python libraries are installed.
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
+        state: present
+      become: true
+    - name: Download K3s install script.
+      ansible.builtin.get_url:
+        url: https://get.k3s.io
+        dest: "~/k3s_install.sh"
+        mode: a+x
+    - name: Add user to sudo with NOPASSWD
+      community.general.sudoers:
+        name: "010_{{ ansible_user }}-nopasswd"
+        user: "{{ ansible_user }}"
+        state: present
+        commands: ALL
+        nopassword: true
+
+- name: Set up Certificates
+  import_playbook: tasks/certs/ca-root.yml
+  tags: ['certs']
+
+- name: Configure storage node.
+  hosts: control_plane
+  gather_facts: true
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Set up mount.
+      ansible.posix.mount:
+        path: "/srv"
+        src: UUID="{{ ansible_devices.sda.partitions.sda1.uuid }}"
+        fstype: ext4
+        opts: rw,auto
+        dump: '1'
+        state: mounted
+      when: ansible_devices.sda.partitions.sda1.uuid is defined
+    - name: Set up storage.
+      include_tasks: tasks/storage/{{ storage_type }}.yml
+
+
+- name: Configure the control plane.
+  hosts: control_plane
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Ensure cgroups are configured correctly in cmdline.txt.
+      ansible.builtin.replace:
+        path: /boot/cmdline.txt
+        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_items:
+        - "cgroup_memory=1"
+        - "cgroup_enable=memory"
+      notify: reboot-pi
+    - name: Install K3s on control plane (takes a while).
+      ansible.builtin.shell: >-
+        ~/k3s_install.sh >> ~/k3s_install_log.txt
+      args:
+        chdir: "~"
+        creates: /var/lib/rancher/k3s/server/node-token
+    - name: Get node token.
+      ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
+      changed_when: false 
+      register: node_token_output
+    - name: Set node_token fact.
+      ansible.builtin.set_fact:
+        node_token: "{{ node_token_output.stdout_lines[0] }}"
+    - name: Ensure required dependencies are installed.
+      ansible.builtin.package:
+        name:
+          - build-essential
+          - golang
+          - git
+        state: present
+      become: true
+    - name: Ensure required Python libraries are installed.
+      ansible.builtin.pip:
+        name:
+          - openshift
+          - pyyaml
+          - python3-pip
+          - python3-setuptools
+          - build-essential
+          - golang
+          - git
+        state: present
+      become: true
+
+- name: Set up Helm.
+  import_playbook: tasks/kubernetes/helm.yml
+  tags: ['helm']
+
+- name: Set up NFS PVCs.
+  import_playbook: tasks/kubernetes/nfs.yml
+  tags: ['nfs']
+
+- name: Set up Prometheus.
+  import_playbook: tasks/kubernetes/prometheus.yml
+  tags: ['prometheus']
+
+- name: Set up ArgoCD.
+  import_playbook: tasks/kubernetes/argo-cd.yml
+  tags: ['argo-cd']
+
+- name: Set up ArgoCD Apps.
+  import_playbook: tasks/kubernetes/argo-cd-apps.yml
+  tags: ['argo-cd']

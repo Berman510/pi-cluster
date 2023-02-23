@@ -15,7 +15,8 @@ declare -g ssh_passwd
 declare -g ssh_user
 
 usage() {
-    echo "Usage: $(basename $0) [-s|-m] -cp <control_plane_prefix> -u <ssh_user> [-np <nodes_prefix>] [-p <STORAGE_DEV>]" >&2
+    echo "Usage: $(basename $0) [-s|-m] -cp <control_plane_prefix> -u <ssh_user> \
+        [-np <nodes_prefix>] [-nfs <storage_host>]" >&2
     exit 1
 }
 
@@ -110,8 +111,7 @@ function host_inventory() {
     for host in ${(@k)arp_list}; do
         if [[ "$host" == "$control_plane_prefix"* ]]; then
             ip=${arp_list[$host]//[()]/}
-            printf "    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n\n" \
-                "$host" "$ip" "$ssh_dir" "$ssh_key"
+            printf "    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n\n" "$host" "$ip" "$ssh_dir" "$ssh_key"
             cluster_members[$host]="$ip"
         fi
     done
@@ -122,8 +122,7 @@ function host_inventory() {
         for host in ${(@k)arp_list}; do
             if [[ "$host" == "$nodes_prefix"* ]]; then
                 ip=${arp_list[$host]//[()]/}
-                printf "    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n" \
-                    "$host" "$ip" "$ssh_dir" "$ssh_key"
+                printf "    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n" "$host" "$ip" "$ssh_dir" "$ssh_key"
                 cluster_members[$host]="$ip"
             fi
         done
@@ -147,6 +146,12 @@ function host_inventory() {
                 "$host" "$ip" "$ssh_dir" "$ssh_key"
         fi
         printf "\ncluster:\n  children:\n    control_plane:\n    nodes:\n"
+    elif [[ $cluster_mode == "single" ]]; then
+        for host in ${(@k)cluster_members}; do
+            ip=${cluster_members[$host]//[()]/}
+            printf "\nstorage:\n  hosts:\n    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n" \
+                "$host" "$ip" "$ssh_dir" "$ssh_key"
+        done
     fi
 }
 
