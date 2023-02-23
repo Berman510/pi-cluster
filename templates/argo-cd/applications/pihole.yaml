@@ -84,6 +84,7 @@ spec:
                 - 10.17.84.22     argocd.bermanoc.net argocd.bermanoc.com
                 - 10.17.84.22     plex.bermanoc.net plex.bermanoc.com
                 - 10.17.84.22     pihole.bermanoc.net pihole.bermanoc.com
+                - 10.17.84.23     rpi3 rpi3.bermanoc.net
                 - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
                 - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
                 - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
