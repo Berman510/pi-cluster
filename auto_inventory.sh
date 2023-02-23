@@ -113,6 +113,7 @@ function host_inventory() {
             ip=${arp_list[$host]//[()]/}
             printf "    %s:\n      ansible_host: %s\n      ansible_ssh_private_key_file: %s%s\n\n" "$host" "$ip" "$ssh_dir" "$ssh_key"
             cluster_members[$host]="$ip"
+            break
         fi
     done
 
