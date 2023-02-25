@@ -1,5 +1,8 @@
 # Raspberry Pi Cluster
 
+### TODO:
+Update README with steps for auto_inventory.sh usage! Below steps are remnants of geerlingguy's pi-cluster repo and still mostly apply.
+
 ## Usage
 
   1. Make sure you have [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed.
