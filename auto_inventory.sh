@@ -1,5 +1,5 @@
 #!/bin/zsh
-hosts_file="hosts.yaml"
+hosts_file="hosts.yml"
 ssh_dir="${HOME}/.ssh/"
 ssh_key="id_rsa_pi_cluster"
 ssh_key_path=${ssh_dir}${ssh_key}

@@ -19,7 +19,7 @@ spec:
         nodeSelector:
           kubernetes.io/hostname: {{ homeassistant_node }}
         image:
-          tag: latest
+          tag: stable
         hostNetwork: true
         dnsPolicy: ClusterFirstWithHostNet
         service:
@@ -31,7 +31,10 @@ spec:
                 login_attempts_threshold: 5
                 use_x_forwarded_for: true
                 trusted_proxies:
-                  - 10.42.0.79
+                  - 10.43.253.20
+                  - 10.42.0.0/16
+                  - 10.43.0.0/16
+                  - 10.17.84.0/24
                 port: 8123
             type: NodePort
         ingress:
@@ -73,7 +76,61 @@ spec:
             enabled: true
             type: hostPath
             hostPath: '/dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_61600129-if01-port0'
-
+        metrics:
+          enabled: true
+          serviceMonitor:
+            interval: 1m
+            scrapeTimeout: 30s
+        mariadb:
+          enabled: true
+          architecture: standalone
+          image:
+            tag: 10.6.12
+          auth:
+            database: home-assistant
+            username: home-assistant
+            password: home-assistant-pass
+            rootPassword: home-assistantrootpass
+          primary:
+            persistence:
+              accessModes:
+                - ReadWriteOnce
+              enabled: false
+              storageClass: nfs-client
+        influxdb:
+          enabled: true
+          image:
+            tag: 2.6.1
+          architecture: standalone
+          database: home_assistant
+          authEnabled: false
+          persistence:
+            enabled: true
+            storageClass: "nfs-client"
+            size: 8Gi
+        postgresql:
+          enabled: true
+          image:
+            repository: bitnami/postgresql
+            tag: 11.19.0
+          postgresqlUsername: home-assistant
+          postgresqlPassword: home-assistant-pass
+          postgresqlDatabase: home-assistant
+          persistence:
+            primary:
+              enabled: true
+              storageClass: "nfs-client"
+        addons:
+          codeserver:
+            enabled: true
+            args:
+              - --auth
+              - none
+              - --user-data-dir
+              - /data/config/.vscode
+            volumeMounts:
+            - name: config
+              mountPath: /data/config
   sources: []
   project: home
   syncPolicy:
