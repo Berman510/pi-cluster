@@ -11,15 +11,16 @@ spec:
     namespace: homeassistant
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://helm.samipsolutions.fi/'
-    targetRevision: 16.1.2
+    repoURL: 'https://k8s-at-home.com/charts/'
+    #targetRevision: 13.4.2
     chart: home-assistant
     helm:
       values: |
         nodeSelector:
           kubernetes.io/hostname: {{ homeassistant_node }}
         image:
-          tag: stable
+          tag: latest
+          pullPolicy: IfNotPresent
         hostNetwork: true
         dnsPolicy: ClusterFirstWithHostNet
         service:
@@ -35,23 +36,24 @@ spec:
                   - 10.42.0.0/16
                   - 10.43.0.0/16
                   - 10.17.84.0/24
+                  - 10.42.1.93
                 port: 8123
             type: NodePort
         ingress:
           main:
             enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod
-              nginx.org/websocket-services: home-assistant
+            #annotations:
+            #  cert-manager.io/cluster-issuer: letsencrypt-prod
+            #  nginx.org/websocket-services: home-assistant
             hosts:
               - host: 'homeassistant.{{ domain }}'
                 paths:
                   - path: '/'
                     pathType: Prefix
-            tls:
-              - secretName: letsencrypt-ca
-                hosts:
-                  - homeassistant.{{ domain }}
+            #tls:
+            #  - secretName: letsencrypt-ca
+            #    hosts:
+            #      - homeassistant.{{ domain }}
         securityContext:
           privileged: true
         persistence:

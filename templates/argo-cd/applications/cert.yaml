@@ -8,6 +8,7 @@ spec:
   commonName: "*.{{ domain }}"
   dnsNames:
     - "*.{{ domain }}"
+    - "{{ domain }}"
   secretName: my-cert-tls
   issuerRef:
     name: my-ca-issuer
