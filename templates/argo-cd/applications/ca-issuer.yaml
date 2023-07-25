@@ -29,26 +29,3 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
     group: cert-manager.io
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: letsencrypt-ca
-  namespace: homeassistant
-spec:
-  ca:
-    secretName: letsencrypt-ca
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: letsencrypt-ca
-  namespace: homeassistant
-spec:
-  isCA: true
-  commonName: osm-system
-  secretName: letsencrypt-ca
-  issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-    group: cert-manager.io

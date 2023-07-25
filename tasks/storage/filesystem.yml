@@ -15,10 +15,10 @@
 - name: Configure NFS exports.
   ansible.builtin.lineinfile:
     dest: /etc/exports
-    line: "/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}    *(rw,sync,no_root_squash)"
+    line: "/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}    *(rw,sync,no_root_squash,subtree_check)"
     regexp: ".*"
     create: true
-  notify: restart-nfs
+  #notify: restart-nfs
 
 - name: Ensure NFS is started and enabled at boot.
   ansible.builtin.service:

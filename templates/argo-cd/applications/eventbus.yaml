@@ -1,0 +1,10 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+  namespace: events
+spec:
+  jetstream:
+    version: 2.9.9
+    replicas: 3

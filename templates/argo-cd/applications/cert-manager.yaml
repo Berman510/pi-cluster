@@ -14,11 +14,14 @@ spec:
     targetRevision: 1.11.0
     helm:
       releaseName: cert-manager
-      params:
-        - name: installCRDs
-          value: "true"
-        - name: prometheus.enabled
-          value: "true"
+      values: |
+        clusterResourceNamespace: "cert-manager"
+        namespace: "cert-manager"
+        installCRDs: true
+        prometheus:
+          enabled: true
+        startupapicheck:
+          timeout: 5m
 
   sources: []
   project: home

@@ -1,0 +1,1844 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimestamp: "2023-03-20T22:06:04Z"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  generation: 43
+  name: pihole
+  namespace: argo-cd
+  resourceVersion: "1018280"
+  uid: 5cb11311-cf26-44d0-bc2f-016cd28e90e9
+spec:
+  destination:
+    namespace: dns
+    server: https://kubernetes.default.svc
+  project: home
+  source:
+    chart: pihole
+    helm:
+      parameters:
+      - name: adminPassword
+        value: admin
+      - name: DNS1
+        value: 1.1.1.1
+      - name: DNS2
+        value: 8.8.8.8
+      - name: hostname
+        value: pihole
+      - name: image.tag
+        value: latest
+      - name: ingress.enabled
+        value: "true"
+      - name: ingress.path
+        value: /
+      - name: ingress.hosts[0]
+        value: pihole.bermanoc.net
+      - name: virtualHost
+        value: pihole.bermanoc.net
+      - name: persistentVolumeClaim.enabled
+        value: "true"
+      - name: persistentVolumeClaim.size
+        value: 800Mi
+      - name: monitoring.podMonitor.enabled
+        value: "true"
+      - name: monitoring.sidecar.enabled
+        value: "true"
+      values: |
+        image:
+          repository: "pihole/pihole"
+          tag: 2023.02.2
+          pullPolicy: IfNotPresent
+        serviceDns:
+          type: LoadBalancer
+          loadBalancerIP: "10.17.84.21"
+        nodeSelector:
+          kubernetes.io/hostname: nanopi01
+        affinity:
+        podAnnotations:
+          prometheus.io/port: '9617'
+          prometheus.io/scrape: 'true'
+        monitoring:
+          podMonitor:
+            enabled: true
+          sidecar:
+            enabled: true
+            port: 9617
+            image:
+              repository: ekofr/pihole-exporter
+              tag: v0.3.0
+              pullPolicy: IfNotPresent
+            resources:
+              limits:
+                memory: 128Mi
+        persistentVolumeClaim:
+          enabled: true
+          storageClass: local-path
+          accessModes:
+            - ReadWriteOnce
+          size: 500Mi
+        dnsmasq:
+            additionalHostsEntries:
+                - 10.17.84.2      homeassistant homeassistant.bermanoc.net
+                - 10.17.84.3      controller controller.bermanoc.net
+                - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+                - 10.17.84.21     speedtest.bermanoc.net
+                - 10.17.84.21     grafana.bermanoc.net
+                - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+                - 10.17.84.21     argocd.bermanoc.net
+                - 10.17.84.21     prometheus.bermanoc.net
+                - 10.17.84.22     plex.bermanoc.net
+                - 10.17.84.22     pihole.bermanoc.net
+                - 10.17.84.23     rpi3 rpi3.bermanoc.net
+                - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
+                - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+                - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
+                - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
+                - 10.17.84.151    hue hue.bermanoc.net
+                - 10.17.84.162    lgtv lgtv.bermanoc.net
+                - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+                - 10.17.84.213    homeassistant-wifi.bermanoc.net
+                - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+                - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+                - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
+        whitelist:
+            - 0.client-channel.google.com
+            - 1drv.com
+            - 2.android.pool.ntp.org
+            - akamaihd.net
+            - akamaitechnologies.com
+            - akamaized.net
+            - amazonaws.com
+            - android.clients.google.com
+            - api.ipify.org
+            - api.rlje.net
+            - app-api.ted.com
+            - appleid.apple.com
+            - apps.skype.com
+            - appsbackup-pa.clients6.google.com
+            - appsbackup-pa.googleapis.com
+            - apt.sonarr.tv
+            - aspnetcdn.com
+            - attestation.xboxlive.com
+            - ax.phobos.apple.com.edgesuite.net
+            - brightcove.net
+            - c.s-microsoft.com
+            - cdn.cloudflare.net
+            - cdn.embedly.com
+            - cdn.optimizely.com
+            - cdn.vidible.tv
+            - cdn2.optimizely.com
+            - cdn3.optimizely.com
+            - cdnjs.cloudflare.com
+            - cert.mgt.xboxlive.com
+            - clientconfig.passport.net
+            - clients1.google.com
+            - clients2.google.com
+            - clients3.google.com
+            - clients4.google.com
+            - clients5.google.com
+            - clients6.google.com
+            - cpms.spop10.ams.plex.bz
+            - cpms35.spop10.ams.plex.bz
+            - cse.google.com
+            - ctldl.windowsupdate.com
+            - d2c8v52ll5s99u.cloudfront.net
+            - d2gatte9o95jao.cloudfront.net
+            - dashboard.plex.tv
+            - dataplicity.com
+            - def-vef.xboxlive.com
+            - delivery.vidible.tv
+            - dev.virtualearth.net
+            - device.auth.xboxlive.com
+            - display.ugc.bazaarvoice.com
+            - displaycatalog.mp.microsoft.com
+            - dl.delivery.mp.microsoft.com
+            - dl.dropbox.com
+            - dl.dropboxusercontent.com
+            - dns.msftncsi.com
+            - download.sonarr.tv
+            - drift.com
+            - driftt.com
+            - dynupdate.no-ip.com
+            - ecn.dev.virtualearth.net
+            - edge.api.brightcove.com
+            - eds.xboxlive.com
+            - fonts.gstatic.com
+            - forums.sonarr.tv
+            - g.live.com
+            - geo-prod.do.dsp.mp.microsoft.com
+            - geo3.ggpht.com
+            - giphy.com
+            - github.com
+            - github.io
+            - googleapis.com
+            - gravatar.com
+            - gstatic.com
+            - help.ui.xboxlive.com
+            - hls.ted.com
+            - i.ytimg.com
+            - i1.ytimg.com
+            - imagesak.secureserver.net
+            - img.vidible.tv
+            - imgix.net
+            - imgs.xkcd.com
+            - instantmessaging-pa.googleapis.com
+            - intercom.io
+            - jquery.com
+            - jsdelivr.net
+            - keystone.mwbsys.com
+            - lastfm-img2.akamaized.net
+            - licensing.xboxlive.com
+            - live.com
+            - login.live.com
+            - login.microsoftonline.com
+            - manifest.googlevideo.com
+            - meta-db-worker02.pop.ric.plex.bz
+            - meta.plex.bz
+            - meta.plex.tv
+            - microsoftonline.com
+            - msftncsi.com
+            - my.plexapp.com
+            - nexusrules.officeapps.live.com
+            - npr-news.streaming.adswizz.com
+            - nine.plugins.plexapp.com
+            - no-ip.com
+            - node.plexapp.com
+            - notify.xboxlive.com
+            - ns1.dropbox.com
+            - ns2.dropbox.com
+            - o1.email.plex.tv
+            - o2.sg0.plex.tv
+            - ocsp.apple.com
+            - office.com
+            - office.net
+            - office365.com
+            - officeclient.microsoft.com
+            - om.cbsi.com
+            - onedrive.live.com
+            - outlook.live.com
+            - outlook.office365.com
+            - placehold.it
+            - placeholdit.imgix.net
+            - players.brightcove.net
+            - pricelist.skype.com
+            - products.office.com
+            - proxy.plex.bz
+            - proxy.plex.tv
+            - proxy02.pop.ord.plex.bz
+            - pubsub.plex.bz
+            - pubsub.plex.tv
+            - raw.githubusercontent.com
+            - redirector.googlevideo.com
+            - res.cloudinary.com
+            - s.gateway.messenger.live.com
+            - s.marketwatch.com
+            - s.youtube.com
+            - s.ytimg.com
+            - s1.wp.com
+            - s2.youtube.com
+            - s3.amazonaws.com
+            - sa.symcb.com
+            - secure.avangate.com
+            - secure.brightcove.com
+            - secure.surveymonkey.com
+            - services.sonarr.tv
+            - skyhook.sonarr.tv
+            - spclient.wg.spotify.com
+            - ssl.p.jwpcdn.com
+            - staging.plex.tv
+            - status.plex.tv
+            - t.co
+            - t0.ssl.ak.dynamic.tiles.virtualearth.net
+            - t0.ssl.ak.tiles.virtualearth.net
+            - tawk.to
+            - tedcdn.com
+            - themoviedb.com
+            - thetvdb.com
+            - tinyurl.com
+            - title.auth.xboxlive.com
+            - title.mgt.xboxlive.com
+            - traffic.libsyn.com
+            - tvdb2.plex.tv
+            - tvthemes.plexapp.com
+            - twimg.com
+            - ui.skype.com
+            - video-stats.l.google.com
+            - videos.vidible.tv
+            - widget-cdn.rpxnow.com
+            - win10.ipv6.microsoft.com
+            - wp.com
+            - ws.audioscrobbler.com
+            - www.dataplicity.com
+            - www.googleapis.com
+            - www.msftncsi.com
+            - www.no-ip.com
+            - www.youtube-nocookie.com
+            - xbox.ipv6.microsoft.com
+            - xboxexperiencesprod.experimentation.xboxlive.com
+            - xflight.xboxlive.com
+            - xkms.xboxlive.com
+            - xsts.auth.xboxlive.com
+            - youtu.be
+            - youtube-nocookie.com
+            - yt3.ggpht.com
+            - zee.cws.conviva.com
+            - pings.conviva.com
+            - cws.conviva.com
+            - livepassdl.conviva.com
+            - gfwsl.geforce.com
+            - appspot-preview.l.google.com
+            - vidtech.cbsinteractive.com
+            - continuum.dds.microsoft.com
+            - connectivitycheck.gstatic.com
+            - connectivitycheck.android.com
+            - www.msftconnecttest.com
+            - slackb.com
+            - sessions.bugsnag.com
+            - notify.bugsnag.com
+            - ssl.google-analytics.com
+            - 7eer.net
+            - ad.doubleclick.net
+            - affiliatefuture.com
+            - anrdoezrs.net
+            - apmebf.com
+            - avantlink.com
+            - bfast.com
+            - cc-dt.com
+            - cj.com
+            - cj.dotomi.com
+            - clickserve.cc-dt.com
+            - commission-junction.com
+            - doubleclick.net
+            - dpbolvw.net
+            - emjcd.com
+            - evyy.net
+            - gan.doubleclick.net
+            - go.redirectingat.com
+            - go2jump.org
+            - gopjn.com
+            - jdoqocy.com
+            - kqzyfj.com
+            - linksynergy.com
+            - ojrq.net
+            - onenetworkdirect.net
+            - partners.webmasterplan.com
+            - pjatr.com
+            - pjtra.com
+            - pntra.com
+            - pntrac.com
+            - pntrack.com
+            - qksrv.net
+            - redirect.at
+            - redirect.viglink.com
+            - redirectingat.com
+            - shareasale.com
+            - tkqlhce.com
+            - www.7eer.net
+            - www.affiliatefuture.com
+            - www.anrdoezrs.net
+            - www.apmebf.com
+            - www.avantlink.com
+            - www.bfast.com
+            - www.cc-dt.com
+            - www.cj.com
+            - www.doubleclick.net
+            - www.dpbolvw.net
+            - www.emjcd.com
+            - www.evyy.net
+            - www.gopjn.com
+            - www.jdoqocy.com
+            - www.kqzyfj.com
+            - www.linksynergy.com
+            - www.ojrq.net
+            - www.onenetworkdirect.net
+            - www.pjatr.com
+            - www.pjtra.com
+            - www.pntra.com
+            - www.pntrac.com
+            - www.pntrack.com
+            - www.qksrv.net
+            - www.tkqlhce.com
+            - tradetracker.net
+            - www.tradetracker.net
+            - click.linksynergy.com
+            - clk.tradedoubler.com
+            - tc.tradetracker.com
+            - track.adform.net
+            - track.webgains.com
+            - ad.atdmt.com
+            - clickserve.dartsearch.net
+            - 5231.xg4ken.com
+            - shareasale-analytics.com
+            - go.skimresources.com
+            - goto-target-com.customtraffic.impactradius.com
+            - goto.target.com
+            - firebaselogging-pa.googleapis.com
+            - ct.klclick.com
+        adlists:
+            - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+            - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+            - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+            - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+            - https://someonewhocares.org/hosts/zero/hosts
+            - https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
+            - https://winhelp2002.mvps.org/hosts.txt
+            - https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+            - https://paulgb.github.io/BarbBlock/blacklists/hosts-file.txt
+            - https://adaway.org/hosts.txt
+            - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+            - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+            - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+            - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+            - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+            - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+            - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+            - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+            - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+            - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+            - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+            - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+            - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+            - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+            - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+            - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+            - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+            - https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+            - https://phishing.army/download/phishing_army_blocklist_extended.txt
+            - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+            - https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+            - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+            - https://urlhaus.abuse.ch/downloads/hostfile/
+            - https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+            - https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+        extraEnvVars:
+          TZ: "America/Los_Angeles"
+          REV_SERVER: "true"
+          REV_SERVER_DOMAIN: "bermanoc.net"
+          REV_SERVER_TARGET: "10.17.84.1"
+          REV_SERVER_CIDR: "10.0.0.0/8"
+          DHCP_ACTIVE: "false"
+          WEBTHEME: "lcars"
+    repoURL: https://mojo2600.github.io/pihole-kubernetes
+    targetRevision: 2.11.1
+  sources: []
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  health:
+  history:
+  - deployStartedAt: "2023-03-20T22:06:04Z"
+    deployedAt: "2023-03-20T22:06:05Z"
+    id: 0
+    revision: 2.11.1
+    source:
+      chart: pihole
+      helm:
+        parameters:
+        - name: adminPassword
+          value: admin
+        - name: DNS1
+          value: 1.1.1.1
+        - name: DNS2
+          value: 8.8.8.8
+        - name: hostname
+          value: pihole
+        - name: image.tag
+          value: latest
+        - name: ingress.enabled
+          value: "true"
+        - name: ingress.path
+          value: /
+        - name: ingress.hosts[0]
+          value: pihole.bermanoc.net
+        - name: virtualHost
+          value: pihole.bermanoc.net
+        - name: persistentVolumeClaim.enabled
+          value: "true"
+        - name: persistentVolumeClaim.size
+          value: 800Mi
+        - name: monitoring.podMonitor.enabled
+          value: "true"
+        - name: monitoring.sidecar.enabled
+          value: "true"
+        values: |
+          image:
+            repository: "pihole/pihole"
+            tag: 2023.02.2
+            pullPolicy: IfNotPresent
+          serviceDns:
+            type: LoadBalancer
+            loadBalancerIP: "10.17.84.21"
+          nodeSelector:
+            kubernetes.io/hostname: nanopi01
+          affinity:
+          podAnnotations:
+            prometheus.io/port: '9617'
+            prometheus.io/scrape: 'true'
+          monitoring:
+            podMonitor:
+              enabled: true
+            sidecar:
+              enabled: true
+              port: 9617
+              image:
+                repository: ekofr/pihole-exporter
+                tag: v0.3.0
+                pullPolicy: IfNotPresent
+              resources:
+                limits:
+                  memory: 128Mi
+          persistentVolumeClaim:
+            enabled: true
+            storageClass: local-path
+            accessModes:
+              - ReadWriteOnce
+            size: 500Mi
+          dnsmasq:
+              additionalHostsEntries:
+                  - 10.17.84.2      homeassistant homeassistant.bermanoc.net
+                  - 10.17.84.3      controller controller.bermanoc.net
+                  - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+                  - 10.17.84.21     speedtest.bermanoc.net
+                  - 10.17.84.21     grafana.bermanoc.net
+                  - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+                  - 10.17.84.21     argocd.bermanoc.net
+                  - 10.17.84.21     prometheus.bermanoc.net
+                  - 10.17.84.22     plex.bermanoc.net
+                  - 10.17.84.22     pihole.bermanoc.net
+                  - 10.17.84.23     rpi3 rpi3.bermanoc.net
+                  - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
+                  - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+                  - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
+                  - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
+                  - 10.17.84.151    hue hue.bermanoc.net
+                  - 10.17.84.162    lgtv lgtv.bermanoc.net
+                  - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+                  - 10.17.84.213    homeassistant-wifi.bermanoc.net
+                  - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+                  - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+                  - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
+          whitelist:
+              - 0.client-channel.google.com
+              - 1drv.com
+              - 2.android.pool.ntp.org
+              - akamaihd.net
+              - akamaitechnologies.com
+              - akamaized.net
+              - amazonaws.com
+              - android.clients.google.com
+              - api.ipify.org
+              - api.rlje.net
+              - app-api.ted.com
+              - appleid.apple.com
+              - apps.skype.com
+              - appsbackup-pa.clients6.google.com
+              - appsbackup-pa.googleapis.com
+              - apt.sonarr.tv
+              - aspnetcdn.com
+              - attestation.xboxlive.com
+              - ax.phobos.apple.com.edgesuite.net
+              - brightcove.net
+              - c.s-microsoft.com
+              - cdn.cloudflare.net
+              - cdn.embedly.com
+              - cdn.optimizely.com
+              - cdn.vidible.tv
+              - cdn2.optimizely.com
+              - cdn3.optimizely.com
+              - cdnjs.cloudflare.com
+              - cert.mgt.xboxlive.com
+              - clientconfig.passport.net
+              - clients1.google.com
+              - clients2.google.com
+              - clients3.google.com
+              - clients4.google.com
+              - clients5.google.com
+              - clients6.google.com
+              - cpms.spop10.ams.plex.bz
+              - cpms35.spop10.ams.plex.bz
+              - cse.google.com
+              - ctldl.windowsupdate.com
+              - d2c8v52ll5s99u.cloudfront.net
+              - d2gatte9o95jao.cloudfront.net
+              - dashboard.plex.tv
+              - dataplicity.com
+              - def-vef.xboxlive.com
+              - delivery.vidible.tv
+              - dev.virtualearth.net
+              - device.auth.xboxlive.com
+              - display.ugc.bazaarvoice.com
+              - displaycatalog.mp.microsoft.com
+              - dl.delivery.mp.microsoft.com
+              - dl.dropbox.com
+              - dl.dropboxusercontent.com
+              - dns.msftncsi.com
+              - download.sonarr.tv
+              - drift.com
+              - driftt.com
+              - dynupdate.no-ip.com
+              - ecn.dev.virtualearth.net
+              - edge.api.brightcove.com
+              - eds.xboxlive.com
+              - fonts.gstatic.com
+              - forums.sonarr.tv
+              - g.live.com
+              - geo-prod.do.dsp.mp.microsoft.com
+              - geo3.ggpht.com
+              - giphy.com
+              - github.com
+              - github.io
+              - googleapis.com
+              - gravatar.com
+              - gstatic.com
+              - help.ui.xboxlive.com
+              - hls.ted.com
+              - i.ytimg.com
+              - i1.ytimg.com
+              - imagesak.secureserver.net
+              - img.vidible.tv
+              - imgix.net
+              - imgs.xkcd.com
+              - instantmessaging-pa.googleapis.com
+              - intercom.io
+              - jquery.com
+              - jsdelivr.net
+              - keystone.mwbsys.com
+              - lastfm-img2.akamaized.net
+              - licensing.xboxlive.com
+              - live.com
+              - login.live.com
+              - login.microsoftonline.com
+              - manifest.googlevideo.com
+              - meta-db-worker02.pop.ric.plex.bz
+              - meta.plex.bz
+              - meta.plex.tv
+              - microsoftonline.com
+              - msftncsi.com
+              - my.plexapp.com
+              - nexusrules.officeapps.live.com
+              - npr-news.streaming.adswizz.com
+              - nine.plugins.plexapp.com
+              - no-ip.com
+              - node.plexapp.com
+              - notify.xboxlive.com
+              - ns1.dropbox.com
+              - ns2.dropbox.com
+              - o1.email.plex.tv
+              - o2.sg0.plex.tv
+              - ocsp.apple.com
+              - office.com
+              - office.net
+              - office365.com
+              - officeclient.microsoft.com
+              - om.cbsi.com
+              - onedrive.live.com
+              - outlook.live.com
+              - outlook.office365.com
+              - placehold.it
+              - placeholdit.imgix.net
+              - players.brightcove.net
+              - pricelist.skype.com
+              - products.office.com
+              - proxy.plex.bz
+              - proxy.plex.tv
+              - proxy02.pop.ord.plex.bz
+              - pubsub.plex.bz
+              - pubsub.plex.tv
+              - raw.githubusercontent.com
+              - redirector.googlevideo.com
+              - res.cloudinary.com
+              - s.gateway.messenger.live.com
+              - s.marketwatch.com
+              - s.youtube.com
+              - s.ytimg.com
+              - s1.wp.com
+              - s2.youtube.com
+              - s3.amazonaws.com
+              - sa.symcb.com
+              - secure.avangate.com
+              - secure.brightcove.com
+              - secure.surveymonkey.com
+              - services.sonarr.tv
+              - skyhook.sonarr.tv
+              - spclient.wg.spotify.com
+              - ssl.p.jwpcdn.com
+              - staging.plex.tv
+              - status.plex.tv
+              - t.co
+              - t0.ssl.ak.dynamic.tiles.virtualearth.net
+              - t0.ssl.ak.tiles.virtualearth.net
+              - tawk.to
+              - tedcdn.com
+              - themoviedb.com
+              - thetvdb.com
+              - tinyurl.com
+              - title.auth.xboxlive.com
+              - title.mgt.xboxlive.com
+              - traffic.libsyn.com
+              - tvdb2.plex.tv
+              - tvthemes.plexapp.com
+              - twimg.com
+              - ui.skype.com
+              - video-stats.l.google.com
+              - videos.vidible.tv
+              - widget-cdn.rpxnow.com
+              - win10.ipv6.microsoft.com
+              - wp.com
+              - ws.audioscrobbler.com
+              - www.dataplicity.com
+              - www.googleapis.com
+              - www.msftncsi.com
+              - www.no-ip.com
+              - www.youtube-nocookie.com
+              - xbox.ipv6.microsoft.com
+              - xboxexperiencesprod.experimentation.xboxlive.com
+              - xflight.xboxlive.com
+              - xkms.xboxlive.com
+              - xsts.auth.xboxlive.com
+              - youtu.be
+              - youtube-nocookie.com
+              - yt3.ggpht.com
+              - zee.cws.conviva.com
+              - pings.conviva.com
+              - cws.conviva.com
+              - livepassdl.conviva.com
+              - gfwsl.geforce.com
+              - appspot-preview.l.google.com
+              - vidtech.cbsinteractive.com
+              - continuum.dds.microsoft.com
+              - connectivitycheck.gstatic.com
+              - connectivitycheck.android.com
+              - www.msftconnecttest.com
+              - slackb.com
+              - sessions.bugsnag.com
+              - notify.bugsnag.com
+              - ssl.google-analytics.com
+              - 7eer.net
+              - ad.doubleclick.net
+              - affiliatefuture.com
+              - anrdoezrs.net
+              - apmebf.com
+              - avantlink.com
+              - bfast.com
+              - cc-dt.com
+              - cj.com
+              - cj.dotomi.com
+              - clickserve.cc-dt.com
+              - commission-junction.com
+              - doubleclick.net
+              - dpbolvw.net
+              - emjcd.com
+              - evyy.net
+              - gan.doubleclick.net
+              - go.redirectingat.com
+              - go2jump.org
+              - gopjn.com
+              - jdoqocy.com
+              - kqzyfj.com
+              - linksynergy.com
+              - ojrq.net
+              - onenetworkdirect.net
+              - partners.webmasterplan.com
+              - pjatr.com
+              - pjtra.com
+              - pntra.com
+              - pntrac.com
+              - pntrack.com
+              - qksrv.net
+              - redirect.at
+              - redirect.viglink.com
+              - redirectingat.com
+              - shareasale.com
+              - tkqlhce.com
+              - www.7eer.net
+              - www.affiliatefuture.com
+              - www.anrdoezrs.net
+              - www.apmebf.com
+              - www.avantlink.com
+              - www.bfast.com
+              - www.cc-dt.com
+              - www.cj.com
+              - www.doubleclick.net
+              - www.dpbolvw.net
+              - www.emjcd.com
+              - www.evyy.net
+              - www.gopjn.com
+              - www.jdoqocy.com
+              - www.kqzyfj.com
+              - www.linksynergy.com
+              - www.ojrq.net
+              - www.onenetworkdirect.net
+              - www.pjatr.com
+              - www.pjtra.com
+              - www.pntra.com
+              - www.pntrac.com
+              - www.pntrack.com
+              - www.qksrv.net
+              - www.tkqlhce.com
+              - tradetracker.net
+              - www.tradetracker.net
+              - click.linksynergy.com
+              - clk.tradedoubler.com
+              - tc.tradetracker.com
+              - track.adform.net
+              - track.webgains.com
+              - ad.atdmt.com
+              - clickserve.dartsearch.net
+              - 5231.xg4ken.com
+              - shareasale-analytics.com
+              - go.skimresources.com
+              - goto-target-com.customtraffic.impactradius.com
+              - goto.target.com
+              - firebaselogging-pa.googleapis.com
+              - ct.klclick.com
+          adlists:
+              - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+              - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+              - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+              - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+              - https://someonewhocares.org/hosts/zero/hosts
+              - https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
+              - https://winhelp2002.mvps.org/hosts.txt
+              - https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+              - https://paulgb.github.io/BarbBlock/blacklists/hosts-file.txt
+              - https://adaway.org/hosts.txt
+              - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+              - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+              - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+              - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+              - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+              - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+              - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+              - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+              - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+              - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+              - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+              - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+              - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+              - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+              - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+              - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+              - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+              - https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+              - https://phishing.army/download/phishing_army_blocklist_extended.txt
+              - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+              - https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+              - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+              - https://urlhaus.abuse.ch/downloads/hostfile/
+              - https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+              - https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+          extraEnvVars:
+            TZ: "America/Los_Angeles"
+            REV_SERVER: "true"
+            REV_SERVER_DOMAIN: "bermanoc.net"
+            REV_SERVER_TARGET: "10.17.84.1"
+            REV_SERVER_CIDR: "10.0.0.0/8"
+            DHCP_ACTIVE: "false"
+            WEBTHEME: "lcars"
+      repoURL: https://mojo2600.github.io/pihole-kubernetes
+      targetRevision: 2.11.1
+  operationState:
+    finishedAt: "2023-03-20T22:06:05Z"
+    message: successfully synced (all tasks run)
+    operation:
+      initiatedBy:
+        automated: true
+      retry:
+        limit: 5
+      sync:
+        prune: true
+        revision: 2.11.1
+        syncOptions:
+        - CreateNamespace=true
+    phase: Succeeded
+    startedAt: "2023-03-20T22:06:04Z"
+    syncResult:
+      resources:
+      - group: ""
+        hookPhase: Running
+        kind: Secret
+        message: secret/pihole-password created
+        name: pihole-password
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: ConfigMap
+        message: configmap/pihole-adlists created
+        name: pihole-adlists
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: ConfigMap
+        message: configmap/pihole-custom-dnsmasq created
+        name: pihole-custom-dnsmasq
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: ConfigMap
+        message: configmap/pihole-whitelist created
+        name: pihole-whitelist
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: PersistentVolumeClaim
+        message: persistentvolumeclaim/pihole created
+        name: pihole
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: Service
+        message: service/pihole-web created
+        name: pihole-web
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: Service
+        message: service/pihole-dns-tcp created
+        name: pihole-dns-tcp
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: Service
+        message: service/pihole-dns-udp created
+        name: pihole-dns-udp
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: ""
+        hookPhase: Running
+        kind: Service
+        message: service/pihole-dhcp created
+        name: pihole-dhcp
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: apps
+        hookPhase: Running
+        kind: Deployment
+        message: deployment.apps/pihole created
+        name: pihole
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: networking.k8s.io
+        hookPhase: Running
+        kind: Ingress
+        message: ingress.networking.k8s.io/pihole created
+        name: pihole
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      - group: monitoring.coreos.com
+        hookPhase: Running
+        kind: PodMonitor
+        message: podmonitor.monitoring.coreos.com/pihole-prometheus-exporter created
+        name: pihole-prometheus-exporter
+        namespace: dns
+        syncPhase: Sync
+        version: v1
+      revision: 2.11.1
+      source:
+        chart: pihole
+        helm:
+          parameters:
+          - name: adminPassword
+            value: admin
+          - name: DNS1
+            value: 1.1.1.1
+          - name: DNS2
+            value: 8.8.8.8
+          - name: hostname
+            value: pihole
+          - name: image.tag
+            value: latest
+          - name: ingress.enabled
+            value: "true"
+          - name: ingress.path
+            value: /
+          - name: ingress.hosts[0]
+            value: pihole.bermanoc.net
+          - name: virtualHost
+            value: pihole.bermanoc.net
+          - name: persistentVolumeClaim.enabled
+            value: "true"
+          - name: persistentVolumeClaim.size
+            value: 800Mi
+          - name: monitoring.podMonitor.enabled
+            value: "true"
+          - name: monitoring.sidecar.enabled
+            value: "true"
+          values: |
+            image:
+              repository: "pihole/pihole"
+              tag: 2023.02.2
+              pullPolicy: IfNotPresent
+            serviceDns:
+              type: LoadBalancer
+              loadBalancerIP: "10.17.84.21"
+            nodeSelector:
+              kubernetes.io/hostname: nanopi01
+            affinity:
+            podAnnotations:
+              prometheus.io/port: '9617'
+              prometheus.io/scrape: 'true'
+            monitoring:
+              podMonitor:
+                enabled: true
+              sidecar:
+                enabled: true
+                port: 9617
+                image:
+                  repository: ekofr/pihole-exporter
+                  tag: v0.3.0
+                  pullPolicy: IfNotPresent
+                resources:
+                  limits:
+                    memory: 128Mi
+            persistentVolumeClaim:
+              enabled: true
+              storageClass: local-path
+              accessModes:
+                - ReadWriteOnce
+              size: 500Mi
+            dnsmasq:
+                additionalHostsEntries:
+                    - 10.17.84.2      homeassistant homeassistant.bermanoc.net
+                    - 10.17.84.3      controller controller.bermanoc.net
+                    - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+                    - 10.17.84.21     speedtest.bermanoc.net
+                    - 10.17.84.21     grafana.bermanoc.net
+                    - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+                    - 10.17.84.21     argocd.bermanoc.net
+                    - 10.17.84.21     prometheus.bermanoc.net
+                    - 10.17.84.22     plex.bermanoc.net
+                    - 10.17.84.22     pihole.bermanoc.net
+                    - 10.17.84.23     rpi3 rpi3.bermanoc.net
+                    - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
+                    - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+                    - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
+                    - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
+                    - 10.17.84.151    hue hue.bermanoc.net
+                    - 10.17.84.162    lgtv lgtv.bermanoc.net
+                    - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+                    - 10.17.84.213    homeassistant-wifi.bermanoc.net
+                    - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+                    - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+                    - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
+            whitelist:
+                - 0.client-channel.google.com
+                - 1drv.com
+                - 2.android.pool.ntp.org
+                - akamaihd.net
+                - akamaitechnologies.com
+                - akamaized.net
+                - amazonaws.com
+                - android.clients.google.com
+                - api.ipify.org
+                - api.rlje.net
+                - app-api.ted.com
+                - appleid.apple.com
+                - apps.skype.com
+                - appsbackup-pa.clients6.google.com
+                - appsbackup-pa.googleapis.com
+                - apt.sonarr.tv
+                - aspnetcdn.com
+                - attestation.xboxlive.com
+                - ax.phobos.apple.com.edgesuite.net
+                - brightcove.net
+                - c.s-microsoft.com
+                - cdn.cloudflare.net
+                - cdn.embedly.com
+                - cdn.optimizely.com
+                - cdn.vidible.tv
+                - cdn2.optimizely.com
+                - cdn3.optimizely.com
+                - cdnjs.cloudflare.com
+                - cert.mgt.xboxlive.com
+                - clientconfig.passport.net
+                - clients1.google.com
+                - clients2.google.com
+                - clients3.google.com
+                - clients4.google.com
+                - clients5.google.com
+                - clients6.google.com
+                - cpms.spop10.ams.plex.bz
+                - cpms35.spop10.ams.plex.bz
+                - cse.google.com
+                - ctldl.windowsupdate.com
+                - d2c8v52ll5s99u.cloudfront.net
+                - d2gatte9o95jao.cloudfront.net
+                - dashboard.plex.tv
+                - dataplicity.com
+                - def-vef.xboxlive.com
+                - delivery.vidible.tv
+                - dev.virtualearth.net
+                - device.auth.xboxlive.com
+                - display.ugc.bazaarvoice.com
+                - displaycatalog.mp.microsoft.com
+                - dl.delivery.mp.microsoft.com
+                - dl.dropbox.com
+                - dl.dropboxusercontent.com
+                - dns.msftncsi.com
+                - download.sonarr.tv
+                - drift.com
+                - driftt.com
+                - dynupdate.no-ip.com
+                - ecn.dev.virtualearth.net
+                - edge.api.brightcove.com
+                - eds.xboxlive.com
+                - fonts.gstatic.com
+                - forums.sonarr.tv
+                - g.live.com
+                - geo-prod.do.dsp.mp.microsoft.com
+                - geo3.ggpht.com
+                - giphy.com
+                - github.com
+                - github.io
+                - googleapis.com
+                - gravatar.com
+                - gstatic.com
+                - help.ui.xboxlive.com
+                - hls.ted.com
+                - i.ytimg.com
+                - i1.ytimg.com
+                - imagesak.secureserver.net
+                - img.vidible.tv
+                - imgix.net
+                - imgs.xkcd.com
+                - instantmessaging-pa.googleapis.com
+                - intercom.io
+                - jquery.com
+                - jsdelivr.net
+                - keystone.mwbsys.com
+                - lastfm-img2.akamaized.net
+                - licensing.xboxlive.com
+                - live.com
+                - login.live.com
+                - login.microsoftonline.com
+                - manifest.googlevideo.com
+                - meta-db-worker02.pop.ric.plex.bz
+                - meta.plex.bz
+                - meta.plex.tv
+                - microsoftonline.com
+                - msftncsi.com
+                - my.plexapp.com
+                - nexusrules.officeapps.live.com
+                - npr-news.streaming.adswizz.com
+                - nine.plugins.plexapp.com
+                - no-ip.com
+                - node.plexapp.com
+                - notify.xboxlive.com
+                - ns1.dropbox.com
+                - ns2.dropbox.com
+                - o1.email.plex.tv
+                - o2.sg0.plex.tv
+                - ocsp.apple.com
+                - office.com
+                - office.net
+                - office365.com
+                - officeclient.microsoft.com
+                - om.cbsi.com
+                - onedrive.live.com
+                - outlook.live.com
+                - outlook.office365.com
+                - placehold.it
+                - placeholdit.imgix.net
+                - players.brightcove.net
+                - pricelist.skype.com
+                - products.office.com
+                - proxy.plex.bz
+                - proxy.plex.tv
+                - proxy02.pop.ord.plex.bz
+                - pubsub.plex.bz
+                - pubsub.plex.tv
+                - raw.githubusercontent.com
+                - redirector.googlevideo.com
+                - res.cloudinary.com
+                - s.gateway.messenger.live.com
+                - s.marketwatch.com
+                - s.youtube.com
+                - s.ytimg.com
+                - s1.wp.com
+                - s2.youtube.com
+                - s3.amazonaws.com
+                - sa.symcb.com
+                - secure.avangate.com
+                - secure.brightcove.com
+                - secure.surveymonkey.com
+                - services.sonarr.tv
+                - skyhook.sonarr.tv
+                - spclient.wg.spotify.com
+                - ssl.p.jwpcdn.com
+                - staging.plex.tv
+                - status.plex.tv
+                - t.co
+                - t0.ssl.ak.dynamic.tiles.virtualearth.net
+                - t0.ssl.ak.tiles.virtualearth.net
+                - tawk.to
+                - tedcdn.com
+                - themoviedb.com
+                - thetvdb.com
+                - tinyurl.com
+                - title.auth.xboxlive.com
+                - title.mgt.xboxlive.com
+                - traffic.libsyn.com
+                - tvdb2.plex.tv
+                - tvthemes.plexapp.com
+                - twimg.com
+                - ui.skype.com
+                - video-stats.l.google.com
+                - videos.vidible.tv
+                - widget-cdn.rpxnow.com
+                - win10.ipv6.microsoft.com
+                - wp.com
+                - ws.audioscrobbler.com
+                - www.dataplicity.com
+                - www.googleapis.com
+                - www.msftncsi.com
+                - www.no-ip.com
+                - www.youtube-nocookie.com
+                - xbox.ipv6.microsoft.com
+                - xboxexperiencesprod.experimentation.xboxlive.com
+                - xflight.xboxlive.com
+                - xkms.xboxlive.com
+                - xsts.auth.xboxlive.com
+                - youtu.be
+                - youtube-nocookie.com
+                - yt3.ggpht.com
+                - zee.cws.conviva.com
+                - pings.conviva.com
+                - cws.conviva.com
+                - livepassdl.conviva.com
+                - gfwsl.geforce.com
+                - appspot-preview.l.google.com
+                - vidtech.cbsinteractive.com
+                - continuum.dds.microsoft.com
+                - connectivitycheck.gstatic.com
+                - connectivitycheck.android.com
+                - www.msftconnecttest.com
+                - slackb.com
+                - sessions.bugsnag.com
+                - notify.bugsnag.com
+                - ssl.google-analytics.com
+                - 7eer.net
+                - ad.doubleclick.net
+                - affiliatefuture.com
+                - anrdoezrs.net
+                - apmebf.com
+                - avantlink.com
+                - bfast.com
+                - cc-dt.com
+                - cj.com
+                - cj.dotomi.com
+                - clickserve.cc-dt.com
+                - commission-junction.com
+                - doubleclick.net
+                - dpbolvw.net
+                - emjcd.com
+                - evyy.net
+                - gan.doubleclick.net
+                - go.redirectingat.com
+                - go2jump.org
+                - gopjn.com
+                - jdoqocy.com
+                - kqzyfj.com
+                - linksynergy.com
+                - ojrq.net
+                - onenetworkdirect.net
+                - partners.webmasterplan.com
+                - pjatr.com
+                - pjtra.com
+                - pntra.com
+                - pntrac.com
+                - pntrack.com
+                - qksrv.net
+                - redirect.at
+                - redirect.viglink.com
+                - redirectingat.com
+                - shareasale.com
+                - tkqlhce.com
+                - www.7eer.net
+                - www.affiliatefuture.com
+                - www.anrdoezrs.net
+                - www.apmebf.com
+                - www.avantlink.com
+                - www.bfast.com
+                - www.cc-dt.com
+                - www.cj.com
+                - www.doubleclick.net
+                - www.dpbolvw.net
+                - www.emjcd.com
+                - www.evyy.net
+                - www.gopjn.com
+                - www.jdoqocy.com
+                - www.kqzyfj.com
+                - www.linksynergy.com
+                - www.ojrq.net
+                - www.onenetworkdirect.net
+                - www.pjatr.com
+                - www.pjtra.com
+                - www.pntra.com
+                - www.pntrac.com
+                - www.pntrack.com
+                - www.qksrv.net
+                - www.tkqlhce.com
+                - tradetracker.net
+                - www.tradetracker.net
+                - click.linksynergy.com
+                - clk.tradedoubler.com
+                - tc.tradetracker.com
+                - track.adform.net
+                - track.webgains.com
+                - ad.atdmt.com
+                - clickserve.dartsearch.net
+                - 5231.xg4ken.com
+                - shareasale-analytics.com
+                - go.skimresources.com
+                - goto-target-com.customtraffic.impactradius.com
+                - goto.target.com
+                - firebaselogging-pa.googleapis.com
+                - ct.klclick.com
+            adlists:
+                - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+                - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+                - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+                - https://someonewhocares.org/hosts/zero/hosts
+                - https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
+                - https://winhelp2002.mvps.org/hosts.txt
+                - https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+                - https://paulgb.github.io/BarbBlock/blacklists/hosts-file.txt
+                - https://adaway.org/hosts.txt
+                - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+                - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+                - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+                - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+                - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+                - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+                - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+                - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+                - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+                - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+                - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+                - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+                - https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+                - https://phishing.army/download/phishing_army_blocklist_extended.txt
+                - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+                - https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+                - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+                - https://urlhaus.abuse.ch/downloads/hostfile/
+                - https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+                - https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+            extraEnvVars:
+              TZ: "America/Los_Angeles"
+              REV_SERVER: "true"
+              REV_SERVER_DOMAIN: "bermanoc.net"
+              REV_SERVER_TARGET: "10.17.84.1"
+              REV_SERVER_CIDR: "10.0.0.0/8"
+              DHCP_ACTIVE: "false"
+              WEBTHEME: "lcars"
+        repoURL: https://mojo2600.github.io/pihole-kubernetes
+        targetRevision: 2.11.1
+  reconciledAt: "2023-03-20T23:34:06Z"
+  resources:
+  - kind: ConfigMap
+    name: pihole-adlists
+    namespace: dns
+    version: v1
+  - kind: ConfigMap
+    name: pihole-custom-dnsmasq
+    namespace: dns
+    version: v1
+  - kind: ConfigMap
+    name: pihole-whitelist
+    namespace: dns
+    version: v1
+  - health:
+    kind: PersistentVolumeClaim
+    name: pihole
+    namespace: dns
+    version: v1
+  - kind: Secret
+    name: pihole-password
+    namespace: dns
+    version: v1
+  - health:
+    kind: Service
+    name: pihole-dhcp
+    namespace: dns
+    version: v1
+  - health:
+    kind: Service
+    name: pihole-dns-tcp
+    namespace: dns
+    version: v1
+  - health:
+    kind: Service
+    name: pihole-dns-udp
+    namespace: dns
+    version: v1
+  - health:
+    kind: Service
+    name: pihole-web
+    namespace: dns
+    version: v1
+  - group: apps
+    health:
+    kind: Deployment
+    name: pihole
+    namespace: dns
+    version: v1
+  - group: monitoring.coreos.com
+    kind: PodMonitor
+    name: pihole-prometheus-exporter
+    namespace: dns
+    version: v1
+  - group: networking.k8s.io
+    health:
+    kind: Ingress
+    name: pihole
+    namespace: dns
+    version: v1
+  sourceType: Helm
+  summary:
+    externalURLs:
+    - http://pihole.bermanoc.net/
+    images:
+    - ekofr/pihole-exporter:v0.3.0
+    - pihole/pihole:latest
+  sync:
+    comparedTo:
+      destination:
+        namespace: dns
+        server: https://kubernetes.default.svc
+      source:
+        chart: pihole
+        helm:
+          parameters:
+          - name: adminPassword
+            value: admin
+          - name: DNS1
+            value: 1.1.1.1
+          - name: DNS2
+            value: 8.8.8.8
+          - name: hostname
+            value: pihole
+          - name: image.tag
+            value: latest
+          - name: ingress.enabled
+            value: "true"
+          - name: ingress.path
+            value: /
+          - name: ingress.hosts[0]
+            value: pihole.bermanoc.net
+          - name: virtualHost
+            value: pihole.bermanoc.net
+          - name: persistentVolumeClaim.enabled
+            value: "true"
+          - name: persistentVolumeClaim.size
+            value: 800Mi
+          - name: monitoring.podMonitor.enabled
+            value: "true"
+          - name: monitoring.sidecar.enabled
+            value: "true"
+          values: |
+            image:
+              repository: "pihole/pihole"
+              tag: 2023.02.2
+              pullPolicy: IfNotPresent
+            serviceDns:
+              type: LoadBalancer
+              loadBalancerIP: "10.17.84.21"
+            nodeSelector:
+              kubernetes.io/hostname: nanopi01
+            affinity:
+            podAnnotations:
+              prometheus.io/port: '9617'
+              prometheus.io/scrape: 'true'
+            monitoring:
+              podMonitor:
+                enabled: true
+              sidecar:
+                enabled: true
+                port: 9617
+                image:
+                  repository: ekofr/pihole-exporter
+                  tag: v0.3.0
+                  pullPolicy: IfNotPresent
+                resources:
+                  limits:
+                    memory: 128Mi
+            persistentVolumeClaim:
+              enabled: true
+              storageClass: local-path
+              accessModes:
+                - ReadWriteOnce
+              size: 500Mi
+            dnsmasq:
+                additionalHostsEntries:
+                    - 10.17.84.2      homeassistant homeassistant.bermanoc.net
+                    - 10.17.84.3      controller controller.bermanoc.net
+                    - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+                    - 10.17.84.21     speedtest.bermanoc.net
+                    - 10.17.84.21     grafana.bermanoc.net
+                    - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+                    - 10.17.84.21     argocd.bermanoc.net
+                    - 10.17.84.21     prometheus.bermanoc.net
+                    - 10.17.84.22     plex.bermanoc.net
+                    - 10.17.84.22     pihole.bermanoc.net
+                    - 10.17.84.23     rpi3 rpi3.bermanoc.net
+                    - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
+                    - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+                    - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
+                    - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
+                    - 10.17.84.151    hue hue.bermanoc.net
+                    - 10.17.84.162    lgtv lgtv.bermanoc.net
+                    - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+                    - 10.17.84.213    homeassistant-wifi.bermanoc.net
+                    - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+                    - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+                    - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
+            whitelist:
+                - 0.client-channel.google.com
+                - 1drv.com
+                - 2.android.pool.ntp.org
+                - akamaihd.net
+                - akamaitechnologies.com
+                - akamaized.net
+                - amazonaws.com
+                - android.clients.google.com
+                - api.ipify.org
+                - api.rlje.net
+                - app-api.ted.com
+                - appleid.apple.com
+                - apps.skype.com
+                - appsbackup-pa.clients6.google.com
+                - appsbackup-pa.googleapis.com
+                - apt.sonarr.tv
+                - aspnetcdn.com
+                - attestation.xboxlive.com
+                - ax.phobos.apple.com.edgesuite.net
+                - brightcove.net
+                - c.s-microsoft.com
+                - cdn.cloudflare.net
+                - cdn.embedly.com
+                - cdn.optimizely.com
+                - cdn.vidible.tv
+                - cdn2.optimizely.com
+                - cdn3.optimizely.com
+                - cdnjs.cloudflare.com
+                - cert.mgt.xboxlive.com
+                - clientconfig.passport.net
+                - clients1.google.com
+                - clients2.google.com
+                - clients3.google.com
+                - clients4.google.com
+                - clients5.google.com
+                - clients6.google.com
+                - cpms.spop10.ams.plex.bz
+                - cpms35.spop10.ams.plex.bz
+                - cse.google.com
+                - ctldl.windowsupdate.com
+                - d2c8v52ll5s99u.cloudfront.net
+                - d2gatte9o95jao.cloudfront.net
+                - dashboard.plex.tv
+                - dataplicity.com
+                - def-vef.xboxlive.com
+                - delivery.vidible.tv
+                - dev.virtualearth.net
+                - device.auth.xboxlive.com
+                - display.ugc.bazaarvoice.com
+                - displaycatalog.mp.microsoft.com
+                - dl.delivery.mp.microsoft.com
+                - dl.dropbox.com
+                - dl.dropboxusercontent.com
+                - dns.msftncsi.com
+                - download.sonarr.tv
+                - drift.com
+                - driftt.com
+                - dynupdate.no-ip.com
+                - ecn.dev.virtualearth.net
+                - edge.api.brightcove.com
+                - eds.xboxlive.com
+                - fonts.gstatic.com
+                - forums.sonarr.tv
+                - g.live.com
+                - geo-prod.do.dsp.mp.microsoft.com
+                - geo3.ggpht.com
+                - giphy.com
+                - github.com
+                - github.io
+                - googleapis.com
+                - gravatar.com
+                - gstatic.com
+                - help.ui.xboxlive.com
+                - hls.ted.com
+                - i.ytimg.com
+                - i1.ytimg.com
+                - imagesak.secureserver.net
+                - img.vidible.tv
+                - imgix.net
+                - imgs.xkcd.com
+                - instantmessaging-pa.googleapis.com
+                - intercom.io
+                - jquery.com
+                - jsdelivr.net
+                - keystone.mwbsys.com
+                - lastfm-img2.akamaized.net
+                - licensing.xboxlive.com
+                - live.com
+                - login.live.com
+                - login.microsoftonline.com
+                - manifest.googlevideo.com
+                - meta-db-worker02.pop.ric.plex.bz
+                - meta.plex.bz
+                - meta.plex.tv
+                - microsoftonline.com
+                - msftncsi.com
+                - my.plexapp.com
+                - nexusrules.officeapps.live.com
+                - npr-news.streaming.adswizz.com
+                - nine.plugins.plexapp.com
+                - no-ip.com
+                - node.plexapp.com
+                - notify.xboxlive.com
+                - ns1.dropbox.com
+                - ns2.dropbox.com
+                - o1.email.plex.tv
+                - o2.sg0.plex.tv
+                - ocsp.apple.com
+                - office.com
+                - office.net
+                - office365.com
+                - officeclient.microsoft.com
+                - om.cbsi.com
+                - onedrive.live.com
+                - outlook.live.com
+                - outlook.office365.com
+                - placehold.it
+                - placeholdit.imgix.net
+                - players.brightcove.net
+                - pricelist.skype.com
+                - products.office.com
+                - proxy.plex.bz
+                - proxy.plex.tv
+                - proxy02.pop.ord.plex.bz
+                - pubsub.plex.bz
+                - pubsub.plex.tv
+                - raw.githubusercontent.com
+                - redirector.googlevideo.com
+                - res.cloudinary.com
+                - s.gateway.messenger.live.com
+                - s.marketwatch.com
+                - s.youtube.com
+                - s.ytimg.com
+                - s1.wp.com
+                - s2.youtube.com
+                - s3.amazonaws.com
+                - sa.symcb.com
+                - secure.avangate.com
+                - secure.brightcove.com
+                - secure.surveymonkey.com
+                - services.sonarr.tv
+                - skyhook.sonarr.tv
+                - spclient.wg.spotify.com
+                - ssl.p.jwpcdn.com
+                - staging.plex.tv
+                - status.plex.tv
+                - t.co
+                - t0.ssl.ak.dynamic.tiles.virtualearth.net
+                - t0.ssl.ak.tiles.virtualearth.net
+                - tawk.to
+                - tedcdn.com
+                - themoviedb.com
+                - thetvdb.com
+                - tinyurl.com
+                - title.auth.xboxlive.com
+                - title.mgt.xboxlive.com
+                - traffic.libsyn.com
+                - tvdb2.plex.tv
+                - tvthemes.plexapp.com
+                - twimg.com
+                - ui.skype.com
+                - video-stats.l.google.com
+                - videos.vidible.tv
+                - widget-cdn.rpxnow.com
+                - win10.ipv6.microsoft.com
+                - wp.com
+                - ws.audioscrobbler.com
+                - www.dataplicity.com
+                - www.googleapis.com
+                - www.msftncsi.com
+                - www.no-ip.com
+                - www.youtube-nocookie.com
+                - xbox.ipv6.microsoft.com
+                - xboxexperiencesprod.experimentation.xboxlive.com
+                - xflight.xboxlive.com
+                - xkms.xboxlive.com
+                - xsts.auth.xboxlive.com
+                - youtu.be
+                - youtube-nocookie.com
+                - yt3.ggpht.com
+                - zee.cws.conviva.com
+                - pings.conviva.com
+                - cws.conviva.com
+                - livepassdl.conviva.com
+                - gfwsl.geforce.com
+                - appspot-preview.l.google.com
+                - vidtech.cbsinteractive.com
+                - continuum.dds.microsoft.com
+                - connectivitycheck.gstatic.com
+                - connectivitycheck.android.com
+                - www.msftconnecttest.com
+                - slackb.com
+                - sessions.bugsnag.com
+                - notify.bugsnag.com
+                - ssl.google-analytics.com
+                - 7eer.net
+                - ad.doubleclick.net
+                - affiliatefuture.com
+                - anrdoezrs.net
+                - apmebf.com
+                - avantlink.com
+                - bfast.com
+                - cc-dt.com
+                - cj.com
+                - cj.dotomi.com
+                - clickserve.cc-dt.com
+                - commission-junction.com
+                - doubleclick.net
+                - dpbolvw.net
+                - emjcd.com
+                - evyy.net
+                - gan.doubleclick.net
+                - go.redirectingat.com
+                - go2jump.org
+                - gopjn.com
+                - jdoqocy.com
+                - kqzyfj.com
+                - linksynergy.com
+                - ojrq.net
+                - onenetworkdirect.net
+                - partners.webmasterplan.com
+                - pjatr.com
+                - pjtra.com
+                - pntra.com
+                - pntrac.com
+                - pntrack.com
+                - qksrv.net
+                - redirect.at
+                - redirect.viglink.com
+                - redirectingat.com
+                - shareasale.com
+                - tkqlhce.com
+                - www.7eer.net
+                - www.affiliatefuture.com
+                - www.anrdoezrs.net
+                - www.apmebf.com
+                - www.avantlink.com
+                - www.bfast.com
+                - www.cc-dt.com
+                - www.cj.com
+                - www.doubleclick.net
+                - www.dpbolvw.net
+                - www.emjcd.com
+                - www.evyy.net
+                - www.gopjn.com
+                - www.jdoqocy.com
+                - www.kqzyfj.com
+                - www.linksynergy.com
+                - www.ojrq.net
+                - www.onenetworkdirect.net
+                - www.pjatr.com
+                - www.pjtra.com
+                - www.pntra.com
+                - www.pntrac.com
+                - www.pntrack.com
+                - www.qksrv.net
+                - www.tkqlhce.com
+                - tradetracker.net
+                - www.tradetracker.net
+                - click.linksynergy.com
+                - clk.tradedoubler.com
+                - tc.tradetracker.com
+                - track.adform.net
+                - track.webgains.com
+                - ad.atdmt.com
+                - clickserve.dartsearch.net
+                - 5231.xg4ken.com
+                - shareasale-analytics.com
+                - go.skimresources.com
+                - goto-target-com.customtraffic.impactradius.com
+                - goto.target.com
+                - firebaselogging-pa.googleapis.com
+                - ct.klclick.com
+            adlists:
+                - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+                - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+                - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+                - https://someonewhocares.org/hosts/zero/hosts
+                - https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts
+                - https://winhelp2002.mvps.org/hosts.txt
+                - https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt
+                - https://paulgb.github.io/BarbBlock/blacklists/hosts-file.txt
+                - https://adaway.org/hosts.txt
+                - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+                - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+                - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+                - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+                - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+                - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+                - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+                - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+                - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+                - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+                - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+                - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+                - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+                - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts
+                - https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt
+                - https://phishing.army/download/phishing_army_blocklist_extended.txt
+                - https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt
+                - https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt
+                - https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts
+                - https://urlhaus.abuse.ch/downloads/hostfile/
+                - https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
+                - https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser
+            extraEnvVars:
+              TZ: "America/Los_Angeles"
+              REV_SERVER: "true"
+              REV_SERVER_DOMAIN: "bermanoc.net"
+              REV_SERVER_TARGET: "10.17.84.1"
+              REV_SERVER_CIDR: "10.0.0.0/8"
+              DHCP_ACTIVE: "false"
+              WEBTHEME: "lcars"
+        repoURL: https://mojo2600.github.io/pihole-kubernetes
+        targetRevision: 2.11.1
+    revision: 2.11.1

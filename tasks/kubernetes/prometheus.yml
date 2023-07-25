@@ -8,7 +8,6 @@
     - ../../config.yml
 
   environment:
-    # The location of the kubeconfig file on the master.
     K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
     PATH: "~/go/bin:{{ ansible_env.PATH }}"
 
@@ -24,14 +23,26 @@
         chart_ref: prometheus-community/kube-prometheus-stack
         release_namespace: default
         state: present
-        values:
+        values: 
+          prometheus:
+            ingress:
+              enabled: true
+              hosts:
+                - prometheus.{{ domain }}
+              path: /
+              pathType: Prefix
+            prometheusSpec:
+              additionalScrapeConfigs:
+                - job_name: 'home-assistant'
+                  metrics_path: '/api/prometheus'
+                  scrape_interval: 60s
+                  bearer_token: "{{ prometheus_bearer_token }}"
+                  scheme: http
+                  static_configs:
+                    - targets: 
+                      - '10.17.84.2:8123'
           alertmanager:
             enabled: false
-          ingress:
-            enabled: true
-            hosts:
-              - prometheus.{{ domain }}
-            path: /
           grafana:
             ingress:
               enabled: true
