@@ -2,3 +2,4 @@ config.yml
 hosts.yml
 certs
 personal/**
+ansible_collections/**
