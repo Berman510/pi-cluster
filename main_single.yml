@@ -92,7 +92,9 @@
       with_items:
         - "cgroup_memory=1"
         - "cgroup_enable=memory"
+      when: ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution'] == 'Raspberry Pi OS'
       notify: reboot-pi
+      ignore_errors: yes
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
         ~/k3s_install.sh >> ~/k3s_install_log.txt
@@ -119,11 +121,7 @@
         name:
           - openshift
           - pyyaml
-          - python3-pip
-          - python3-setuptools
-          - build-essential
           - golang
-          - git
         state: present
       become: true
 

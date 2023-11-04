@@ -43,10 +43,15 @@ ansible-playbook main.yml
 
 ### Upgrading the cluster
 
+Install CRDs:
+```
+kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/download/v0.7.5/system-upgrade-controller.yaml
+```
+
 Run the upgrade playbook:
 
 ```
-ansible-playbook upgrade.yml
+ansible-playbook upgrade.ymal
 ```
 
 ### Monitoring the cluster

@@ -23,7 +23,7 @@
         chart_ref: prometheus-community/kube-prometheus-stack
         chart_version: 48.4.0
         release_namespace: monitoring
-        state: absent
+        state: present
         values: 
           prometheus:
             ingress:
