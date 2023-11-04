@@ -21,8 +21,9 @@
       kubernetes.core.helm:
         name: cluster-monitoring
         chart_ref: prometheus-community/kube-prometheus-stack
-        release_namespace: default
-        state: present
+        chart_version: 48.4.0
+        release_namespace: monitoring
+        state: absent
         values: 
           prometheus:
             ingress:
@@ -41,6 +42,13 @@
                   static_configs:
                     - targets: 
                       - '10.17.84.2:8123'
+                - job_name: 'omada-exporter'
+                  metrics_path: '/metrics'
+                  scrape_interval: 60s
+                  scheme: http
+                  static_configs:
+                    - targets: 
+                      - 'omada-omada-exporter:9202'
           alertmanager:
             enabled: false
           grafana:

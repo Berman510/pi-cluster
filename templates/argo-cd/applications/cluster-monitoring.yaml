@@ -8,30 +8,49 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: cluster-monitoring
+    namespace: monitoring
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://prometheus-community.github.io/helm-charts'
-    targetRevision: 45.1.1
+    targetRevision: 48.4.0
     chart: kube-prometheus-stack
     helm:
       values: |
-          alertmanager:
-            enabled: false
+        prometheus:
           ingress:
             enabled: true
             hosts:
               - prometheus.{{ domain }}
             path: /
-          grafana:
-            ingress:
-              enabled: true
-              hosts:
-                - grafana.{{ domain }}
-              path: /
-          sidecar:
-            dashboards:
-              enabled: true
+            pathType: Prefix
+          prometheusSpec:
+            additionalScrapeConfigs:
+              - job_name: 'home-assistant'
+                metrics_path: '/api/prometheus'
+                scrape_interval: 60s
+                bearer_token: "{{ prometheus_bearer_token }}"
+                scheme: http
+                static_configs:
+                  - targets: 
+                    - '10.17.84.2:8123'
+              - job_name: 'omada-exporter'
+                metrics_path: '/metrics'
+                scrape_interval: 60s
+                scheme: http
+                static_configs:
+                  - targets: 
+                    - 'omada-omada-exporter:9202'
+        alertmanager:
+          enabled: false
+        grafana:
+          ingress:
+            enabled: true
+            hosts:
+              - grafana.{{ domain }}
+            path: /
+        sidecar:
+          dashboards:
+            enabled: true
 
   sources: []
   project: home
@@ -41,3 +60,6 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - Replace=true
+      - ServerSideApply=true

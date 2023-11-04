@@ -6,20 +6,23 @@ metadata:
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  labels:
+    traefik.http.middlewares.limit.buffering.maxRequestBodyBytes: '2500000000'
+    traefik.http.routers.openspeedtest-https.middlewares: 'limit'
 spec:
   destination:
     namespace: openspeedtest
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://openspeedtest.github.io/Helm-chart'
-    targetRevision: 0.1.0
+    targetRevision: 0.1.2
     chart: openspeedtest
     helm:
       values: |
         ingress:
           enabled: true
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
+          #annotations:
+          #  cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
             - host: speedtest.{{ domain }}
               paths:

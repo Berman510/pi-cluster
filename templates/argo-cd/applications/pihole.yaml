@@ -17,7 +17,7 @@ spec:
     helm:
       parameters:
         - name: adminPassword
-          value: '{{ pihole_passwd }}'
+          value: 'admin'
         - name: DNS1
           value: '1.1.1.1'
         - name: DNS2
@@ -35,9 +35,9 @@ spec:
         - name: ingress.path
           value: '/'
         - name: 'ingress.hosts[0]'
-          value: 'pihole.{{ domain }}'
+          value: 'pihole.bermanoc.net'
         - name: virtualHost
-          value: 'pihole.{{ domain }}'
+          value: 'pihole.bermanoc.net'
         - name: persistentVolumeClaim.enabled
           value: 'true'
         - name: persistentVolumeClaim.size
@@ -49,9 +49,9 @@ spec:
       values: |
         serviceDns:
           type: LoadBalancer
-          loadBalancerIP: "{{ pihole_node_ip }}"
+          loadBalancerIP: "10.17.84.21"
         nodeSelector:
-          kubernetes.io/hostname: {{ pihole_node }}
+          kubernetes.io/hostname: nanopi01
         affinity:
         podAnnotations:
           prometheus.io/port: '9617'
@@ -85,6 +85,7 @@ spec:
                 - 10.17.84.21     octoprint.bermanoc.net
                 - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
                 - 10.17.84.21     argocd.bermanoc.net
+                - 10.17.84.21     omada.bermanoc.net
                 - 10.17.84.21     prometheus.bermanoc.net
                 - 10.17.84.21     plex.bermanoc.net
                 - 10.17.84.21     pihole.bermanoc.net
@@ -451,9 +452,9 @@ spec:
         extraEnvVars:
           TZ: "America/Los_Angeles"
           REV_SERVER: "true"
-          REV_SERVER_DOMAIN: "{{ domain }}"
-          REV_SERVER_TARGET: "{{ gateway }}"
-          REV_SERVER_CIDR: "{{ subnet_full_cidr }}"
+          REV_SERVER_DOMAIN: "bermanoc.net"
+          REV_SERVER_TARGET: "10.17.84.1"
+          REV_SERVER_CIDR: "10.0.0.0/8"
           DHCP_ACTIVE: "false"
           WEBTHEME: "lcars"
   sources: []
