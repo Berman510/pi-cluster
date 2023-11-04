@@ -2,19 +2,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kube-prometheus-stack
+  name: prometheus-grafana-stack
   namespace: argo-cd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-  #annotations:
-  #  argocd.argoproj.io/sync-wave: "-40"
+  annotations:
+    argocd.argoproj.io/sync-options: Replace=true
+    strategy.spinnaker.io/replace: 'true'
 spec:
-  destination:
-    namespace: monitoring
-    server: 'https://kubernetes.default.svc'
+  project: home
   source:
     repoURL: 'https://prometheus-community.github.io/helm-charts'
-    targetRevision: 52.1.0
+    targetRevision: 48.4.0
     chart: kube-prometheus-stack
     helm:
       values: |
@@ -53,14 +50,10 @@ spec:
         sidecar:
           dashboards:
             enabled: true
-  project: home
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
   syncPolicy:
     automated:
-      prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-      - ApplyOutOfSyncOnly=true
-      - Replace=true
-      - ServerSideApply=true
-      - PruneLast=true
+      prune: true
