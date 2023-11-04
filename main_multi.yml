@@ -158,11 +158,7 @@
 
 - name: Set up NFS PVCs.
   import_playbook: tasks/kubernetes/nfs.yml
-  tags: ['nfs']
-
-- name: Set up Prometheus.
-  import_playbook: tasks/kubernetes/prometheus.yml
-  tags: ['prometheus']
+  tags: ['nfs'] 
 
 - name: Set up ArgoCD.
   import_playbook: tasks/kubernetes/argo-cd.yml
