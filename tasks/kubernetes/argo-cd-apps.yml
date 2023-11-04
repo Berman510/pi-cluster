@@ -23,7 +23,7 @@
         state: present
         definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
       with_fileglob:
-        #- "../../templates/argo-cd/applications/templates/cluster-monitoring-crds.yaml"
+        - "../../templates/argo-cd/applications/templates/cluster-monitoring-crds.yaml"
         - "../../templates/argo-cd/applications/templates/cluster-monitoring.yaml"
         - "../../templates/argo-cd/applications/templates/cert-manager.yaml"
         - "../../templates/argo-cd/applications/templates/cert.yaml"

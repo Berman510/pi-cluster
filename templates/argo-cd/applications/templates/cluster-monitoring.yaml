@@ -2,10 +2,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-grafana-stack
+  name: cluster-monitoring
   namespace: argo-cd
   annotations:
-    argocd.argoproj.io/sync-options: Replace=true
+    argocd.argoproj.io/sync-wave: "-40"
     strategy.spinnaker.io/replace: 'true'
 spec:
   project: home
@@ -14,6 +14,7 @@ spec:
     targetRevision: 48.4.0
     chart: kube-prometheus-stack
     helm:
+      skipCrds: true
       values: |
         prometheus:
           ingress:
@@ -54,6 +55,8 @@ spec:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
   syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - Replace=true
+      - ServerSideApply=true
