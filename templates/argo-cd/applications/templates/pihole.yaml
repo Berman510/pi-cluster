@@ -12,7 +12,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://mojo2600.github.io/pihole-kubernetes'
-    targetRevision: 2.11.1
+    targetRevision: 2.18.0
     chart: pihole
     helm:
       parameters:
@@ -27,7 +27,7 @@ spec:
         - name: image.repository
           value: pihole/pihole
         - name: image.tag
-          value: '2023.05.2'
+          value: '2023.10.0'
         - name: image.pullPolicy
           value: IfNotPresent
         - name: ingress.enabled
