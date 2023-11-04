@@ -2,20 +2,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-monitoring-crds
+  name: kube-prometheus-stack-crds
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
 spec:
   destination:
     namespace: monitoring
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://prometheus-community.github.io/helm-charts'
-    targetRevision: 5.1.0
-    chart: prometheus-operator-crds
-
-  sources: []
+    repoURL: 'https://github.com/prometheus-community/helm-charts.git'
+    path: charts/kube-prometheus-stack/charts/crds
+    targetRevision: kube-prometheus-stack-52.1.0
+    directory:
+      recurse: true
   project: home
   syncPolicy:
     automated:
@@ -26,3 +28,4 @@ spec:
       - ApplyOutOfSyncOnly=true
       - Replace=true
       - ServerSideApply=true
+      - PruneLast=true

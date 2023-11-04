@@ -42,8 +42,15 @@
               serviceMonitor:
                 enabled: true
           configs:
+            repositories:
+              pi-cluster:
+                url: https://github.com/Berman510/pi-cluster.git
             secret:
               argocdServerAdminPassword: "{{ argo_cd_admin_password }}"
+          repoServer:
+            replicas: 1
+            autoscaling:
+              enabled: false
           server:
             extraArgs:
             - --insecure
