@@ -51,12 +51,12 @@ spec:
             annotations:
               cert-manager.io/cluster-issuer: letsencrypt-prod
             hosts:
-              - host: plex.{{ domain }}
+              - host: plex.bermanoc.net
                 paths:
                   - path: /
                     pathType: ImplementationSpecific
         nodeSelector:
-          kubernetes.io/hostname: {{ plex_node }}
+          kubernetes.io/hostname: nanopi01
         persistence:
           config:
             enabled: true
