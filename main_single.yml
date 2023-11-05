@@ -137,6 +137,6 @@
   import_playbook: tasks/kubernetes/argo-cd.yml
   tags: ['argo-cd']
 
-- name: Set up ArgoCD Apps.
-  import_playbook: tasks/kubernetes/argo-cd-apps.yml
-  tags: ['argo-cd']
+#- name: Set up ArgoCD Apps.
+#  import_playbook: tasks/kubernetes/argo-cd-apps.yml
+#  tags: ['argo-cd']
