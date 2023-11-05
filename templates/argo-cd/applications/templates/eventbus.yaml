@@ -8,3 +8,8 @@ spec:
   jetstream:
     version: 2.9.9
     replicas: 3
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

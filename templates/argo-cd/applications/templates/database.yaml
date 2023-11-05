@@ -82,3 +82,8 @@ spec:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mariadb-pvc
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

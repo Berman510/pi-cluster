@@ -12,3 +12,7 @@ spec:
   secretName: my-cert-tls
   issuerRef:
     name: my-ca-issuer
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
