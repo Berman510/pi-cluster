@@ -22,10 +22,6 @@ metadata:
   name: letsencrypt-ca
   namespace: cert-manager
 spec:
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
   isCA: true
   commonName: osm-system
   secretName: letsencrypt-ca
