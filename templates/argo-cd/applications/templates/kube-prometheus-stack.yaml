@@ -51,6 +51,12 @@ spec:
         sidecar:
           dashboards:
             enabled: true
+      parameters: # Add this section
+        - name: prometheus.prometheusSpec.additionalScrapeConfigs[0].bearer_token
+          valueFrom:
+            secretKeyRef:
+              name: prometheus-secret
+              key: prometheus_bearer_token
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
