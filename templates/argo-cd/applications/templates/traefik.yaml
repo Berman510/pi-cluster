@@ -10,7 +10,7 @@ spec:
   destination:
     namespace: traefik
     server: 'https://kubernetes.default.svc'
-  project: deploy
+  project: home
   source:
     chart: traefik
     repoURL: https://traefik.github.io/charts
