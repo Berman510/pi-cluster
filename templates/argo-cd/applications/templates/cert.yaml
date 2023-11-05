@@ -11,4 +11,5 @@ spec:
     - "bermanoc.net"
   secretName: my-cert-tls
   issuerRef:
-    name: my-ca-issuer
+    name: letsencrypt-prod
+    kind: ClusterIssuer
