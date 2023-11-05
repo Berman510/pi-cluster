@@ -33,7 +33,7 @@ spec:
             username: "prometheus"       #Username for the Omada user.
             password: "prometheus"     #Host of the Omada Controller SDN
             site: "Home"              #Site you'd like to get metrics from.
-            insecure: true              #Whether to skip verifying the SSL certificate on the controller, defaults to false.
+            insecure: false              #Whether to skip verifying the SSL certificate on the controller, defaults to false.
             request_timeout: 15
 
         #Enable Prometheus ServiceMonitor
@@ -88,12 +88,12 @@ spec:
           # choice for the user. This also increases chances charts run on environments with little
           # resources, such as Minikube. If you do want to specify resources, uncomment the following
           # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-          # limits:
-          #   cpu: 100m
-          #   memory: 128Mi
-          # requests:
-          #   cpu: 100m
-          #   memory: 128Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
 
         autoscaling:
           enabled: false

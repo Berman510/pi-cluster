@@ -23,6 +23,8 @@ spec:
               - prometheus.bermanoc.net
             path: /
             pathType: Prefix
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
           prometheusSpec:
             secrets:
               - prometheus-secret
