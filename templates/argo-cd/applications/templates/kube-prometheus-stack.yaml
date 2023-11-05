@@ -24,6 +24,8 @@ spec:
             path: /
             pathType: Prefix
           prometheusSpec:
+            secrets:
+              - prometheus-secret
             additionalScrapeConfigs:
               - job_name: 'home-assistant'
                 metrics_path: '/api/prometheus'
@@ -32,6 +34,7 @@ spec:
                 static_configs:
                   - targets: 
                     - '10.17.84.2:8123'
+                bearer_token_file: /etc/prometheus/secrets/prometheus_bearer_token
               - job_name: 'omada-exporter'
                 metrics_path: '/metrics'
                 scrape_interval: 60s
@@ -50,12 +53,6 @@ spec:
         sidecar:
           dashboards:
             enabled: true
-      parameters: # Add this section
-        - name: prometheus.prometheusSpec.additionalScrapeConfigs[0].bearer_token
-          valueFrom:
-            secretKeyRef:
-              name: prometheus-secret
-              key: prometheus_bearer_token
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
