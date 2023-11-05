@@ -28,7 +28,6 @@ spec:
               - job_name: 'home-assistant'
                 metrics_path: '/api/prometheus'
                 scrape_interval: 60s
-                bearer_token: "{{ prometheus_bearer_token }}"
                 scheme: http
                 static_configs:
                   - targets: 
