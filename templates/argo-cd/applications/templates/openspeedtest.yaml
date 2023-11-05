@@ -15,7 +15,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://openspeedtest.github.io/Helm-chart'
-    targetRevision: 2.0.0
+    targetRevision: 0.1.2
     chart: openspeedtest
     helm:
       values: |
