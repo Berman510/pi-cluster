@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/Berman510/pi-cluster.git'
     targetRevision: 0.0.1
-    path: 'templates/argo-cd/'
+    path: 'templates/argo-cd/templates'
     directory:
       recurse: true
   destination:
