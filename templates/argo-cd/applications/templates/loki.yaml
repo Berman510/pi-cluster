@@ -7,13 +7,17 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
+  ignoreDifferences:
+    - group: "apps"
+      kind: "StatefulSet"
   destination:
-    namespace: loki
+    namespace: monitoring
     server: 'https://kubernetes.default.svc'
+  project: home
   source:
+    chart: loki
     repoURL: https://grafana.github.io/helm-charts
     targetRevision: "5.1.0"
-    chart: loki
     helm:
       releaseName: loki
       values: |
@@ -29,8 +33,8 @@ spec:
                     pathType: Prefix
         monitoring:       
           dashboards:
-            enabled: false
-            namespace: grafana
+            enabled: true
+            namespace: monitoring
           selfMonitoring:
             enabled: true
         minio:
@@ -51,7 +55,6 @@ spec:
         serviceAccount:
           create: true
         
-  project: home
   syncPolicy:
     automated: {}
     syncOptions:

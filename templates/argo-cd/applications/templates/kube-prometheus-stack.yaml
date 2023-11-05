@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-monitoring
+  name: kube-prometheus-stack
   namespace: argo-cd
   annotations:
     argocd.argoproj.io/sync-wave: "-40"
@@ -56,7 +56,4 @@ spec:
     namespace: monitoring
   syncPolicy:
     syncOptions:
-      - CreateNamespace=true
-      - ApplyOutOfSyncOnly=true
-      - Replace=true
       - ServerSideApply=true
