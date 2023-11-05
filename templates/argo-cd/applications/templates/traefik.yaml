@@ -21,28 +21,6 @@ spec:
         deployment:
           enabled: true
           kind: Deployment
-          replicas: 1
-        autoscaling:
-          enabled: true
-          minReplicas: 1
-          maxReplicas: 1
-          metrics:
-          - type: Resource
-            resource:
-              name: memory
-              target:
-                type: Utilization
-                averageUtilization: 60
-          - type: Resource
-            resource:
-              name: cpu
-              target:
-                type: Utilization
-                averageUtilization: 60
-        updateStrategy:
-          rollingUpdate:
-            maxUnavailable: 1
-            maxSurge: 1
         logs:
           general:
             level: WARN
@@ -57,33 +35,6 @@ spec:
           type: LoadBalancer
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
-          spec:
-            externalTrafficPolicy: Cluster
-        ports:
-          traefik:
-            port: 9000
-            expose: false
-            exposedPort: 9000
-            protocol: TCP
-          web:
-            port: 8000
-            expose: true
-            exposedPort: 80
-            protocol: TCP
-            redirectTo: websecure
-          websecure:
-            port: 8443
-            expose: true
-            exposedPort: 443
-            protocol: TCP
-            http3:
-              enabled: false
-            tls:
-              enabled: false
-              options: ""
-              certResolver: ""
-              domains: []
-            middlewares: []
         resources:
           requests:
             cpu: "200m"
