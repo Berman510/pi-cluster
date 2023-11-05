@@ -5,10 +5,10 @@ metadata:
   name: my-cert
   namespace: cert-manager
 spec:
-  commonName: "*.{{ domain }}"
+  commonName: "*.bermanoc.net"
   dnsNames:
-    - "*.{{ domain }}"
-    - "{{ domain }}"
+    - "*.bermanoc.net"
+    - "bermanoc.net"
   secretName: my-cert-tls
   issuerRef:
     name: my-ca-issuer

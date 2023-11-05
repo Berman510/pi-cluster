@@ -20,7 +20,7 @@ spec:
           ingress:
             enabled: true
             hosts:
-              - prometheus.{{ domain }}
+              - prometheus.bermanoc.net
             path: /
             pathType: Prefix
           prometheusSpec:
@@ -46,7 +46,7 @@ spec:
           ingress:
             enabled: true
             hosts:
-              - grafana.{{ domain }}
+              - grafana.bermanoc.net
             path: /
         sidecar:
           dashboards:

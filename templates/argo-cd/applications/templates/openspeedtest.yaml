@@ -24,12 +24,12 @@ spec:
           #annotations:
           #  cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
-            - host: speedtest.{{ domain }}
+            - host: speedtest.bermanoc.net
               paths:
                 - path: /
                   pathType: ImplementationSpecific
         nodeSelector:
-          kubernetes.io/hostname: {{ openspeedtest_node }}
+          kubernetes.io/hostname: nanopi01
   sources: []
   project: home
   syncPolicy:

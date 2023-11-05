@@ -23,7 +23,7 @@ spec:
           image:
             repository: taoyou/iperf3-alpine
         nodeSelector:
-          kubernetes.io/hostname: {{ iperf_node }}
+          kubernetes.io/hostname: nanopi01
   sources: []
   project: home
   syncPolicy:
