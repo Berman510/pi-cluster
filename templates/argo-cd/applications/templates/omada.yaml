@@ -29,11 +29,11 @@ spec:
           pullPolicy: IfNotPresent
 
         omada:
-            host: "https://10.17.84.3" #Host of the Omada Controller SDN
-            username: "prometheus"       #Username for the Omada user.
-            password: "prometheus"     #Host of the Omada Controller SDN
-            site: "Home"              #Site you'd like to get metrics from.
-            insecure: false              #Whether to skip verifying the SSL certificate on the controller, defaults to false.
+            host: "https://10.17.84.3"
+            username: "prometheus"
+            password: "prometheus"
+            site: "Home"
+            insecure: false
             request_timeout: 15
 
         #Enable Prometheus ServiceMonitor
@@ -45,13 +45,7 @@ spec:
         fullnameOverride: ""
 
         serviceAccount:
-          # Specifies whether a service account should be created
           create: true
-          # Annotations to add to the service account
-          annotations: {}
-          # The name of the service account to use.
-          # If not set and create is true, a name is generated using the fullname template
-          name: ""
 
         podAnnotations: {}
 
@@ -59,12 +53,6 @@ spec:
           # fsGroup: 2000
 
         securityContext: {}
-          # capabilities:
-          #   drop:
-          #   - ALL
-          # readOnlyRootFilesystem: true
-          # runAsNonRoot: true
-          # runAsUser: 1000
 
         service:
           type: ClusterIP
@@ -92,11 +80,7 @@ spec:
           #    hosts:
           #      - chart-example.local
 
-        resources: {}
-          # We usually recommend not to specify default resources and to leave this as a conscious
-          # choice for the user. This also increases chances charts run on environments with little
-          # resources, such as Minikube. If you do want to specify resources, uncomment the following
-          # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+        resources:
           limits:
             cpu: 100m
             memory: 128Mi
