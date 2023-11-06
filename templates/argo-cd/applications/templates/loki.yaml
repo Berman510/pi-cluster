@@ -1,0 +1,64 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argo-cd
+spec:
+  project: home
+  source:
+    repoURL: 'https://grafana.github.io/helm-charts'
+    targetRevision: 2.9.11
+    chart: loki-stack
+    helm:
+      values: |
+        loki:
+          serviceMonitor:
+            enabled: true
+            additionalLabels:
+              release: prometheus  # Adjust if your Prometheus release label is different
+
+        promtail:
+          serviceMonitor:
+            enabled: true
+            additionalLabels:
+              release: prometheus  # Adjust if your Prometheus release label is different
+
+        grafana:
+          enabled: false
+
+        # Set the persistence options as needed for your environment
+        persistence:
+          enabled: true
+          accessModes:
+          - ReadWriteOnce
+          size: 10Gi
+          # additional configuration for storage class or existing claim
+
+        # Configure the service type and other settings as per your requirement
+        service:
+          type: ClusterIP
+          port: 3100
+          annotations: {}
+
+        ingress:
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+          hosts:
+            - host: loki.bermanoc.net
+              paths:
+                - path: /
+                  pathType: Prefix
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
