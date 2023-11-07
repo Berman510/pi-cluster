@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: deploy-prod-external-dns
+  name: external-dns
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -13,7 +13,7 @@ spec:
   source:
     chart: external-dns
     repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.13.6
+    targetRevision: 0.13.6
     helm:
       releaseName: external-dns
       values: |
