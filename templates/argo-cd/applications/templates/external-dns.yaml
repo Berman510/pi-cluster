@@ -5,15 +5,17 @@ metadata:
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-30"
 spec:
   destination:
     namespace: kube-system
     name: in-cluster
-  project: home
+  project: default
   source:
-    chart: external-dns
+    chart: external-dnss
     repoURL: https://github.com/kubernetes-sigs/external-dns/
-    targetRevision: 1.13.1
+    targetRevision: 0.13.6
     helm:
       releaseName: external-dns
       values: |
