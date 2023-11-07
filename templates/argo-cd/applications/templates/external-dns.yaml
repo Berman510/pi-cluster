@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: deploy-prod-external-dns
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: kube-system
+    name: in-cluster
+  project: home
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.13.6
+    helm:
+      releaseName: external-dns
+      values: |
+        serviceAccount:
+          create: true
+          annotations:
+        aws:
+          credentials:
+            secretKey: "aws-secret-access-key"
+            accessKey: "aws-access-key-id"
+        policy: sync
+        domainFilters:
+          - bermanoc.net
+        logLevel: "info"
+        env:
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: aws-access-key-id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: aws-secret-access-key
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
