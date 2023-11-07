@@ -13,7 +13,7 @@ spec:
     name: in-cluster
   project: default
   source:
-    chart: external-dnss
+    chart: external-dns
     repoURL: https://github.com/kubernetes-sigs/external-dns/
     targetRevision: v0.13.6
     helm:
