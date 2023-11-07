@@ -13,9 +13,9 @@ spec:
     name: in-cluster
   project: home
   source:
+    repoURL: https://charts.bitnami.com/bitnami
     chart: external-dns
-    repoURL: https://github.com/kubernetes-sigs/external-dns/
-    targetRevision: 1.9.0
+    targetRevision: 6.20.4
     helm:
       values: |
         serviceAccount:
