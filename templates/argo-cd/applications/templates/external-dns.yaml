@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: kube-system
     name: in-cluster
-  project: default
+  project: home
   source:
     chart: external-dns
     repoURL: https://github.com/kubernetes-sigs/external-dns/
