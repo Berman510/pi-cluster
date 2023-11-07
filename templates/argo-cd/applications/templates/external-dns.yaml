@@ -17,11 +17,11 @@ spec:
     repoURL: https://github.com/kubernetes-sigs/external-dns/
     targetRevision: 1.9.0
     helm:
-      releaseName: external-dns
       values: |
         serviceAccount:
           create: true
           annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::321447295215:role/externa-dns
         aws:
           credentials:
             secretKey: "aws-secret-access-key"
