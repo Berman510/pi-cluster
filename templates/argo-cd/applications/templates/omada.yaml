@@ -6,15 +6,13 @@ metadata:
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  labels:
-    monitoring: prometheus
 spec:
   destination:
     namespace: monitoring
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'http://charts.charliehaley.dev'
-    targetRevision: 0.8.0
+    targetRevision: "0.8.0"
     chart: omada-exporter
     helm:
       values: |
