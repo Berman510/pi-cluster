@@ -2,14 +2,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metrics-server-deploy-prod
+  name: metrics-server
   namespace: argo-cd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: kube-system
-    name: in-cluster
+    namespace: monitoring
+    server: 'https://kubernetes.default.svc'
   project: home
   source:
     chart: metrics-server
