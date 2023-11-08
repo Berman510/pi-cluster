@@ -1,0 +1,40 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metrics-server-deploy-prod
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: kube-system
+    name: in-cluster
+  project: home
+  source:
+    chart: metrics-server
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    targetRevision: "3.8.3"
+    helm:
+      releaseName: metrics-server
+      values: |
+        metrics:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+        apiService:
+          create: true
+          insecureSkipTLSVerify: true
+        hostNetwork:
+          enabled: false
+        defaultArgs:
+          - --cert-dir=/tmp
+          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+          - --kubelet-use-node-status-port
+          - --metric-resolution=15s
+          - --kubelet-insecure-tls
+        containerPort: 443
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
