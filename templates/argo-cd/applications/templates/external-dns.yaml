@@ -20,6 +20,8 @@ spec:
       values: |
         serviceAccount:
           create: true
+        sources:
+          - service
         aws:
           credentials:
             accessKeyIDSecretRef:
@@ -29,6 +31,10 @@ spec:
               name: "aws-credentials"
               key: "aws-secret-access-key"
         policy: sync
+        provider: aws
+        registry: txt
+        txtOwnerId: "extdns-internal-bermanoc-net"
+        txtPrefix: "extdns-int-internal-bermanoc-net-"
         domainFilters:
           - bermanoc.net
         logLevel: "info"
