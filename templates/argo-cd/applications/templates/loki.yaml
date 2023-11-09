@@ -25,6 +25,8 @@ spec:
     helm:
       skipCrds: true
       values: |
+        ring:
+          replication_factor: 1
         minio:
           enabled: true
         backend:
