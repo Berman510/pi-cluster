@@ -52,7 +52,7 @@ spec:
           namespaceOverride: grafana
           sidecar:
             datasources:
-              enabled: false
+              enabled: true
           image:
             tag: 8.2.2
           persistence:
