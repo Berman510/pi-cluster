@@ -32,14 +32,6 @@ spec:
           value: '2023.10.0'
         - name: image.pullPolicy
           value: IfNotPresent
-        - name: persistentVolumeClaim.enabled
-          value: 'true'
-        - name: persistentVolumeClaim.size
-          value: 800Mi
-        - name: monitoring.podMonitor.enabled
-          value: 'true'
-        - name: monitoring.sidecar.enabled
-          value: 'true'
       values: |
         ingress:
           enabled: true
@@ -81,33 +73,33 @@ spec:
           storageClass: local-path
           accessModes:
             - ReadWriteOnce
-          size: 500Mi
-        dnsmasq:
-            additionalHostsEntries:
-                - 10.17.84.2      homeassistant homeassistant.bermanoc.net
-                - 10.17.84.3      controller controller.bermanoc.net
-                - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
-                - 10.17.84.21     speedtest.bermanoc.net
-                - 10.17.84.21     grafana.bermanoc.net
-                - 10.17.84.21     octoprint.bermanoc.net
-                - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
-                - 10.17.84.21     argocd.bermanoc.net
-                - 10.17.84.21     omada.bermanoc.net
-                - 10.17.84.21     prometheus.bermanoc.net
-                - 10.17.84.21     plex.bermanoc.net
-                - 10.17.84.21     pihole.bermanoc.net
-                - 10.17.84.23     rpi3 rpi3.bermanoc.net
-                - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
-                - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
-                - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
-                - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
-                - 10.17.84.151    hue hue.bermanoc.net
-                - 10.17.84.162    lgtv lgtv.bermanoc.net
-                - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
-                - 10.17.84.213    homeassistant-wifi.bermanoc.net
-                - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
-                - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
-                - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
+          size: 800Mi
+        #dnsmasq:
+        #    additionalHostsEntries:
+        #        - 10.17.84.2      homeassistant homeassistant.bermanoc.net
+        #        - 10.17.84.3      controller controller.bermanoc.net
+        #        - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
+        #        - 10.17.84.21     speedtest.bermanoc.net
+        #        - 10.17.84.21     grafana.bermanoc.net
+        #        - 10.17.84.21     octoprint.bermanoc.net
+        #        - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
+        #        - 10.17.84.21     argocd.bermanoc.net
+        #        - 10.17.84.21     omada.bermanoc.net
+        #        - 10.17.84.21     prometheus.bermanoc.net
+        #        - 10.17.84.21     plex.bermanoc.net
+        #        - 10.17.84.21     pihole.bermanoc.net
+        #        - 10.17.84.23     rpi3 rpi3.bermanoc.net
+        #        - 10.17.84.51     charlie-iphone charlie-iphone.bermanoc.net
+        #        - 10.17.84.50     charlie-gamerig charlie-gamerig.bermanoc.net
+        #        - 10.17.84.52     charlie-multigig charlie-multigig.bermanoc.net
+        #        - 10.17.84.55     charlie-mbp-tb charlie-mbp-tb.bermanoc.net
+        #        - 10.17.84.151    hue hue.bermanoc.net
+        #        - 10.17.84.162    lgtv lgtv.bermanoc.net
+        #        - 10.17.84.207    violet-gamerig violet-gamerig.bermanoc.net
+        #        - 10.17.84.213    homeassistant-wifi.bermanoc.net
+        #        - 10.0.69.26      anova-oven anova-oven.iot anova-oven.iot.bermanoc.net
+        #        - 10.0.69.30      roomba roomba.iot roomba.iot.bermanoc.net
+        #        - 10.0.69.32      eva-whistle eva-whistle.iot eva-whistle.iot.bermanoc.net
         whitelist:
             - 0.client-channel.google.com
             - 1drv.com
