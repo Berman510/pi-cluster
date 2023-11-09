@@ -41,6 +41,8 @@
             metrics:
               serviceMonitor:
                 enabled: true
+                additionalLabels:
+                  release: kube-prometheus-stack
           configs:
             repositories:
               pi-cluster:
@@ -62,6 +64,8 @@
             metrics:
               serviceMonitor:
                 enabled: true
+                additionalLabels:
+                  release: kube-prometheus-stack
             ingress:
               enabled: true
               hosts:

@@ -59,7 +59,9 @@ spec:
           retention_period: 72h
         monitoring:
           lokiCanary:
-            enabled: false
+            enabled: true
+            annotations:
+              argocd.argoproj.io/hook: PreSync
           selfMonitoring:
             enabled: true
         test:
