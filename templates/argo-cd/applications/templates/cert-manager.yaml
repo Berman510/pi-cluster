@@ -12,7 +12,6 @@ spec:
       annotations:
         argocd.argoproj.io/sync-wave: "-5"
     spec:
-      project: cluster-base
       source:
         repoURL: https://charts.jetstack.io
         chart: cert-manager
