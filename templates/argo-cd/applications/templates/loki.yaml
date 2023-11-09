@@ -47,9 +47,6 @@ spec:
         promtail:
           enabled: true
 
-        fluent-bit:
-          enabled: false
-
         grafana:
           enabled: true
           namespaceOverride: grafana
