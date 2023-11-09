@@ -10,10 +10,13 @@ spec:
   ignoreDifferences:
     - group: "apps"
       kind: "StatefulSet"
+      name: loki-minio
       jsonPointers:
         - /spec/persistentVolumeClaimRetentionPolicy
-        - /spec/volumeClaimTemplates/*/metadata/creationTimestamp
-        - /spec/volumeClaimTemplates/*/status
+        - /spec/volumeClaimTemplates/0/status
+        - /spec/volumeClaimTemplates/0/metadata/creationTimestamp
+        - /spec/volumeClaimTemplates/1/status
+        - /spec/volumeClaimTemplates/1/metadata/creationTimestamp
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
