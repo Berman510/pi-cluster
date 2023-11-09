@@ -9,6 +9,8 @@ metadata:
   labels:
     traefik.http.middlewares.limit.buffering.maxRequestBodyBytes: '2500000000'
     traefik.http.routers.openspeedtest-https.middlewares: 'limit'
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
 spec:
   destination:
     namespace: openspeedtest

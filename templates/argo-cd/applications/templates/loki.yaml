@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: loki
   namespace: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
 spec:
   project: home
   source:

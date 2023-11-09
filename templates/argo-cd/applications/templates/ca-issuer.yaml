@@ -4,6 +4,8 @@ kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
   namespace: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: "-30"
 spec:
   selfSigned: {}
 ---
@@ -12,6 +14,8 @@ kind: Issuer
 metadata:
   name: letsencrypt-ca
   namespace: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: "-25"
 spec:
   ca:
     secretName: letsencrypt-ca
@@ -21,6 +25,8 @@ kind: Certificate
 metadata:
   name: letsencrypt-ca
   namespace: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
 spec:
   isCA: true
   commonName: osm-system
