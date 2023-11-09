@@ -32,14 +32,6 @@ spec:
           value: '2023.10.0'
         - name: image.pullPolicy
           value: IfNotPresent
-        - name: ingress.enabled
-          value: 'true'
-        - name: ingress.path
-          value: '/'
-        - name: 'ingress.hosts[0]'
-          value: 'pihole.bermanoc.net'
-        - name: virtualHost
-          value: 'pihole.bermanoc.net'
         - name: persistentVolumeClaim.enabled
           value: 'true'
         - name: persistentVolumeClaim.size
@@ -49,6 +41,20 @@ spec:
         - name: monitoring.sidecar.enabled
           value: 'true'
       values: |
+        ingress:
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+          path: /
+          hosts:
+            - host: pihole.bermanoc.net
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: my-cert-tls
+              hosts:
+                - pihole.bermanoc.net
         serviceDns:
           type: LoadBalancer
           loadBalancerIP: "10.17.84.21"
