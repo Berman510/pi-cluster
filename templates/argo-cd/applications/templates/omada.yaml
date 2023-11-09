@@ -71,10 +71,6 @@ spec:
 
         autoscaling:
           enabled: false
-          minReplicas: 1
-          maxReplicas: 1
-          targetCPUUtilizationPercentage: 80
-          # targetMemoryUtilizationPercentage: 80
 
         nodeSelector: {}
 

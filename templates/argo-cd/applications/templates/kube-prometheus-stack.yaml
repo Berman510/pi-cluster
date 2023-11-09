@@ -52,8 +52,10 @@ spec:
             hosts:
               - grafana.bermanoc.net
             path: /
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
             tls:
-              - secretName: letsencrypt-prod
+              - secretName: my-cert-tls
                 hosts:
                   - grafana.bermanoc.net
           sidecar:
