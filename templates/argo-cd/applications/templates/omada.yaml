@@ -59,13 +59,14 @@ spec:
           port: 9202
 
         ingress:
-          enabled: true
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
+          enabled: false
           hosts:
             - host: omada.bermanoc.net
-              paths:
-                - path: /
+              paths: []
+          tls:
+            - secretName: my-cert-tls
+              hosts:
+                - omada.bermanoc.net
         #ingress:
         #  enabled: false
         #  # hosts:
