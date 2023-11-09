@@ -74,6 +74,12 @@ spec:
           enabled: false
         serviceAccount:
           create: true
+        podSecurityContext:
+          fsGroup: 10001
+          limits:
+            nofile:
+              soft: 65536
+              hard: 65536
 
   destination:
     server: 'https://kubernetes.default.svc'
