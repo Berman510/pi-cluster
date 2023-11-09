@@ -22,23 +22,16 @@ spec:
           create: true
         aws:
           credentials:
-            secretKey: "aws-secret-access-key"
-            accessKey: "aws-access-key-id"
+            accessKeyIDSecretRef:
+              name: "aws-credentials"
+              key: "aws-access-key-id"
+            secretAccessKeySecretRef:
+              name: "aws-credentials"
+              key: "aws-secret-access-key"
         policy: sync
         domainFilters:
           - bermanoc.net
         logLevel: "info"
-        env:
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: aws-credentials
-                key: aws-access-key-id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: aws-credentials
-                key: aws-secret-access-key
   syncPolicy:
     automated: {}
     syncOptions:
