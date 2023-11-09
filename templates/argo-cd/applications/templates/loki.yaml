@@ -70,9 +70,7 @@ spec:
           #    directory: /var/loki/chunks
         monitoring:
           lokiCanary:
-            enabled: true
-            annotations:
-              argocd.argoproj.io/hook: PreSync
+            enabled: false
           selfMonitoring:
             enabled: true
         test:
