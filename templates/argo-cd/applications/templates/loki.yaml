@@ -51,64 +51,64 @@ spec:
           enabled: true
 
         grafana:
-          enabled: false
-          #namespaceOverride: grafana
-          #sidecar:
-          #  datasources:
-          #    enabled: false
-          #image:
-          #  tag: 8.2.2
-          #persistence:
-          #  type: pvc
-          #  enabled: true
-          #  existingClaim: grafana
-          #securityContext:
-          #  runAsUser: 472
-          #  runAsGroup: 472
-          #initChownData:
-          #  enabled: false
+          enabled: true
+          namespaceOverride: grafana
+          sidecar:
+            datasources:
+              enabled: false
+          image:
+            tag: 8.2.2
+          persistence:
+            type: pvc
+            enabled: true
+            existingClaim: grafana
+          securityContext:
+            runAsUser: 472
+            runAsGroup: 472
+          initChownData:
+            enabled: false
 
         prometheus:
-          enabled: false
-          #forceNamespace: prometheus
-          #configmapReload:
-          #  prometheus:
-          #    enabled: false
-          #  alertmanager:
-          #    enabled: false
-          #server:
-          #  persistentVolume:
-          #    enabled: true
-          #    accessModes:
-          #      - ReadWriteMany
-          #  resources:
-          #    limits:
-          #      cpu: 800m
-          #      memory: 1Gi
-          #    requests:
-          #      cpu: 500m
-          #      memory: 512Mi
-          #alertmanager:
-          #  persistentVolume:
-          #    enabled: true
-          #    accessModes:
-          #      - ReadWriteMany
-          #  resources:
-          #    limits:
-          #      cpu: 100m
-          #      memory: 100Mi
-          #    requests:
-          #      cpu: 50m
-          #      memory: 50Mi
-          #nodeExporter:
-          #  enabled: true
-          #  resources:
-          #    limits:
-          #      cpu: 200m
-          #      memory: 50Mi
-          #    requests:
-          #      cpu: 100m
-          #      memory: 30Mi
+          enabled: true
+          forceNamespace: prometheus
+          configmapReload:
+            prometheus:
+              enabled: false
+            alertmanager:
+              enabled: false
+          server:
+            persistentVolume:
+              enabled: true
+              accessModes:
+                - ReadWriteMany
+            resources:
+              limits:
+                cpu: 800m
+                memory: 1Gi
+              requests:
+                cpu: 500m
+                memory: 512Mi
+          alertmanager:
+            persistentVolume:
+              enabled: true
+              accessModes:
+                - ReadWriteMany
+            resources:
+              limits:
+                cpu: 100m
+                memory: 100Mi
+              requests:
+                cpu: 50m
+                memory: 50Mi
+          nodeExporter:
+            enabled: true
+            resources:
+              limits:
+                cpu: 200m
+                memory: 50Mi
+              requests:
+                cpu: 100m
+                memory: 30Mi
 
         filebeat:
           enabled: false
