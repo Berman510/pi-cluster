@@ -25,66 +25,86 @@ spec:
     helm:
       skipCrds: true
       values: |
-        read:
-          replicas: 1
-        write:
-          replicas: 1
-        commonConfig:
-          replication_factor: 1
-        minio:
-          enabled: true
-        gateway:
-          enabled: true
-          ingress:
-            enabled: true
-            annotations:
-              external-dns.alpha.kubernetes.io/hostname: lokiingest.bermanoc.net
-            hosts:
-              - host: lokiingest.bermanoc.net
-                paths:
-                  - path: /
-                    pathType: Prefix
         loki:
-          singleBinary:
-            replicas: 1
           enabled: true
-          ingress:
+          persistence:
+            type: pvc
             enabled: true
-          auth_enabled: false
-          #schema_config:
-          #  configs:
-          #  - from: 2020-10-24
-          #    store: boltdb-shipper
-          #    object_store: filesystem
-          #    schema: v11
-          #    index:
-          #      prefix: loki_index_
-          #      period: 24h
-          #storage_config:
-          #  boltdb_shipper:
-          #    active_index_directory: /var/loki/index
-          #    cache_location: /var/loki/cache
-          #    cache_ttl: 24h       # Can be increased for longer caching
-          #    shared_store: filesystem
-          #  filesystem:
-          #    directory: /var/loki/chunks
-        monitoring:
-          lokiCanary:
-            enabled: false
-          selfMonitoring:
-            enabled: true
-        test:
+          securityContext:
+            runAsGroup: 10001
+            runAsUser: 10001
+
+        promtail:
+          enabled: true
+
+        fluent-bit:
           enabled: false
-        serviceAccount:
-          create: true
-        podSecurityContext:
-          fsGroup: 10001
-          limits:
-            nofile:
-              soft: 65536
-              hard: 65536
-        singleBinary:
-          replicas: 1
+
+        grafana:
+          enabled: false
+          #namespaceOverride: grafana
+          #sidecar:
+          #  datasources:
+          #    enabled: false
+          #image:
+          #  tag: 8.2.2
+          #persistence:
+          #  type: pvc
+          #  enabled: true
+          #  existingClaim: grafana
+          #securityContext:
+          #  runAsUser: 472
+          #  runAsGroup: 472
+          #initChownData:
+          #  enabled: false
+
+        prometheus:
+          enabled: false
+          #forceNamespace: prometheus
+          #configmapReload:
+          #  prometheus:
+          #    enabled: false
+          #  alertmanager:
+          #    enabled: false
+          #server:
+          #  persistentVolume:
+          #    enabled: true
+          #    accessModes:
+          #      - ReadWriteMany
+          #  resources:
+          #    limits:
+          #      cpu: 800m
+          #      memory: 1Gi
+          #    requests:
+          #      cpu: 500m
+          #      memory: 512Mi
+          #alertmanager:
+          #  persistentVolume:
+          #    enabled: true
+          #    accessModes:
+          #      - ReadWriteMany
+          #  resources:
+          #    limits:
+          #      cpu: 100m
+          #      memory: 100Mi
+          #    requests:
+          #      cpu: 50m
+          #      memory: 50Mi
+          #nodeExporter:
+          #  enabled: true
+          #  resources:
+          #    limits:
+          #      cpu: 200m
+          #      memory: 50Mi
+          #    requests:
+          #      cpu: 100m
+          #      memory: 30Mi
+
+        filebeat:
+          enabled: false
+
+        logstash:
+          enabled: false
 
   destination:
     server: 'https://kubernetes.default.svc'
