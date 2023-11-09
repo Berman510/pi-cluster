@@ -7,48 +7,39 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-55"
 spec:
+  ignoreDifferences:
+    - group: "apps"
+      kind: "StatefulSet"
+      jsonPointers:
+        - /spec/persistentVolumeClaimRetentionPolicy
   project: home
   source:
-    repoURL: 'https://grafana.github.io/helm-charts'
-    targetRevision: 2.9.11
-    chart: loki-stack
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: "5.36.3"
+    chart: loki
     helm:
+      skipCrds: true
       values: |
+        minio:
+          enabled: true
         loki:
-          serviceMonitor:
-            enabled: true
-            additionalLabels:
-              release: kube-prometheus-stack
-
-        promtail:
-          serviceMonitor:
-            enabled: true
-            additionalLabels:
-              release: kube-prometheus-stack
-
-        grafana:
+          auth_enabled: false
+          compactor:
+            working_directory: /var/loki/compactor/retention
+            shared_store: s3
+            compaction_interval: 10m
+            retention_enabled: true
+            retention_delete_delay: 2h
+            retention_delete_worker_count: 150
+          limits_config:
+          retention_period: 72h
+        monitoring:
+          lokiCanary:
+            enabled: false
+          selfMonitoring:
+            enabled: false
+        test:
           enabled: false
-
-        persistence:
-          enabled: true
-          accessModes:
-          - ReadWriteOnce
-          size: 10Gi
-
-        service:
-          type: ClusterIP
-          port: 3100
-          annotations: {}
-
-        ingress:
-          enabled: true
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-          hosts:
-            - host: loki.bermanoc.net
-              paths:
-                - path: /
-                  pathType: Prefix
 
   destination:
     server: 'https://kubernetes.default.svc'
