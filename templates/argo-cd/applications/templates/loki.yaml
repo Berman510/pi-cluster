@@ -31,8 +31,6 @@ spec:
         loki:
           storage:
             type: 'filesystem'
-          singleBinary:
-            replicas: 1
           auth_enabled: false
           compactor:
             working_directory: /var/loki/compactor/retention
