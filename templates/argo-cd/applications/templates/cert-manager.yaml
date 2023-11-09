@@ -22,6 +22,8 @@ spec:
         installCRDs: true
         prometheus:
           enabled: true
+          servicemonitor:
+            enabled: true
         startupapicheck:
           timeout: 5m
 

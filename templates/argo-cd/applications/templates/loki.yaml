@@ -18,7 +18,7 @@ spec:
     targetRevision: "5.36.3"
     chart: loki
     helm:
-      #skipCrds: true
+      skipCrds: true
       values: |
         minio:
           enabled: true
