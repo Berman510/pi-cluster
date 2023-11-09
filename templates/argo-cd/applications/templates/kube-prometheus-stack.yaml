@@ -102,6 +102,14 @@ spec:
                 gnetId: 15038
                 datasource: Prometheus
                 revision: 1
+          additionalDataSources:
+            - access: proxy
+              isDefault: false
+              name: loki
+              orgId: 1
+              type: loki
+              url: http://loki.monitoring.svc.cluster.local:3100
+              version: 1
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
