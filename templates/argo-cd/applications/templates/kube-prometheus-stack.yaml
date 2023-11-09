@@ -52,9 +52,13 @@ spec:
             hosts:
               - grafana.bermanoc.net
             path: /
-        sidecar:
-          dashboards:
-            enabled: true
+            tls:
+              - secretName: letsencrypt-prod
+                hosts:
+                  - grafana.bermanoc.net
+          sidecar:
+            dashboards:
+              enabled: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
