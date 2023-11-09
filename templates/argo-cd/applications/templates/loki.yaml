@@ -31,8 +31,12 @@ spec:
           replicas: 1
         write:
           replicas: 1
+          persistence:
+            storageClass: "local-path"
         read:
           replicas: 1
+          persistence:
+            storageClass: "local-path"
         gateway:
           enabled: true
           ingress:
