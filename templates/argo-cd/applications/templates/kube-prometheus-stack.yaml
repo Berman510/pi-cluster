@@ -24,7 +24,9 @@ spec:
             path: /
             pathType: Prefix
             annotations:
+              kubernetes.io/ingress.class: "traefik"
               cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
             tls:
               - secretName: my-cert-tls
                 hosts:
@@ -57,7 +59,9 @@ spec:
               - grafana.bermanoc.net
             path: /
             annotations:
+              kubernetes.io/ingress.class: "traefik"
               cert-manager.io/cluster-issuer: letsencrypt-prod
+              traefik.ingress.kubernetes.io/router.entrypoints: websecure
             tls:
               - secretName: my-cert-tls
                 hosts:
