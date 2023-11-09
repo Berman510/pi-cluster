@@ -43,14 +43,11 @@ spec:
       values: |
         ingress:
           enabled: true
+          hosts:
+            - pihole.bermanoc.net
+          path: /
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
-          path: /
-          hosts:
-            - host: pihole.bermanoc.net
-              paths:
-                - path: /
-                  pathType: Prefix
           tls:
             - secretName: my-cert-tls
               hosts:
