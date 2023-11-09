@@ -43,8 +43,6 @@ spec:
                     pathType: Prefix
         loki:
           enabled: true
-          singleBinary:
-            replicas: 1
           auth_enabled: false
           schema_config:
             configs:
@@ -80,6 +78,8 @@ spec:
             nofile:
               soft: 65536
               hard: 65536
+        singleBinary:
+          replicas: 1
 
   destination:
     server: 'https://kubernetes.default.svc'
