@@ -25,6 +25,10 @@ spec:
     helm:
       skipCrds: true
       values: |
+        read:
+          replicas: 1
+        write:
+          replicas: 1
         commonConfig:
           replication_factor: 1
           path_prefix: /var/loki
