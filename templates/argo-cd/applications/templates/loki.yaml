@@ -26,6 +26,11 @@ spec:
       skipCrds: true
       values: |
         loki:
+          storage:
+            type: 'filesystem'
+          rulerConfig:
+            storage:
+              type: local
           commonConfig:
             replication_factor: 1
           enabled: true
