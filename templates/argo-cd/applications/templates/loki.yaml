@@ -12,6 +12,8 @@ spec:
       kind: "StatefulSet"
       jsonPointers:
         - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/volumeClaimTemplates/*/metadata/creationTimestamp
+        - /spec/volumeClaimTemplates/*/status
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
