@@ -28,8 +28,6 @@ spec:
         commonConfig:
           replication_factor: 1
           path_prefix: /var/loki
-        ring:
-          replication_factor: 1
         minio:
           enabled: true
         backend:
