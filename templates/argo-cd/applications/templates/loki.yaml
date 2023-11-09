@@ -25,6 +25,9 @@ spec:
     helm:
       skipCrds: true
       values: |
+        commonConfig:
+          replication_factor: 1
+          path_prefix: /var/loki
         ring:
           replication_factor: 1
         minio:
