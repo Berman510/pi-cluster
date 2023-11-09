@@ -1,11 +1,8 @@
----
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: cert-manager
-  namespace: argo-cd
-  annotations:
-    argocd.argoproj.io/sync-wave: "-50"
+  namespace: argocd
 spec:
   generators:
     - clusters: {}
@@ -13,13 +10,11 @@ spec:
     metadata:
       name: cert-manager
       annotations:
-        argocd.argoproj.io/sync-wave: "-50"
+        argocd.argoproj.io/sync-wave: "-5"
     spec:
-      destination:
-        namespace: cert-manager
-        server: https://kubernetes.default.svc
+      project: cluster-base
       source:
-        repoURL: 'https://charts.jetstack.io'
+        repoURL: https://charts.jetstack.io
         chart: cert-manager
         targetRevision: 1.13.2
         helm:
@@ -35,8 +30,10 @@ spec:
                 enabled: true
             startupapicheck:
               timeout: 5m
-      sources: []
       project: home
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
+      destination:
+        namespace: cert-manager
+        server: https://kubernetes.default.svc
