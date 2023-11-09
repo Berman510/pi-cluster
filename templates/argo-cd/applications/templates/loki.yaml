@@ -22,15 +22,15 @@ spec:
       values: |
         minio:
           enabled: true
-        backend:
-          replicas: 1
-        write:
-          replicas: 1
-        read:
-          replicas: 1
+        #backend:
+        #  replicas: 1
+        #write:
+        #  replicas: 1
+        #read:
+        #  replicas: 1
         loki:
-          storage:
-            type: 'filesystem'
+          singleBinary:
+            replicas: 1
           auth_enabled: false
           compactor:
             working_directory: /var/loki/compactor/retention
