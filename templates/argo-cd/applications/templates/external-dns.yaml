@@ -23,6 +23,7 @@ spec:
         aws:
           credentials:
             secretName: aws-credentials
+            CredentialsChainVerboseErrors: true
         txtOwnerId: "external-dns-bermanoc-net"
         policy: sync
         domainFilters:
