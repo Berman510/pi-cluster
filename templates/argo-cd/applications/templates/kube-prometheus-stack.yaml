@@ -25,6 +25,10 @@ spec:
             pathType: Prefix
             annotations:
               cert-manager.io/cluster-issuer: letsencrypt-prod
+            tls:
+              - secretName: my-cert-tls
+                hosts:
+                  - grafana.bermanoc.net
           prometheusSpec:
             secrets:
               - prometheus-secret
