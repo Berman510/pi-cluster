@@ -34,6 +34,9 @@ spec:
             runAsGroup: 10001
             runAsUser: 10001
           auth_enabled: false
+          singleBinary:
+            enabled: true
+            replicas: 1
 
         promtail:
           enabled: true
