@@ -5,15 +5,7 @@ metadata:
   name: letsencrypt-prod
   namespace: cert-manager
 spec:
-  acme:
-    email: 'charlie.berman@gmail.com'
-    server: https://acme-v02.api.letsencrypt.org/directory
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    solvers:
-    - http01:
-        ingress:
-          class: traefik
+  selfSigned: {}
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
