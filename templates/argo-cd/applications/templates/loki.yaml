@@ -31,7 +31,6 @@ spec:
           replicas: 1
         commonConfig:
           replication_factor: 1
-          path_prefix: /var/loki
         minio:
           enabled: true
         gateway:
@@ -46,6 +45,8 @@ spec:
                   - path: /
                     pathType: Prefix
         loki:
+          singleBinary:
+            replicas: 1
           enabled: true
           ingress:
             enabled: true
