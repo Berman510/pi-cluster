@@ -26,6 +26,8 @@ spec:
       skipCrds: true
       values: |
         loki:
+          commonConfig:
+            replication_factor: 1
           enabled: true
           persistence:
             type: pvc
@@ -35,7 +37,6 @@ spec:
             runAsUser: 10001
           auth_enabled: false
           singleBinary:
-            enabled: true
             replicas: 1
 
         promtail:
