@@ -28,6 +28,17 @@ spec:
           replicas: 1
         read:
           replicas: 1
+        gateway:
+          enabled: true
+          ingress:
+            enabled: true
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: loki.bermanoc.net
+            hosts:
+              - host: lokiingest.bermanoc.net
+                paths:
+                  - path: /
+                    pathType: Prefix
         loki:
           singleBinary:
             replicas: 1
@@ -45,9 +56,11 @@ spec:
           lokiCanary:
             enabled: false
           selfMonitoring:
-            enabled: false
+            enabled: true
         test:
           enabled: false
+        serviceAccount:
+          create: true
 
   destination:
     server: 'https://kubernetes.default.svc'
