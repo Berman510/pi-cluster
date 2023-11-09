@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: cert-manager
   namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "-50"
 spec:
@@ -17,8 +19,6 @@ spec:
     helm:
       releaseName: cert-manager
       values: |
-        clusterResourceNamespace: "cert-manager"
-        namespace: "cert-manager"
         installCRDs: true
         prometheus:
           enabled: true
