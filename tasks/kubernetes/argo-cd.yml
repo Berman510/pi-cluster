@@ -17,7 +17,7 @@
         name: argo-cd
         api_version: v1
         kind: Namespace
-        state: absent
+        state: present
 
     - name: Add Argo-CD chart repo.
       kubernetes.core.helm_repository:
@@ -29,7 +29,7 @@
         name: argo-cd
         chart_ref: argo/argo-cd
         release_namespace: argo-cd
-        state: absent
+        state: present
         values:
           params:
             server.insecure: true
