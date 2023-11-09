@@ -46,13 +46,55 @@ spec:
                     - 'omada-omada-exporter:9202'
         alertmanager:
           enabled: false
+        #grafana:
+        #  sidecar:
+        #    dashboards:
+        #      label: grafana_dashboard
+        #      folderAnnotation: grafana_folder
+        #      provider:
+        #        foldersFromFilesStructure: true
+        #  dashboardProviders:
+        #    dashboardproviders.yaml:
+        #      apiVersion: 1
+        #      providers:
+        #        - name: 'argo'
+        #          orgId: 1
+        #          folder: 'argo'
+        #          type: file
+        #          disableDeletion: false
+        #          editable: true
+        #          options:
+        #            path: /var/lib/grafana/dashboards/argo
+        #        - name: 'external-dns'
+        #          orgId: 1
+        #          folder: 'external-dns'
+        #          type: file
+        #          disableDeletion: false
+        #          editable: true
+        #          options:
+        #            path: /var/lib/grafana/dashboards/external-dns
+        #  dashboards:
+        #    argo:
+        #      argocd:
+        #        # https://grafana.com/grafana/dashboards/14584-argocd/
+        #        gnetId: 14584
+        #        datasource: Prometheus
+        #        revision: 1
+        #    external-dns:
+        #      external-dns:
+        #        # https://grafana.com/grafana/dashboards/15038-external-dns/
+        #        gnetId: 15038
+        #        datasource: Prometheus
+        #        revision: 1
         grafana:
-          sidecar:
-            dashboards:
-              label: grafana_dashboard
-              folderAnnotation: grafana_folder
-              provider:
-                foldersFromFilesStructure: true
+          ingress:
+            enabled: true
+            hosts:
+              - grafana.bermanoc.net
+            path: /
+        sidecar:
+          dashboards:
+            enabled: true
           dashboardProviders:
             dashboardproviders.yaml:
               apiVersion: 1
@@ -86,15 +128,6 @@ spec:
                 gnetId: 15038
                 datasource: Prometheus
                 revision: 1
-        #grafana:
-        #  ingress:
-        #    enabled: true
-        #    hosts:
-        #      - grafana.bermanoc.net
-        #    path: /
-        #sidecar:
-        #  dashboards:
-        #    enabled: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
