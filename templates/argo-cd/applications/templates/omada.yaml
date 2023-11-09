@@ -59,23 +59,7 @@ spec:
           port: 9202
 
         ingress:
-          enabled: true
-          hosts:
-            - host: omada.bermanoc.net
-              paths: []
-          tls:
-            - secretName: my-cert-tls
-              hosts:
-                - omada.bermanoc.net
-        #ingress:
-        #  enabled: false
-        #  # hosts:
-        #  #   - host: chart-example.local
-        #  #     paths: []
-        #  # tls: []
-        #  #  - secretName: chart-example-tls
-        #  #    hosts:
-        #  #      - chart-example.local
+          enabled: false
 
         resources:
           limits:
