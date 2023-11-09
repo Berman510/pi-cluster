@@ -30,6 +30,15 @@ spec:
           path_prefix: /var/loki
         minio:
           enabled: true
+          ingress:
+            enabled: true
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: minio.bermanoc.net
+            hosts:
+              - host: minio.bermanoc.net
+                paths:
+                  - path: /
+                    pathType: Prefix
         gateway:
           enabled: true
           ingress:
