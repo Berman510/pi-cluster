@@ -42,7 +42,7 @@ spec:
           ingress:
             enabled: true
             annotations:
-              external-dns.alpha.kubernetes.io/hostname: loki.bermanoc.net
+              external-dns.alpha.kubernetes.io/hostname: lokiingest.bermanoc.net
             hosts:
               - host: lokiingest.bermanoc.net
                 paths:
