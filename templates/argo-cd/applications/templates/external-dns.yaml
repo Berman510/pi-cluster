@@ -20,6 +20,10 @@ spec:
       values: |
         serviceAccount:
           create: true
+        aws:
+          credentials:
+            secretKey: "aws-secret-access-key"
+            accessKey: "aws-access-key-id"
         policy: sync
         domainFilters:
           - bermanoc.net
