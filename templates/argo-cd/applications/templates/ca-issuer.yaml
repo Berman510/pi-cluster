@@ -5,7 +5,15 @@ metadata:
   name: letsencrypt-prod
   namespace: cert-manager
 spec:
-  selfSigned: {}
+  acme:
+    email: 'charlie.berman@gmail.com'
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: traefik
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -29,3 +37,37 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
     group: cert-manager.io
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami-tls-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+spec:
+  rules:
+    - host: whoami.bermanoc.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port:
+                  number: 5678
+  tls:
+    - secretName: whoami-tls
+      hosts:
+        - whoami.bermanoc.net
