@@ -14,7 +14,7 @@ spec:
     targetRevision: 52.1.0
     chart: kube-prometheus-stack
     helm:
-      skipCrds: true
+      skipCrds: false
       values: |
         prometheus:
           ingress:
@@ -114,8 +114,6 @@ spec:
     server: 'https://kubernetes.default.svc'
     namespace: monitoring
   syncPolicy:
-    syncOptions:
-      - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true
