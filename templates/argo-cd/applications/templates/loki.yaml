@@ -12,7 +12,7 @@ spec:
       kind: "StatefulSet"
       name: loki-minio
       jsonPointers:
-        - /spec/relabelings
+        - /spec/relabelings/*
         #- /spec/persistentVolumeClaimRetentionPolicy
         #- /spec/volumeClaimTemplates/*
         #- /spec/volumeClaimTemplates/*/metadata/*
