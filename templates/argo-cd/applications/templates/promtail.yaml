@@ -47,7 +47,7 @@ spec:
                     target_label: 'hostname'
           logLevel: info
           clients:
-            - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
+            - url: http://loki.loki.svc.cluster.local:3100/loki/api/v1/push
         extraVolumes:
           - name: journal
             hostPath:
@@ -58,7 +58,7 @@ spec:
             readOnly: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: promtail
   syncPolicy:
     automated: {}
     syncOptions:
