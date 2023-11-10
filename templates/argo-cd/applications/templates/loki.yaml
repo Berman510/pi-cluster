@@ -12,10 +12,9 @@ spec:
       kind: "StatefulSet"
       name: loki-minio
       jsonPointers:
-        - /spec/template/spec/persistentVolumeClaimRetentionPolicy
-        - /spec/template/spec/volumeClaimTemplates/*
-        - /spec/template/spec/volumeClaimTemplates/*/metadata/*
-        - /spec/template/spec/volumeClaimTemplates/*/apiVersion/*
+        - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/volumeClaimTemplates/metadata/*
+        - /spec/volumeClaimTemplates/apiVersion/*
     - group: "apps"
       kind: "PodLogs"
       name: loki
