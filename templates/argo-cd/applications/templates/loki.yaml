@@ -12,15 +12,15 @@ spec:
       kind: "StatefulSet"
       name: loki-minio
       jsonPointers:
-        - /spec/persistentVolumeClaimRetentionPolicy
-        - /spec/volumeClaimTemplates/*
-        - /spec/volumeClaimTemplates/*/metadata/*
-        - /spec/volumeClaimTemplates/*/apiVersion/*
+        - /spec/template/spec/persistentVolumeClaimRetentionPolicy
+        - /spec/template/spec/volumeClaimTemplates/*
+        - /spec/template/spec/volumeClaimTemplates/*/metadata/*
+        - /spec/template/spec/volumeClaimTemplates/*/apiVersion/*
     - group: "apps"
       kind: "PodLogs"
       name: loki
       jsonPointers:
-        - /spec/relabelings/*
+        - /spec/template/spec/relabelings/*
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
