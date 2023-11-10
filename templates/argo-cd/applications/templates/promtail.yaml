@@ -63,3 +63,4 @@ spec:
     automated: {}
     syncOptions:
       - ServerSideApply=true
+      - CreateNamespace=true
