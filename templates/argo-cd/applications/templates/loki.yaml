@@ -13,10 +13,9 @@ spec:
       name: loki-minio
       jsonPointers:
         - /spec/persistentVolumeClaimRetentionPolicy
-        - /spec/volumeClaimTemplates/0/status
-        - /spec/volumeClaimTemplates/0/metadata/creationTimestamp
-        - /spec/volumeClaimTemplates/1/status
-        - /spec/volumeClaimTemplates/1/metadata/creationTimestamp
+        - /spec/volumeClaimTemplates/*
+        - /spec/volumeClaimTemplates/*/metadata/*
+        - /spec/volumeClaimTemplates/*/apiVersion/*
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
