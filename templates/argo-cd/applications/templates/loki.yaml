@@ -20,7 +20,7 @@ spec:
       kind: "PodLogs"
       name: loki
       jsonPointers:
-        - /spec/relabelings
+        - /spec/relabelings/*
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
