@@ -7,109 +7,81 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-55"
 spec:
-  #ignoreDifferences:
-  #  - group: "apps"
-  #    kind: "StatefulSet"
-  #    name: loki-minio
-  #    jsonPointers:
-  #      - /spec/persistentVolumeClaimRetentionPolicy
-  #      - /spec/volumeClaimTemplates/0/status
-  #      - /spec/volumeClaimTemplates/0/metadata/creationTimestamp
-  #      - /spec/volumeClaimTemplates/1/status
-  #      - /spec/volumeClaimTemplates/1/metadata/creationTimestamp
+  ignoreDifferences:
+    - group: "apps"
+      kind: "StatefulSet"
+      name: loki-minio
+      jsonPointers:
+        - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/volumeClaimTemplates/0/status
+        - /spec/volumeClaimTemplates/0/metadata/creationTimestamp
+        - /spec/volumeClaimTemplates/1/status
+        - /spec/volumeClaimTemplates/1/metadata/creationTimestamp
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: "2.9.11"
-    chart: loki-stack
+    targetRevision: "5.36.3"
+    chart: loki
     helm:
       skipCrds: true
       values: |
+        commonConfig:
+          replication_factor: 1
+          path_prefix: /var/loki
+        minio:
+          enabled: true
+          ingress:
+            enabled: true
+        #gateway:
+        #  enabled: true
+        #  ingress:
+        #    enabled: true
+        #    annotations:
+        #      external-dns.alpha.kubernetes.io/hostname: lokiingest.bermanoc.net
+        #    hosts:
+        #      - host: lokiingest.bermanoc.net
+        #        paths:
+        #          - path: /
+        #            pathType: Prefix
         loki:
-          storage:
-            type: 'filesystem'
-          rulerConfig:
-            storage:
-              type: local
-          commonConfig:
-            replication_factor: 1
           enabled: true
-          persistence:
-            type: pvc
-            enabled: true
-          securityContext:
-            runAsGroup: 10001
-            runAsUser: 10001
           auth_enabled: false
-          singleBinary:
-            replicas: 1
-
-        promtail:
-          enabled: true
-
-        grafana:
-          enabled: true
-          sidecar:
-            datasources:
-              enabled: true
-          image:
-            tag: 8.2.2
-          persistence:
-            type: pvc
+          #schema_config:
+          #  configs:
+          #  - from: 2020-10-24
+          #    store: boltdb-shipper
+          #    object_store: filesystem
+          #    schema: v11
+          #    index:
+          #      prefix: loki_index_
+          #      period: 24h
+          #storage_config:
+          #  boltdb_shipper:
+          #    active_index_directory: /var/loki/index
+          #    cache_location: /var/loki/cache
+          #    cache_ttl: 24h       # Can be increased for longer caching
+          #    shared_store: filesystem
+          #  filesystem:
+          #    directory: /var/loki/chunks
+        monitoring:
+          lokiCanary:
             enabled: true
-            existingClaim: grafana
-          securityContext:
-            runAsUser: 472
-            runAsGroup: 472
-          initChownData:
-            enabled: false
-
-        prometheus:
-          enabled: true
-          configmapReload:
-            prometheus:
-              enabled: false
-            alertmanager:
-              enabled: false
-          server:
-            persistentVolume:
-              enabled: true
-              accessModes:
-                - ReadWriteMany
-            resources:
-              limits:
-                cpu: 800m
-                memory: 1Gi
-              requests:
-                cpu: 500m
-                memory: 512Mi
-          alertmanager:
-            persistentVolume:
-              enabled: true
-              accessModes:
-                - ReadWriteMany
-            resources:
-              limits:
-                cpu: 100m
-                memory: 100Mi
-              requests:
-                cpu: 50m
-                memory: 50Mi
-          nodeExporter:
+            annotations:
+              argocd.argoproj.io/hook: PreSync
+          selfMonitoring:
             enabled: true
-            resources:
-              limits:
-                cpu: 200m
-                memory: 50Mi
-              requests:
-                cpu: 100m
-                memory: 30Mi
-
-        filebeat:
+        test:
           enabled: false
-
-        logstash:
-          enabled: false
+        serviceAccount:
+          create: true
+        podSecurityContext:
+          fsGroup: 10001
+          limits:
+            nofile:
+              soft: 65536
+              hard: 65536
+        singleBinary:
+          replicas: 1
 
   destination:
     server: 'https://kubernetes.default.svc'
