@@ -31,11 +31,9 @@ spec:
       values: |
         commonConfig:
           replication_factor: 1
-          path_prefix: /var/loki
+          path_prefix: /loki
         minio:
           enabled: true
-          ingress:
-            enabled: true
         gateway:
           enabled: true
           ingress:
@@ -50,6 +48,8 @@ spec:
         loki:
           enabled: true
           auth_enabled: false
+          frontend_worker:
+            parallelism: 2
           schema_config:
             configs:
             - from: 2020-10-24
@@ -59,14 +59,16 @@ spec:
               index:
                 prefix: loki_index_
                 period: 24h
+          common:
+            replication_factor: 1
           storage_config:
             boltdb_shipper:
-              active_index_directory: /var/loki/index
-              cache_location: /var/loki/cache
+              active_index_directory: /loki/index
+              cache_location: /loki/cache
               cache_ttl: 24h       # Can be increased for longer caching
               shared_store: filesystem
             filesystem:
-              directory: /var/loki/chunks
+              directory: /loki/chunks
         monitoring:
           lokiCanary:
             enabled: true
@@ -84,8 +86,8 @@ spec:
             nofile:
               soft: 65536
               hard: 65536
-        singleBinary:
-          replicas: 1
+        #singleBinary:
+        #  replicas: 1
 
   destination:
     server: 'https://kubernetes.default.svc'
