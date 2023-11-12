@@ -1,6 +1,6 @@
 ---
 - name: Set up cluster-wide configuration.
-  hosts: cluster
+  hosts: all
   gather_facts: false
   become: true
 
@@ -49,30 +49,30 @@
         commands: ALL
         nopassword: true
 
-- name: Set up Certificates
-  import_playbook: tasks/certs/ca-root.yml
-  tags: ['certs']
-
-- name: Configure storage node.
-  hosts: storage
-  gather_facts: true
-  become: true
-
-  vars_files:
-    - config.yml
-
-  tasks:
-    - name: Set up mount.
-      ansible.posix.mount:
-        path: "/srv"
-        src: UUID="{{ ansible_devices.sda.partitions.sda1.uuid }}"
-        fstype: ext4
-        opts: rw,auto
-        dump: '1'
-        state: mounted
-      when: ansible_devices.sda.partitions.sda1.uuid is defined
-    - name: Set up storage.
-      include_tasks: tasks/storage/{{ storage_type }}.yml
+#- name: Set up Certificates
+#  import_playbook: tasks/certs/ca-root.yml
+#  tags: ['certs']
+#
+#- name: Configure storage node.
+#  hosts: storage
+#  gather_facts: true
+#  become: true
+#
+#  vars_files:
+#    - config.yml
+#
+#  tasks:
+#    - name: Set up mount.
+#      ansible.posix.mount:
+#        path: "/srv"
+#        src: UUID="{{ ansible_devices.sda.partitions.sda1.uuid }}"
+#        fstype: ext4
+#        opts: rw,auto
+#        dump: '1'
+#        state: mounted
+#      when: ansible_devices.sda.partitions.sda1.uuid is defined
+#    - name: Set up storage.
+#      include_tasks: tasks/storage/{{ storage_type }}.yml
 
 
 - name: Configure the control plane.
@@ -84,15 +84,17 @@
     - config.yml
 
   tasks:
-    #- name: Ensure cgroups are configured correctly in cmdline.txt.
-    #  ansible.builtin.replace:
-    #    path: /boot/cmdline.txt
-    #    regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
-    #    replace: '\1 {{ item }}'
-    #  with_items:
-    #    - "cgroup_memory=1"
-    #    - "cgroup_enable=memory"
-    #  notify: reboot-pi
+    - name: Ensure cgroups are configured correctly in cmdline.txt.
+      ansible.builtin.replace:
+        path: /boot/cmdline.txt
+        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_items:
+        - "cgroup_memory=1"
+        - "cgroup_enable=memory"
+      when: ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution'] == 'Raspberry Pi OS'
+      notify: reboot-pi
+      ignore_errors: yes
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
         ~/k3s_install.sh >> ~/k3s_install_log.txt
@@ -119,6 +121,7 @@
         name:
           - openshift
           - pyyaml
+          - golang
         state: present
       become: true
 
@@ -148,7 +151,6 @@
           - python3-setuptools
           - build-essential
           - golang
-          - git
         state: present
       become: true
 
@@ -164,6 +166,6 @@
   import_playbook: tasks/kubernetes/argo-cd.yml
   tags: ['argo-cd']
 
-- name: Set up ArgoCD Apps.
-  import_playbook: tasks/kubernetes/argo-cd-apps.yml
-  tags: ['argo-cd']
+#- name: Set up ArgoCD Apps.
+#  import_playbook: tasks/kubernetes/argo-cd-apps.yml
+#  tags: ['argo-cd']
