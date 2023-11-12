@@ -70,7 +70,7 @@ spec:
                 memory: 128Mi
         persistentVolumeClaim:
           enabled: true
-          storageClass: local-path
+          storageClass: nfs-client
           accessModes:
             - ReadWriteOnce
           size: 800Mi
