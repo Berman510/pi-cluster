@@ -39,7 +39,7 @@ spec:
                   accessModes: ["ReadWriteOnce"]
                   resources:
                     requests:
-                      storage: 10Gi
+                      storage: 3Gi
             secrets:
               - prometheus-secret
             additionalScrapeConfigs:
