@@ -1,0 +1,113 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-40"
+    strategy.spinnaker.io/replace: 'true'
+spec:
+  project: home
+  source:
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
+    targetRevision: 52.1.0
+    chart: kube-prometheus-stack
+    helm:
+      skipCrds: true
+      values: |
+        prometheus:
+          ingress:
+            enabled: true
+            hosts:
+              - prometheus.bermanoc.net
+            path: /
+            pathType: Prefix
+            annotations:
+              kubernetes.io/ingress.class: "traefik"
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              #traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            tls:
+              - secretName: my-cert-tls
+                hosts:
+                  - grafana.bermanoc.net
+          prometheusSpec:
+            secrets:
+              - prometheus-secret
+            additionalScrapeConfigs:
+              - job_name: 'home-assistant'
+                metrics_path: '/api/prometheus'
+                scrape_interval: 60s
+                scheme: http
+                static_configs:
+                  - targets:
+                    - '10.17.84.2:8123'
+                bearer_token_file: /etc/prometheus/secrets/prometheus-secret/prometheus_bearer_token
+              - job_name: 'omada-exporter'
+                metrics_path: '/metrics'
+                scrape_interval: 60s
+                scheme: http
+                static_configs:
+                  - targets:
+                    - 'omada-omada-exporter:9202'
+        alertmanager:
+          enabled: true
+        grafana:
+          ingress:
+            enabled: true
+            hosts:
+              - grafana.bermanoc.net
+            path: /
+            annotations:
+              kubernetes.io/ingress.class: "traefik"
+              cert-manager.io/cluster-issuer: letsencrypt-prod
+              #traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            tls:
+              - secretName: my-cert-tls
+                hosts:
+                  - grafana.bermanoc.net
+          sidecar:
+            dashboards:
+              enabled: true
+          dashboardProviders:
+            dashboardproviders.yaml:
+              apiVersion: 1
+              providers:
+                - name: 'argo'
+                  orgId: 1
+                  folder: 'argo'
+                  type: file
+                  disableDeletion: false
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/argo
+                - name: 'external-dns'
+                  orgId: 1
+                  folder: 'external-dns'
+                  type: file
+                  disableDeletion: false
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/external-dns
+          dashboards:
+            argo:
+              argocd:
+                # https://grafana.com/grafana/dashboards/14584-argocd/
+                gnetId: 14584
+                datasource: Prometheus
+                revision: 1
+            external-dns:
+              external-dns:
+                # https://grafana.com/grafana/dashboards/15038-external-dns/
+                gnetId: 15038
+                datasource: Prometheus
+                revision: 1
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

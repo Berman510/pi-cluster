@@ -1,0 +1,122 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
+spec:
+  ignoreDifferences:
+    - group: "apps"
+      kind: "StatefulSet"
+      managedFieldsManagers:
+        - loki-minio
+      #name: minio
+      #jsonPointers:
+      #  - /spec/persistentVolumeClaimRetentionPolicy
+      #  - /spec/volumeClaimTemplates
+    - group: "apps"
+      kind: "PodLogs"
+      name: loki
+      jsonPointers:
+        - /spec/relabeling/*/action
+  project: home
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: "5.36.3"
+    chart: loki
+    helm:
+      skipCrds: true
+      values: |
+        write:
+          replicas: 2
+          persistence::
+            storageClass: nfs-client
+        read:
+          replicas: 2
+          persistence::
+            storageClass: nfs-client
+        backend:
+          replicas: 2
+          persistence::
+            storageClass: nfs-client
+        commonConfig:
+          replication_factor: 2
+          persistence::
+            storageClass: nfs-client
+        minio:
+          enabled: true
+        gateway:
+          enabled: true
+        #  ingress:
+        #    enabled: true
+        #    annotations:
+        #      external-dns.alpha.kubernetes.io/hostname: lokiingest.bermanoc.net
+        #    hosts:
+        #      - host: lokiingest.bermanoc.net
+        #        paths:
+        #          - path: /
+        #            pathType: Prefix
+        loki:
+        #  config: |
+        #    ruler:
+        #      wal:
+        #        /var/loki/wal
+          enabled: true
+          auth_enabled: false
+        #  schema_config:
+        #    configs:
+        #    - from: 2020-10-24
+        #      store: boltdb-shipper
+        #      object_store: filesystem
+        #      schema: v11
+        #      index:
+        #        prefix: loki_index_
+        #        period: 24h
+        #  common:
+        #    replication_factor: 2
+        #  #storage_config:
+        #  #  boltdb_shipper:
+        #  #    active_index_directory: /loki/index
+        #  #    cache_location: /loki/cache
+        #  #    cache_ttl: 24h       # Can be increased for longer caching
+        #  #    shared_store: filesystem
+        #  #  filesystem:
+        #  #    directory: /loki/chunks
+        #monitoring:
+        #  lokiCanary:
+        #    enabled: true
+        #    annotations:
+        #      argocd.argoproj.io/hook: PreSync
+        #  selfMonitoring:
+        #    enabled: true
+        #test:
+        #  enabled: false
+        serviceAccount:
+          create: true
+        #podSecurityContext:
+        #  fsGroup: 10001
+        #  limits:
+        #    nofile:
+        #      soft: 65536
+        #      hard: 65536
+        #ruler:
+        #  enabled: true
+        #  kind: StatefulSet
+        #  persistence:
+        #    enabled: true
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: loki
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
+      #- ServerSideApply=true
