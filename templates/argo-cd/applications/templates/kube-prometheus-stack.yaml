@@ -32,6 +32,14 @@ spec:
                 hosts:
                   - grafana.bermanoc.net
           prometheusSpec:
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: nfs-client
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 10Gi
             secrets:
               - prometheus-secret
             additionalScrapeConfigs:
