@@ -5,27 +5,38 @@ metadata:
   name: letsencrypt-prod
   namespace: cert-manager
 spec:
-  selfSigned: {}
----
-apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata:
-  name: letsencrypt-ca
-  namespace: cert-manager
-spec:
-  ca:
-    secretName: letsencrypt-ca
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: letsencrypt-ca
-  namespace: cert-manager
-spec:
-  isCA: true
-  commonName: osm-system
-  secretName: letsencrypt-ca
-  issuerRef:
+  accessModes:
+  email: charlie.berman@gmail.com
+  server: https://acme-v02.api.letsencrypt.org/directory
+  privateKeySecretRef:
     name: letsencrypt-prod
-    kind: ClusterIssuer
-    group: cert-manager.io
+  solvers:
+    - dns01:
+        cloudDNS:
+          project: bermanoc
+          serviceAccountSecretRef:
+            name: cloud-dns-dns01-solver-svc-acct
+            key: key.json
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Issuer
+#metadata:
+#  name: letsencrypt-ca
+#  namespace: cert-manager
+#spec:
+#  ca:
+#    secretName: letsencrypt-ca
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Certificate
+#metadata:
+#  name: letsencrypt-ca
+#  namespace: cert-manager
+#spec:
+#  isCA: true
+#  commonName: osm-system
+#  secretName: letsencrypt-ca
+#  issuerRef:
+#    name: letsencrypt-prod
+#    kind: ClusterIssuer
+#    group: cert-manager.io
