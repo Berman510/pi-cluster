@@ -30,19 +30,19 @@ spec:
       skipCrds: true
       values: |
         write:
-          replicas: 2
+          replicas: 3
           persistence::
             storageClass: nfs-client
         read:
-          replicas: 2
+          replicas: 3
           persistence::
             storageClass: nfs-client
         backend:
-          replicas: 2
+          replicas: 3
           persistence::
             storageClass: nfs-client
         commonConfig:
-          replication_factor: 2
+          replication_factor: 3
           persistence::
             storageClass: nfs-client
         minio:

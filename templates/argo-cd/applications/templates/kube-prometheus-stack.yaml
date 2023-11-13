@@ -30,7 +30,7 @@ spec:
             tls:
               - secretName: my-cert-tls
                 hosts:
-                  - grafana.bermanoc.net
+                  - prometheus.bermanoc.net
           prometheusSpec:
             secrets:
               - prometheus-secret
