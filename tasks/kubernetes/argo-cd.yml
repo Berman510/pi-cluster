@@ -41,8 +41,6 @@
             metrics:
               serviceMonitor:
                 enabled: true
-                additionalLabels:
-                  release: kube-prometheus-stack
           configs:
             repositories:
               pi-cluster:
@@ -53,6 +51,9 @@
             replicas: 1
             autoscaling:
               enabled: false
+            metrics:
+              serviceMonitor:
+                enabled: true
           server:
             extraArgs:
             - --insecure
@@ -64,8 +65,6 @@
             metrics:
               serviceMonitor:
                 enabled: true
-                additionalLabels:
-                  release: kube-prometheus-stack
             ingress:
               enabled: true
               hosts:
