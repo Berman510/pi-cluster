@@ -38,6 +38,10 @@ spec:
         domainFilters:
           - bermanoc.net
         logLevel: "info"
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
   syncPolicy:
     automated: {}
     syncOptions:
