@@ -11,7 +11,7 @@ spec:
     - group: "apps"
       kind: "StatefulSet"
   destination:
-    namespace: monitoring
+    namespace: loki
     server: 'https://kubernetes.default.svc'
   project: home
   source:
@@ -34,7 +34,6 @@ spec:
         monitoring:       
           dashboards:
             enabled: true
-            namespace: monitoring
           selfMonitoring:
             enabled: true
         minio:

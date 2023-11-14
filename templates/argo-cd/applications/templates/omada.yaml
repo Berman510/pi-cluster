@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "-55"
 spec:
   destination:
-    namespace: monitoring
+    namespace: omada
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'http://charts.charliehaley.dev'
