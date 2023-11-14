@@ -33,12 +33,11 @@
         values:
           params:
             server.insecure: true
-            nodeSelector:
-              kubernetes.io/hostname: nanopi02
           alertmanager:
             enabled: false
           controller:
             metrics:
+              enabled: true
               serviceMonitor:
                 enabled: true
           configs:
@@ -52,6 +51,7 @@
             autoscaling:
               enabled: false
             metrics:
+              enabled: true
               serviceMonitor:
                 enabled: true
           server:
@@ -63,6 +63,7 @@
               loadBalancerIP: "{{ argo_cd_host_ip }}"
               type: "NodePort"
             metrics:
+              enabled: true
               serviceMonitor:
                 enabled: true
             ingress:

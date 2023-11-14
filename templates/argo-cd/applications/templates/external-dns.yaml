@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: kube-system
-    name: in-cluster
+    server: "https://kubernetes.default.svc"
   project: home
   source:
     repoURL: https://charts.bitnami.com/bitnami
