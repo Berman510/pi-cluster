@@ -50,8 +50,6 @@ spec:
         ingress:
           main:
             enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod
             hosts:
               - host: plex.bermanoc.net
                 paths:

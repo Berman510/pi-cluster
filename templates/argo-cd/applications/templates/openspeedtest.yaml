@@ -23,17 +23,11 @@ spec:
       values: |
         ingress:
           enabled: true
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
             - host: speedtest.bermanoc.net
               paths:
                 - path: /
                   pathType: ImplementationSpecific
-          tls:
-            - secretName: my-cert-tls
-              hosts:
-                - speedtest.bermanoc.net
         nodeSelector:
           kubernetes.io/hostname: nanopi01
   sources: []
