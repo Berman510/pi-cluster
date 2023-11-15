@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cluster-base
-  namespace: argo-cd
+  namespace: argocd
 spec:
   project: home
   source:
@@ -13,7 +13,7 @@ spec:
       recurse: true
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: argo-cd
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true

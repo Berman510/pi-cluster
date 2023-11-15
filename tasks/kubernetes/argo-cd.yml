@@ -14,7 +14,7 @@
   tasks:
     - name: Create Argo-CD namespace.
       k8s:
-        name: argo-cd
+        name: argocd
         api_version: v1
         kind: Namespace
         state: present
@@ -26,9 +26,9 @@
 
     - name: Deploy Argo-CD Helm chart.
       kubernetes.core.helm:
-        name: argo-cd
+        name: argocd
         chart_ref: argo/argo-cd
-        release_namespace: argo-cd
+        release_namespace: argocd
         state: present
         values:
           params:
