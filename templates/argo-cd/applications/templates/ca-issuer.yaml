@@ -19,7 +19,7 @@ spec:
           region: us-west-2
           accessKeyIDSecretRef:
             name: aws-credentials
-            key: access-keyaws-access-key-id
+            key: aws-access-key-id
           secretAccessKeySecretRef:
             name: aws-credentials
             key: aws-secret-access-key
