@@ -43,28 +43,24 @@ spec:
             storageClass: nfs-client
         minio:
           enabled: true
-        gateway:
-          enabled: true
-          ingress:
-            enabled: true
-            annotations:
-              external-dns.alpha.kubernetes.io/hostname: lokiingest.bermanoc.net
-            hosts:
-              - host: lokiingest.bermanoc.net
-                paths:
-                  - path: /
-                    pathType: Prefix
         loki:
-          enabled: true
           auth_enabled: false
+          compactor:
+            working_directory: /var/loki/compactor/retention
+            shared_store: s3
+            compaction_interval: 10m
+            retention_enabled: true
+            retention_delete_delay: 2h
+            retention_delete_worker_count: 150
+          limits_config:
+          retention_period: 72h
         monitoring:
-          enabled: true
-          dashboards:
-            enabled: true
-          serviceMonitor:
-            enabled: true
-        serviceAccount:
-          create: true
+          lokiCanary:
+            enabled: false
+          selfMonitoring:
+            enabled: false
+        test:
+          enabled: false
 
   destination:
     server: 'https://kubernetes.default.svc'
