@@ -49,6 +49,27 @@
         commands: ALL
         nopassword: true
 
+- name: Configure storage node.
+  hosts: storage
+  gather_facts: true
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
+    - name: Set up mount.
+      ansible.posix.mount:
+        path: "/srv"
+        src: UUID="{{ ansible_devices.sda.partitions.sda1.uuid }}"
+        fstype: ext4
+        opts: rw,auto
+        dump: '1'
+        state: mounted
+      when: ansible_devices.sda.partitions.sda1.uuid is defined
+    - name: Set up storage.
+      include_tasks: tasks/storage/{{ storage_type }}.yml
+
 - name: Configure the control plane.
   hosts: control_plane
   gather_facts: false
