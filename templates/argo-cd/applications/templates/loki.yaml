@@ -13,6 +13,11 @@ spec:
       managedFieldsManagers:
         - loki-minio
     - group: "apps"
+      kind: "StatefulSet"
+      name: loki-minio
+      jsonPointers:
+        - /spec/volumeClaimTemplates
+    - group: "apps"
       kind: "PodLogs"
       name: loki
       jsonPointers:
