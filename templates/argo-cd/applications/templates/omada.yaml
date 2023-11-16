@@ -22,11 +22,11 @@ spec:
         image:
           repository: ghcr.io/charlie-haley/omada_exporter
         omada:
-            host: "https://10.17.84.3"
+            host: "http://10.17.84.3"
             username: "prometheus"
             password: "prometheus"
             site: "Home"
-            insecure: false
+            insecure: true
             request_timeout: 15
         serviceMonitor:
           enabled: true
