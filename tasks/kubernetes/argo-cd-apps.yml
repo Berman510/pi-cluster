@@ -1,38 +1,38 @@
----
-- name: Configure Argo-CD.
-  hosts: control_plane
-  gather_facts: false
-  become: true
-
-  vars_files:
-    - ../../config.yml
-
-  environment:
-    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
-    PATH: "~/go/bin:{{ ansible_env.PATH }}"
-
-  tasks:
-    - name: Deploy Argo Projects
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-      with_fileglob:
-        - "../../templates/argo-cd/projects/home.yaml"
-    - name: Deploy Argo Apps
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-      with_fileglob:
-        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack-crds.yaml"
-        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack.yaml"
-        - "../../templates/argo-cd/applications/templates/cert-manager.yaml"
-        - "../../templates/argo-cd/applications/templates/cert.yaml"
-        - "../../templates/argo-cd/applications/templates/openspeedtest.yaml"
-        - "../../templates/argo-cd/applications/templates/pihole.yaml"
-        - "../../templates/argo-cd/applications/templates/iperf.yaml"
-        - "../../templates/argo-cd/applications/templates/omada.yaml"
-        #- "../../templates/argo-cd/applications/templates/mimir.yaml"
-        #- "../../templates/argo-cd/applications/templates/loki.yaml"
-        #- "../../templates/argo-cd/applications/ca-issuer.yaml"
-        #- "../../templates/argo-cd/applications/unbound.yaml"
-        #- "../../templates/argo-cd/applications/plex.yaml"
+#---
+#- name: Configure Argo-CD.
+#  hosts: control_plane
+#  gather_facts: false
+#  become: true
+#
+#  vars_files:
+#    - ../../config.yml
+#
+#  environment:
+#    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+#    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+#
+#  tasks:
+#    - name: Deploy Argo Projects
+#      kubernetes.core.k8s:
+#        state: present
+#        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+#      with_fileglob:
+#        - "../../templates/argo-cd/projects/home.yaml"
+#    - name: Deploy Argo Apps
+#      kubernetes.core.k8s:
+#        state: present
+#        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
+#      with_fileglob:
+#        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack-crds.yaml"
+#        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack.yaml"
+#        - "../../templates/argo-cd/applications/templates/cert-manager.yaml"
+#        - "../../templates/argo-cd/applications/templates/cert.yaml"
+#        - "../../templates/argo-cd/applications/templates/openspeedtest.yaml"
+#        - "../../templates/argo-cd/applications/templates/pihole.yaml"
+#        - "../../templates/argo-cd/applications/templates/iperf.yaml"
+#        - "../../templates/argo-cd/applications/templates/omada.yaml"
+#        #- "../../templates/argo-cd/applications/templates/mimir.yaml"
+#        #- "../../templates/argo-cd/applications/templates/loki.yaml"
+#        #- "../../templates/argo-cd/applications/ca-issuer.yaml"
+#        #- "../../templates/argo-cd/applications/unbound.yaml"
+#        #- "../../templates/argo-cd/applications/plex.yaml"
