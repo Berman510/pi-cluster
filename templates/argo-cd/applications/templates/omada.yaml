@@ -44,8 +44,6 @@ spec:
             memory: 128Mi
         autoscaling:
           enabled: false
-        ingress:
-          enabled: true
   sources: []
   project: home
   syncPolicy:
