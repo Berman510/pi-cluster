@@ -61,8 +61,6 @@ spec:
             enabled: true
             size: 10Gi
             storageClass: nfs-client
-          zoneAwareReplication:
-            enabled: true
         compactor:
           extraArgs:
             compactor.blocks-retention-period: "90d"
@@ -99,7 +97,6 @@ spec:
                 num_tokens: 512
                 tokens_file_path: /data/tokens
                 unregister_on_shutdown: true
-                zone_awareness_enabled: true
             ingester_client:
               grpc_client_config:
                 max_recv_msg_size: 104857600
