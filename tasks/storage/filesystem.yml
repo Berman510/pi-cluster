@@ -15,7 +15,7 @@
 - name: Configure NFS exports.
   ansible.builtin.lineinfile:
     dest: /etc/exports
-    line: "/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}    *(rw,sync,no_root_squash,subtree_check)"
+    line: "/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}    *(rw,sync,no_root_squash)"
     regexp: ".*"
     create: true
   #notify: restart-nfs

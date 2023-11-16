@@ -49,6 +49,26 @@
         commands: ALL
         nopassword: true
 
+- name: Play to update /etc/hosts for cluster group
+  hosts: cluster
+  tasks:
+    - name: Update /etc/hosts with unique entries for cluster group
+      become: true
+      blockinfile:
+        path: /etc/hosts
+        block: |
+          {% for host in groups['cluster'] %}
+          {% set ip = hostvars[host]['ansible_host'] %}
+          {% if ip not in already_added %}
+          {{ ip }} {{ host }}
+          {% set _ = already_added.append(ip) %}
+          {% endif %}
+          {% endfor %}
+        marker: "# {mark} ANSIBLE MANAGED BLOCK FOR CLUSTER GROUP"
+      vars:
+        already_added: []
+
+
 - name: Configure storage node.
   hosts: storage
   gather_facts: true
