@@ -39,6 +39,8 @@ spec:
             enabled: true
             storageClass: nfs-client
             size: 50Gi
+          zoneAwareReplication:
+            enabled: false
         querier:
           extraArgs:
             querier.query-store-after: "0s"
