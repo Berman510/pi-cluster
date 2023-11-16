@@ -44,8 +44,6 @@
             repositories:
               pi-cluster:
                 url: https://github.com/Berman510/pi-cluster.git
-            secret:
-              argocdServerAdminPassword: "{{ argo_cd_admin_password }}"
           repoServer:
             replicas: 1
             autoscaling:
@@ -74,3 +72,60 @@
                 - /
               pathType: Prefix
               https: false
+
+- name: Update Argo CD admin password
+  hosts: control_plane
+  become: true
+
+  environment:
+    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+
+  tasks:
+    - name: Get initial admin password from argocd-initial-admin-secret
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: argocd
+        name: argocd-initial-admin-secret
+      register: initial_admin_secret
+
+    - name: Decode initial admin password
+      set_fact:
+        initial_admin_password: "{{ ('initial_admin_secret.resources[0].data.password' | b64decode) }}"
+
+    - name: Get new admin password from secret-argocd-admin-password
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: argocd
+        name: secret-argocd-admin-password
+      register: new_admin_secret
+
+    - name: Decode new admin password
+      set_fact:
+        new_admin_password: "{{ ('new_admin_secret.resources[0].data.argocd-admin-password' | b64decode) }}"
+
+    - name: Update Argo CD admin password
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: argocd-admin-password-update
+            namespace: argocd
+          spec:
+            template:
+              spec:
+                containers:
+                - name: update-password
+                  image: argoproj/argocd:latest
+                  command: ["/bin/sh", "-c"]
+                  args:
+                  - >
+                    argocd login {{ argo_cd_host }} --username admin --password '{{ initial_admin_password }}' &&
+                    argocd account update-password --current-password '{{ initial_admin_password }}' --new-password '{{ new_admin_password }}'
+                restartPolicy: OnFailure
+            backoffLimit: 4
+
+
+#TODO: FIX THE ABOVE - DECODE NEW ADMIN PASSWORD FAILS BUT INITIAL DOESNT? ALSO MAKE THIS CONDITIONAL ON IF INITIAL SECRET EXISTS OR NOT. THIS ISNT USED FOR RESETTING ITS USED FOR INITIAL DEPLOYMENT.

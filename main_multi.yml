@@ -7,6 +7,7 @@
   handlers:
     - name: reboot-pi
       ansible.builtin.reboot:
+
     - name: restart-nfs
       ansible.builtin.service:
         name: nfs-server
@@ -29,6 +30,7 @@
           - python3-cryptography
         state: present
       become: true
+
     - name: Ensure required Python libraries are installed.
       ansible.builtin.pip:
         name:
@@ -36,11 +38,13 @@
           - pyyaml
         state: present
       become: true
+
     - name: Download K3s install script.
       ansible.builtin.get_url:
         url: https://get.k3s.io
         dest: "~/k3s_install.sh"
         mode: a+x
+
     - name: Add user to sudo with NOPASSWD
       community.general.sudoers:
         name: "010_{{ ansible_user }}-nopasswd"
@@ -110,19 +114,23 @@
       when: ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution'] == 'Raspberry Pi OS'
       notify: reboot-pi
       ignore_errors: yes
+
     - name: Install K3s on control plane (takes a while).
       ansible.builtin.shell: >-
         ~/k3s_install.sh >> ~/k3s_install_log.txt
       args:
         chdir: "~"
         creates: /var/lib/rancher/k3s/server/node-token
+
     - name: Get node token.
       ansible.builtin.command: cat /var/lib/rancher/k3s/server/node-token
-      changed_when: false 
+      changed_when: false
       register: node_token_output
+
     - name: Set node_token fact.
       ansible.builtin.set_fact:
         node_token: "{{ node_token_output.stdout_lines[0] }}"
+
     - name: Ensure required dependencies are installed.
       ansible.builtin.package:
         name:
@@ -131,6 +139,7 @@
           - git
         state: present
       become: true
+
     - name: Ensure required Python libraries are installed.
       ansible.builtin.pip:
         name:
@@ -139,6 +148,7 @@
           - golang
         state: present
       become: true
+
     - name: Save node token to local file
       ansible.builtin.copy:
         content: "{{ node_token }}"
@@ -151,8 +161,6 @@
         src: /etc/rancher/k3s/k3s.yaml
         dest: "./k3s.yaml"
         flat: yes
-
-
 
 - name: Configure the worker nodes.
   hosts: nodes
@@ -188,9 +196,12 @@
 
 - name: Set up NFS PVCs.
   import_playbook: tasks/kubernetes/nfs.yml
-  tags: ['nfs'] 
+  tags: ['nfs']
+
+- name: Set up Kubernetes secrets.
+  import_playbook: tasks/kubernetes/secrets.yml
+  tags: ['secrets']
 
 - name: Set up ArgoCD.
   import_playbook: tasks/kubernetes/argo-cd.yml
   tags: ['argo-cd']
-

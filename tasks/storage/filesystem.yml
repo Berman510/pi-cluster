@@ -12,13 +12,17 @@
     name: nfs-kernel-server
     state: present
 
-- name: Configure NFS exports.
-  ansible.builtin.lineinfile:
-    dest: /etc/exports
-    line: "/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}    *(rw,sync,no_root_squash)"
-    regexp: ".*"
+- name: Configure NFS exports for nodes and control_plane groups
+  ansible.builtin.blockinfile:
+    path: /etc/exports
+    block: |
+      /{{ storage_nfs_dir }}/{{ storage_nfs_share_name }} {% for host in groups['nodes'] + groups['control_plane'] %}{{ hostvars[host]['ansible_host'] }}(rw,sync,no_root_squash) {% endfor %}
     create: true
-  #notify: restart-nfs
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+
+- name: Reload NFS exports
+  ansible.builtin.command: exportfs -ra
+  become: true
 
 - name: Ensure NFS is started and enabled at boot.
   ansible.builtin.service:

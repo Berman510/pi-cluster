@@ -3,3 +3,6 @@ hosts.yml
 certs
 personal/**
 ansible_collections/**
+secrets/*.yml
+!secrets/example-secret.example-namespace.yml
+!secrets/argocd-admin-password.argocd.yml
