@@ -44,7 +44,7 @@ spec:
                 scheme: http
                 static_configs:
                   - targets:
-                    - 'omada-omada-exporter:9202'
+                    - 'omada-omada-exporter.omada.svc.cluster.local:9202'
         alertmanager:
           enabled: true
         grafana:

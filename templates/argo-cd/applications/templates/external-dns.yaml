@@ -21,7 +21,6 @@ spec:
         serviceAccount:
           create: true
         sources:
-          - service
           - ingress
         aws:
           credentials:
