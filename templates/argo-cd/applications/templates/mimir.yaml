@@ -133,4 +133,9 @@ spec:
               grpc_server_max_connection_age_grace: 5m
               grpc_server_max_connection_idle: 1m
   syncPolicy:
-    automated: {}
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
