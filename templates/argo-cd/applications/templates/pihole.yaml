@@ -42,7 +42,6 @@ spec:
             kubernetes.io/ingress.class: "traefik"
         serviceDns:
           type: LoadBalancer
-          loadBalancerIP: "10.17.84.21"
         tolerations:
           - key: Function
         affinity:
@@ -76,13 +75,6 @@ spec:
           accessModes:
             - ReadWriteOnce
           size: 800Mi
-        dnsmasq:
-            additionalHostsEntries:
-                - 10.17.84.2      homeassistant homeassistant.bermanoc.net
-                - 10.17.84.3      controller controller.bermanoc.net
-                - 10.17.84.21     nanopi01 nanopi01.bermanoc.net
-                - 10.17.84.22     nanopi02 nanopi02.bermanoc.net
-                - 10.17.84.23     nanopi03 nanopi03.bermanoc.net
         whitelist:
             - 0.client-channel.google.com
             - 1drv.com
