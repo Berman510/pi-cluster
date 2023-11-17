@@ -29,13 +29,6 @@ spec:
             targetCPUUtilizationPercentage: 60
             targetMemoryUtilizationPercentage: 80
           topologySpreadConstraints: {}  
-          tolerations:
-            - key: "dedicated"
-              operator: "Equal"
-              value: "ObservabilityGroup"
-              effect: "NoSchedule"
-          nodeSelector:
-            nodeGroup: ObservabilityGroup
           persistence:
             enabled: true
             storageClass: "nfs-client"
