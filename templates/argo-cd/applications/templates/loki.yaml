@@ -11,60 +11,53 @@ spec:
     - group: "apps"
       kind: "StatefulSet"
       managedFieldsManagers:
-        - loki-minio
-    - group: "apps"
-      kind: "StatefulSet"
-      name: loki-minio
+        - loki-backend
+      name: loki-backend
       jsonPointers:
-        - /spec/volumeClaimTemplates
-    - group: "apps"
-      kind: "PodLogs"
-      name: loki
-      jsonPointers:
-        - /spec/relabeling/*/action
+        - /spec/persistentVolumeClaimRetentionPolicy
   project: home
   source:
     repoURL: https://grafana.github.io/helm-charts
     targetRevision: "5.36.3"
     chart: loki
     helm:
-      #skipCrds: true
+      skipCrds: true
       values: |
         write:
           replicas: 3
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          nodeSelector:
-            Function: monitoring
-          affinity: {}
-          tolerations:
-            - key: node-role.kubernetes.io/monitoring
-              operator: In
-              value: true
-              effect: NoSchedule
+          #nodeSelector:
+          #  Function: monitoring
+          #affinity: {}
+          #tolerations:
+          #  - key: node-role.kubernetes.io/monitoring
+          #    operator: In
+          #    value: true
+          #    effect: NoSchedule
         read:
           replicas: 3
             size: 30Gi
           persistence:
             storageClass: nfs-client
-          affinity: {}
-          tolerations:
-            - key: node-role.kubernetes.io/monitoring
-              operator: In
-              value: true
-              effect: NoSchedule
+          #affinity: {}
+          #tolerations:
+          #  - key: node-role.kubernetes.io/monitoring
+          #    operator: In
+          #    value: true
+          #    effect: NoSchedule
         backend:
           replicas: 3
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          affinity: {}
-          tolerations:
-            - key: node-role.kubernetes.io/monitoring
-              operator: In
-              value: true
-              effect: NoSchedule
+          #affinity: {}
+          #tolerations:
+          #  - key: node-role.kubernetes.io/monitoring
+          #    operator: In
+          #    value: true
+          #    effect: NoSchedule
         commonConfig:
           replication_factor: 3
           persistence:
@@ -75,12 +68,12 @@ spec:
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          affinity: {}
-          tolerations:
-            - key: node-role.kubernetes.io/monitoring
-              operator: In
-              value: true
-              effect: NoSchedule
+          #affinity: {}
+          #tolerations:
+          #  - key: node-role.kubernetes.io/monitoring
+          #    operator: In
+          #    value: true
+          #    effect: NoSchedule
         loki:
           auth_enabled: false
           compactor:
@@ -92,12 +85,12 @@ spec:
             retention_delete_worker_count: 150
           limits_config:
           retention_period: 72h
-          affinity: {}
-          tolerations:
-            - key: node-role.kubernetes.io/monitoring
-              operator: In
-              value: true
-              effect: NoSchedule
+          #affinity: {}
+          #tolerations:
+          #  - key: node-role.kubernetes.io/monitoring
+          #    operator: In
+          #    value: true
+          #    effect: NoSchedule
         monitoring:
           lokiCanary:
             enabled: false
@@ -111,9 +104,7 @@ spec:
     namespace: loki
 
   syncPolicy:
-    automated:
-      prune: false
-      selfHeal: true
+    automated: {}
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
