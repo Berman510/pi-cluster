@@ -23,7 +23,7 @@ spec:
     chart: loki
     helm:
       skipCrds: true
-      values: |
+      values: |-
         write:
           replicas: 3
           persistence:
