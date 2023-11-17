@@ -8,8 +8,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "-30"
 spec:
   acme:
-    email: charlie.berman@gmail.com
-    server: https://acme-v02.api.letsencrypt.org/directory
+    email: "charlie.berman@gmail.com"
+    server: "https://acme-v02.api.letsencrypt.org/directory"
     privateKeySecretRef:
       name: aws-creds
     solvers:
