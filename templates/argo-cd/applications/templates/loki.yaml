@@ -35,12 +35,6 @@ spec:
           persistence:
             storageClass: nfs-client
           affinity: |
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      {{- include "loki.writeSelectorLabels" . | nindent 10 }}
-                  topologyKey: kubernetes.io/hostname
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -54,12 +48,6 @@ spec:
           persistence:
             storageClass: nfs-client
           affinity: |
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      {{- include "loki.writeSelectorLabels" . | nindent 10 }}
-                  topologyKey: kubernetes.io/hostname
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -73,12 +61,6 @@ spec:
           persistence:
             storageClass: nfs-client
           affinity: |
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      {{- include "loki.writeSelectorLabels" . | nindent 10 }}
-                  topologyKey: kubernetes.io/hostname
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -105,12 +87,6 @@ spec:
           limits_config:
           retention_period: 72h
           affinity: |
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchLabels:
-                      {{- include "loki.writeSelectorLabels" . | nindent 10 }}
-                  topologyKey: kubernetes.io/hostname
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
