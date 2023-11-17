@@ -17,6 +17,15 @@ spec:
       skipCrds: true
       values: |
         prometheus:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
           ingress:
             enabled: true
             hosts:
@@ -48,6 +57,15 @@ spec:
         alertmanager:
           enabled: true
         grafana:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
           ingress:
             enabled: true
             hosts:

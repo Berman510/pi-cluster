@@ -34,14 +34,41 @@ spec:
           replicas: 3
           persistence:
             storageClass: nfs-client
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
         read:
           replicas: 3
           persistence:
             storageClass: nfs-client
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
         backend:
           replicas: 3
           persistence:
             storageClass: nfs-client
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
         commonConfig:
           replication_factor: 3
           persistence:
@@ -59,6 +86,15 @@ spec:
             retention_delete_worker_count: 150
           limits_config:
           retention_period: 72h
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/monitoring
+                    operator: In
+                    values:
+                    - "true"
         monitoring:
           lokiCanary:
             enabled: false
