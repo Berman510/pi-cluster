@@ -7,6 +7,14 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
+  ignoreDifferences:
+    - group: "apps"
+      kind: "StatefulSet"
+      managedFieldsManagers:
+        - loki-backend
+      name: loki-backend
+      jsonPointers:
+        - /spec/persistentVolumeClaimRetentionPolicy
   destination:
     namespace: mimir
     server: 'https://kubernetes.default.svc'
