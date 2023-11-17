@@ -34,7 +34,7 @@ spec:
           replicas: 3
           persistence:
             storageClass: nfs-client
-          affinity:
+          affinity: |
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -47,7 +47,7 @@ spec:
           replicas: 3
           persistence:
             storageClass: nfs-client
-          affinity:
+          affinity: |
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -60,7 +60,7 @@ spec:
           replicas: 3
           persistence:
             storageClass: nfs-client
-          affinity:
+          affinity: |
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
@@ -86,7 +86,7 @@ spec:
             retention_delete_worker_count: 150
           limits_config:
           retention_period: 72h
-          affinity:
+          affinity: |
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
