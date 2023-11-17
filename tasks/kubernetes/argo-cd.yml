@@ -44,6 +44,8 @@
             repositories:
               pi-cluster:
                 url: https://github.com/Berman510/pi-cluster.git
+              secret:
+                argocdServerAdminPassword: "admin"
           repoServer:
             replicas: 1
             autoscaling:
@@ -73,59 +75,84 @@
               pathType: Prefix
               https: false
 
-- name: Update Argo CD admin password
-  hosts: control_plane
-  become: true
-
-  environment:
-    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
-    PATH: "~/go/bin:{{ ansible_env.PATH }}"
-
-  tasks:
-    - name: Get initial admin password from argocd-initial-admin-secret
-      kubernetes.core.k8s_info:
-        kind: Secret
-        namespace: argocd
-        name: argocd-initial-admin-secret
-      register: initial_admin_secret
-
-    - name: Decode initial admin password
-      set_fact:
-        initial_admin_password: "{{ ('initial_admin_secret.resources[0].data.password' | b64decode) }}"
-
-    - name: Get new admin password from secret-argocd-admin-password
-      kubernetes.core.k8s_info:
-        kind: Secret
-        namespace: argocd
-        name: secret-argocd-admin-password
-      register: new_admin_secret
-
-    - name: Decode new admin password
-      set_fact:
-        new_admin_password: "{{ ('new_admin_secret.resources[0].data.argocd-admin-password' | b64decode) }}"
-
-    - name: Update Argo CD admin password
-      kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: batch/v1
-          kind: Job
-          metadata:
-            name: argocd-admin-password-update
-            namespace: argocd
-          spec:
-            template:
-              spec:
-                containers:
-                - name: update-password
-                  image: argoproj/argocd:latest
-                  command: ["/bin/sh", "-c"]
-                  args:
-                  - >
-                    argocd login {{ argo_cd_host }} --username admin --password '{{ initial_admin_password }}' &&
-                    argocd account update-password --current-password '{{ initial_admin_password }}' --new-password '{{ new_admin_password }}'
-                restartPolicy: OnFailure
-            backoffLimit: 4
-
-
-#TODO: FIX THE ABOVE - DECODE NEW ADMIN PASSWORD FAILS BUT INITIAL DOESNT? ALSO MAKE THIS CONDITIONAL ON IF INITIAL SECRET EXISTS OR NOT. THIS ISNT USED FOR RESETTING ITS USED FOR INITIAL DEPLOYMENT.
+##TODO: FIX THE BELOW - DECODE NEW ADMIN PASSWORD FAILS BUT INITIAL DOESNT? ALSO MAKE THIS CONDITIONAL ON IF INITIAL SECRET EXISTS OR NOT. THIS ISNT USED FOR RESETTING ITS USED FOR INITIAL DEPLOYMENT. ALSO BROKE SERVER>SECRETKEY?
+#- name: Update Argo CD admin password
+#  hosts: control_plane
+#  become: true
+#
+#  vars_files:
+#    - ../../config.yml
+#
+#  environment:
+#    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+#    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+#
+#  tasks:
+#    - name: Get initial admin password from argocd-initial-admin-secret
+#      kubernetes.core.k8s_info:
+#        kind: Secret
+#        namespace: argocd
+#        name: argocd-initial-admin-secret
+#      register: initial_admin_secret
+#
+#    - name: Decode initial admin password
+#      set_fact:
+#        initial_admin_password: "{{ ('initial_admin_secret.resources[0].data.password' | b64decode) }}"
+#
+#    - name: Get new admin password from secret-argocd-admin-password
+#      kubernetes.core.k8s_info:
+#        kind: Secret
+#        namespace: argocd
+#        name: secret-argocd-admin-password
+#      register: new_admin_secret
+#
+#    - name: Decode new admin password
+#      set_fact:
+#        new_admin_password: "{{ new_admin_secret.resources[0].data['argocd-admin-password'] | b64decode }}"
+#
+#    - name: Delete existing Argo CD admin password update job
+#      kubernetes.core.k8s:
+#        state: absent
+#        kind: Job
+#        api_version: batch/v1
+#        namespace: argocd
+#        name: argocd-admin-password-update
+#
+#    - name: Update Argo CD admin password
+#      kubernetes.core.k8s:
+#        state: present
+#        definition:
+#          apiVersion: batch/v1
+#          kind: Job
+#          metadata:
+#            name: argocd-admin-password-update
+#            namespace: argocd
+#          spec:
+#            template:
+#              spec:
+#                containers:
+#                - name: update-password
+#                  image: argoproj/argocd:latest
+#                  command: ["/bin/sh", "-c"]
+#                  args:
+#                  - >
+#                    argocd login argocd.bermanoc.net --username admin --password 'admin' --insecure &&
+#                    argocd account update-password --current-password 'admin' --new-password '{{ new_admin_password }}'
+#                restartPolicy: OnFailure
+#            backoffLimit: 4
+#      register: argocd_password_updated
+#
+#    - name: Delete new Argo CD admin password update job
+#      kubernetes.core.k8s:
+#        state: absent
+#        kind: Job
+#        api_version: batch/v1
+#        namespace: argocd
+#        name: argocd-admin-password-update
+#      when: argocd_password_updated.changed
+#
+#    - name: Reload ArgoCD Deployment
+#      ansible.builtin.command: kubectl rollout restart deploy/argocd-server -n argocd
+#      become: true
+#      when: argocd_password_updated.changed
+##todo, hard-set temp password instead of relying on initialpassword

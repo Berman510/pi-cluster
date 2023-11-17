@@ -43,9 +43,17 @@ spec:
         serviceDns:
           type: LoadBalancer
           loadBalancerIP: "10.17.84.21"
-        nodeSelector:
-          kubernetes.io/hostname: nanopi01
+        tolerations:
+          - key: Function
         affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: node-role.kubernetes.io/dns
+                  operator: In
+                  values:
+                  - "true"
         podAnnotations:
           prometheus.io/port: '9617'
           prometheus.io/scrape: 'true'

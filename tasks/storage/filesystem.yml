@@ -19,10 +19,12 @@
       /{{ storage_nfs_dir }}/{{ storage_nfs_share_name }} {% for host in groups['nodes'] + groups['control_plane'] %}{{ hostvars[host]['ansible_host'] }}(rw,sync,no_root_squash) {% endfor %}
     create: true
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
+  register: nfs_exports_configured
 
 - name: Reload NFS exports
   ansible.builtin.command: exportfs -ra
   become: true
+  when: nfs_exports_configured.changed
 
 - name: Ensure NFS is started and enabled at boot.
   ansible.builtin.service:

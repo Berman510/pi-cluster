@@ -28,6 +28,7 @@
           - python3-pip
           - python3-setuptools
           - python3-cryptography
+          - curl
         state: present
       become: true
 
@@ -171,6 +172,24 @@
     - config.yml
 
   tasks:
+    - name: Create nfs mount directory
+      ansible.builtin.file:
+        path: /{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}
+        state: directory
+        mode: '0755'
+      become: true
+
+    - name: Mount nfs share
+      ansible.builtin.mount:
+        path: /{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}
+        src: "{{ hostvars[groups['storage'][0]]['ansible_host'] }}:/{{ storage_nfs_dir }}/{{ storage_nfs_share_name }}"
+        fstype: nfs
+        opts: defaults
+        state: mounted
+        dump: 0
+        passno: 0
+      become: true
+
     - name: Install K3s on nodes (takes a while).
       ansible.builtin.shell: >-
         K3S_URL="https://{{ groups['control_plane'][0] }}:6443"
