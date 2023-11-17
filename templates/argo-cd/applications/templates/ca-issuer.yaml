@@ -19,6 +19,7 @@ spec:
       dns01:
         route53:
           region: us-west-2
+          hostedZoneID: Z06657531GAB5340ZGQON
           accessKeyIDSecretRef:
             name: aws-creds
             key: aws-access-key-id
