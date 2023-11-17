@@ -11,10 +11,17 @@ spec:
     - group: "apps"
       kind: "StatefulSet"
       managedFieldsManagers:
-        - loki-backend
-      name: loki-backend
+        - loki-minio
+    - group: "apps"
+      kind: "StatefulSet"
+      name: loki-minio
       jsonPointers:
-        - /spec/persistentVolumeClaimRetentionPolicy
+        - /spec/volumeClaimTemplates
+    - group: "apps"
+      kind: "PodLogs"
+      name: loki
+      jsonPointers:
+        - /spec/relabeling/*/action
   destination:
     namespace: mimir
     server: 'https://kubernetes.default.svc'
