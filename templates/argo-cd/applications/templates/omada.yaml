@@ -44,11 +44,7 @@ spec:
             memory: 128Mi
         autoscaling:
           enabled: false
-  sources: []
   project: home
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
     syncOptions:
       - CreateNamespace=true
