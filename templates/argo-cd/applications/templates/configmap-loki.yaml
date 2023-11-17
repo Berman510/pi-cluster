@@ -13,6 +13,6 @@ data:
     - name: Loki
       type: loki
       access: proxy
-      url: http://loki-test.loki.svc.cluster.local:80/
+      url: http://loki-gateway.loki.svc.cluster.local:80/
       jsonData:
         maxLines: 500
