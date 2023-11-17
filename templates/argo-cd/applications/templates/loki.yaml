@@ -22,6 +22,7 @@ spec:
     targetRevision: "5.36.3"
     chart: loki
     helm:
+      skipCrds: true
       values: |-
         write:
           replicas: 3
@@ -73,3 +74,4 @@ spec:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
       - RespectIgnoreDifferences=true
+      - ServerSideApply=true
