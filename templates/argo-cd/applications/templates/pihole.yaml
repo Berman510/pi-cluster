@@ -40,6 +40,12 @@ spec:
           path: /
           annotations:
             kubernetes.io/ingress.class: "traefik"
+            cert-manager.io/cluster-issuer: "letsencrypt-prod"
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          tls:
+            - hosts:
+              - pihole.bermanoc.net
+              secretName: my-cert-tls
         serviceDns:
           type: LoadBalancer
         tolerations:
