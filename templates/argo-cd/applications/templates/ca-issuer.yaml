@@ -10,6 +10,8 @@ spec:
   acme:
     email: "charlie.berman@gmail.com"
     server: "https://acme-v02.api.letsencrypt.org/directory"
+    privateKeySecretRef:
+      name: letsencrypt-prod
     solvers:
     - selector:
         dnsZones:
