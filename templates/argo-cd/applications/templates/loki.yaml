@@ -28,36 +28,15 @@ spec:
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          #nodeSelector:
-          #  Function: monitoring
-          #affinity: {}
-          #tolerations:
-          #  - key: node-role.kubernetes.io/monitoring
-          #    operator: In
-          #    value: true
-          #    effect: NoSchedule
-        read:
           replicas: 3
             size: 30Gi
           persistence:
             storageClass: nfs-client
-          #affinity: {}
-          #tolerations:
-          #  - key: node-role.kubernetes.io/monitoring
-          #    operator: In
-          #    value: true
-          #    effect: NoSchedule
         backend:
           replicas: 3
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          #affinity: {}
-          #tolerations:
-          #  - key: node-role.kubernetes.io/monitoring
-          #    operator: In
-          #    value: true
-          #    effect: NoSchedule
         commonConfig:
           replication_factor: 3
           persistence:
@@ -68,12 +47,6 @@ spec:
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          #affinity: {}
-          #tolerations:
-          #  - key: node-role.kubernetes.io/monitoring
-          #    operator: In
-          #    value: true
-          #    effect: NoSchedule
         loki:
           auth_enabled: false
           compactor:
@@ -85,12 +58,6 @@ spec:
             retention_delete_worker_count: 150
           limits_config:
           retention_period: 72h
-          #affinity: {}
-          #tolerations:
-          #  - key: node-role.kubernetes.io/monitoring
-          #    operator: In
-          #    value: true
-          #    effect: NoSchedule
         monitoring:
           lokiCanary:
             enabled: false
