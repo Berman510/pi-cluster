@@ -23,14 +23,12 @@ spec:
     chart: loki
     helm:
       skipCrds: true
-      values: |-
+      values: |
         write:
           replicas: 3
           persistence:
             size: 30Gi
             storageClass: nfs-client
-          nodeSelector:
-            Function: monitoring
         read:
           replicas: 3
             size: 30Gi
