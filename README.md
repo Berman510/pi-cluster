@@ -69,7 +69,7 @@ ansible-playbook upgrade.ymal
 
 To access ArgoCD/Grafana/etc:
 
-  1. `external-dns` (if configured) should create a DNS entry for each Ingress it finds. `cert-manager` (if configured) will create LetsEncrypt signed certs. Once DNS propagates and certificates are valid, ingresses are reachable at http://<ingress>.<domian> - e.g. `https://argocd.bermanoc.net`, `https://grafana.bermanoc.net`, etc.
+  1. `external-dns` (if configured) should create a DNS entry for each Ingress it finds. `cert-manager` (if configured) will create LetsEncrypt signed certs. Once DNS propagates and certificates are valid, ingresses are reachable at https://\<ingress\>.\<domian\> - e.g. `https://argocd.bermanoc.net`, `https://grafana.bermanoc.net`, etc.
 
 The default login is `admin` / `prom-operator`, but you can also get the secret with `kubectl get secret cluster-monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -D`.
 
