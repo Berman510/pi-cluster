@@ -1,2 +1,3 @@
 global:
-  test: !!null
+  domain: bermanoc.net
+  cert_email: charlie.berman@gmail.com

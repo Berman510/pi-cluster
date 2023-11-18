@@ -14,7 +14,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: omada.bermanoc.net
+  - host: omada.{{ .Values.global.domain }}
     http:
       paths:
       - path: /

@@ -8,14 +8,14 @@ metadata:
     argocd.argoproj.io/sync-wave: "-30"
 spec:
   acme:
-    email: "charlie.berman@gmail.com"
+    email: "{{ .Values.global.cert_email }}"
     server: "https://acme-v02.api.letsencrypt.org/directory"
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
     - selector:
         dnsZones:
-          - "bermanoc.net"
+          - "{{ .Values.global.domain }}"
       dns01:
         route53:
           region: us-west-2

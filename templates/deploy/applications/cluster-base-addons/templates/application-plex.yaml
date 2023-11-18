@@ -51,7 +51,7 @@ spec:
           main:
             enabled: true
             hosts:
-              - host: plex.bermanoc.net
+              - host: plex.{{ .Values.global.domain }}
                 paths:
                   - path: /
                     pathType: ImplementationSpecific

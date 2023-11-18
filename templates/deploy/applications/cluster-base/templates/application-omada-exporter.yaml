@@ -22,7 +22,7 @@ spec:
         image:
           repository: ghcr.io/charlie-haley/omada_exporter
         omada:
-            host: "https://controller.bermanoc.net"
+            host: "https://controller.{{ .Values.global.domain }}"
             username: "prometheus"
             password: "prometheus"
             site: "Home"

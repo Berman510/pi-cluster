@@ -33,10 +33,10 @@ spec:
         policy: sync
         provider: aws
         registry: txt
-        txtOwnerId: "extdns-internal-bermanoc-net"
-        txtPrefix: "extdns-int-internal-bermanoc-net-"
+        txtOwnerId: "extdns-internal-{{ .Values.global.domain | replace "." "-" }}"
+        txtPrefix: "extdns-int-internal-{{ .Values.global.domain | replace "." "-" }}-"
         domainFilters:
-          - bermanoc.net
+          - {{ .Values.global.domain }}
         logLevel: "info"
         metrics:
           enabled: true

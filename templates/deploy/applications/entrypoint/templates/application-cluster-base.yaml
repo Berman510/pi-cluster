@@ -8,17 +8,17 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-70"
 spec:
-  project: default
+  project: home
   source:
-    repoURL: https://gitlab.com/zeropw/sre/sre-dev-eks.git
-    targetRevision: main
-    path: kubernetes/cluster-base
-    helm:
-      values: |-
-        global:
-          {{- toYaml .Values.global | nindent 10 }}
+    repoURL: 'https://github.com/Berman510/pi-cluster.git'
+    targetRevision: HEAD
+    path: 'templates/deploy/applications/cluster-base/templates'
+    directory:
+      recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
-    namespace: "argocd"
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
   syncPolicy:
     automated: {}
+    syncOptions:
+      - CreateNamespace=true

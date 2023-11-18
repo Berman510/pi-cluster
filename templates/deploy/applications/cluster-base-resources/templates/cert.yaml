@@ -7,10 +7,10 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-20"
 spec:
-  commonName: "bermanoc.net"
+  commonName: "{{ .Values.global.domain }}"
   dnsNames:
-    - "*.bermanoc.net"
-    - "bermanoc.net"
+    - "*.{{ .Values.global.domain }}"
+    - "{{ .Values.global.domain }}"
   secretName: my-cert-tls
   issuerRef:
     name: letsencrypt-prod

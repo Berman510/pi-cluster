@@ -24,7 +24,7 @@ spec:
         ingress:
           enabled: true
           hosts:
-            - host: speedtest.bermanoc.net
+            - host: speedtest.{{ .Values.global.domain }}
               paths:
                 - path: /
                   pathType: ImplementationSpecific
