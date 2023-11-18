@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/Berman510/pi-cluster.git'
-    targetRevision: Chart_restructuring
+    targetRevision: master
     path: 'templates/deploy/applications/cluster-base'
     helm:
       values: |-
