@@ -429,7 +429,6 @@ spec:
           DHCP_ACTIVE: "false"
           WEBTHEME: "lcars"
           extraObjects:
-            []
             - apiVersion: v1
               kind: ConfigMap
               metadata:
