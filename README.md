@@ -12,12 +12,12 @@ Update README with steps for auto_inventory.sh usage (also make it work reliably
 
 ### Cluster Pre-Provisioning
 
-  - Set hostnames: `node01` (set to `02` for node 2, `03` for node 3, etc.) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
-  - Modify `/etc/hosts` to include the new hostname in the loopback address on each node. (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
-  - Ensure nodes are set to static IP addresses, matching values configured in hosts.yml (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
-  - Ensure nodes are set to the correct timezone (e.g. using `timedatectl set-hostname America/Los_Angeles`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
-  - Enable SSH: Generate id_rsa_pi_cluster ssh keypair, then copy public keys to allowed_hosts on each node (e.g. `for i in {1..3}; do ssh-copy-id -i ~/.ssh/id_rsa_pi_cluster pi@nanopi0$i; done`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
-  - Reboot all nodes.
+- Set hostnames: `node01` (set to `02` for node 2, `03` for node 3, etc.) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+- Modify `/etc/hosts` to include the new hostname in the loopback address on each node. (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+- Ensure nodes are set to static IP addresses, matching values configured in hosts.yml (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+- Ensure nodes are set to the correct timezone (e.g. using `timedatectl set-hostname America/Los_Angeles`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+- Enable SSH: Generate id_rsa_pi_cluster ssh keypair, then copy public keys to allowed_hosts on each node (e.g. `for i in {1..3}; do ssh-copy-id -i ~/.ssh/id_rsa_pi_cluster pi@nanopi0$i; done`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+- Reboot all nodes.
 
 ### Configure Secrets Files
 
