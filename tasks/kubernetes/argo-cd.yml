@@ -115,6 +115,14 @@
               pathType: Prefix
               https: false
 
+    - name: Deploy entrypoint chart to Argo-CD.
+      kubernetes.core.helm:
+        release_name: entrypoint
+        chart_ref: templates/deploy/entrypoint
+        namespace: argocd
+        state: present
+
+## Below needs work - will deal with setting admin password via secret from secrets folder.
 ##TODO: FIX THE BELOW - DECODE NEW ADMIN PASSWORD FAILS BUT INITIAL DOESNT? ALSO MAKE THIS CONDITIONAL ON IF INITIAL SECRET EXISTS OR NOT. THIS ISNT USED FOR RESETTING ITS USED FOR INITIAL DEPLOYMENT. ALSO BROKE SERVER>SECRETKEY?
 #- name: Update Argo CD admin password
 #  hosts: control_plane

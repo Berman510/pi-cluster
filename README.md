@@ -6,19 +6,27 @@ Update README with steps for auto_inventory.sh usage! Below steps are remnants o
 ## Usage
 
   1. Make sure you have [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) installed.
-  2. Copy the `example.hosts.ini` inventory file to `hosts.ini`. Make sure it has the `control_plane` and `node`s configured correctly (for my examples I named my nodes `node[1-4].local`).
-  3. Copy the `example.config.yml` file to `config.yml`, and modify the variables to your liking.
+  2. Copy the `example.(multi|single).hosts.ini` inventory file to `hosts.ini`. Make sure it has the `control_plane`, `storage`, and `node`s configured correctly (for my examples I named my nodes `nanopi0[1-3]`).
+  3. Copy the `example.(multi|single).config.yml` file to `config.yml`, and modify the variables to your liking.
 
-### Raspberry Pi Setup
+### Cluster Pre-Provisioning
 
-  - Set hostname: `node1.local` (set to `2` for node 2, `3` for node 3, etc.)
-  - Enable SSH: 'Allow public-key', and paste in my public SSH key(s)
+  - Set hostnames: `node01` (set to `02` for node 2, `03` for node 3, etc.) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+  - Modify `/etc/hosts` to include the new hostname in the loopback address on each node. (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+  - Ensure nodes are set to static IP addresses, matching values configured in hosts.yml (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+  - Ensure nodes are set to the correct timezone (e.g. using `timedatectl set-hostname America/Los_Angeles`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+  - Enable SSH: Generate id_rsa_pi_cluster ssh keypair, then copy public keys to allowed_hosts on each node (e.g. `for i in {1..3}; do ssh-copy-id -i ~/.ssh/id_rsa_pi_cluster pi@nanopi0$i; done`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
+  - Reboot all nodes.
+
+### Configure Secrets Files
+
+- Update `secrets` folder with desired secrets - this will also create the target namespaces for the secrets. Secret file format is `secrets/<secret-name>.<target-namespace>.yml`, with key/value pairs in yaml format of `<key-name>: "<secret>"`.
 
 ### SSH connection test
 
 
 ```
-ssh pi@node1.local
+ssh pi@node1
 ```
 
 ```
@@ -34,6 +42,8 @@ It should respond with a 'SUCCESS' message for each node.
 If using filesystem (`storage_type: filesystem`), make sure to use the appropriate `storage_nfs_dir` variable in `config.yml`.
 
 ### Cluster configuration and K3s installation
+
+Copy the desired playbook for single or multiple nodes (e.g. `cp main_multi.yml main.yml`)
 
 Run the playbook:
 

@@ -74,7 +74,7 @@ function inventory_init() {
     read -s ssh_passwd
     # Check for sshpass
     if ! which sshpass > /dev/null; then
-      yes | brew install hudochenkov/sshpass/sshpass
+        yes | brew install hudochenkov/sshpass/sshpass
     fi
     # Check for yq
     if ! which yq > /dev/null; then
