@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: 'https://github.com/Berman510/pi-cluster.git'
     targetRevision: master
-    path: 'templates/deploy/applications/cluster-base-resources'
+    path: 'templates/deploy/cluster-base-resources'
   destination:
     server: "https://kubernetes.default.svc"
     namespace: "argocd"

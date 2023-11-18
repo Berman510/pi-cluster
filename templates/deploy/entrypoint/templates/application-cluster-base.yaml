@@ -1,21 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-base-addons
+  name: cluster-base
   namespace: argocd
-  # Finalizer that ensures that Application is not deleted until the resources underneath are deleted.
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   annotations:
-    argocd.argoproj.io/sync-wave: "-40"
+    argocd.argoproj.io/sync-wave: "-70"
 spec:
   project: default
   source:
     repoURL: 'https://github.com/Berman510/pi-cluster.git'
     targetRevision: master
-    path: 'templates/deploy/applications/cluster-base-addons'
+    path: 'templates/deploy/cluster-base'
+    helm:
+      values: |-
+        global:
+          {{- toYaml .Values.global | nindent 10 }}
   destination:
-    server: "https://kubernetes.default.svc"
-    namespace: "argocd"
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
   syncPolicy:
     automated: {}
