@@ -35,7 +35,27 @@
             server.insecure: true
           alertmanager:
             enabled: false
+          fullnameOverride: argocd
           controller:
+            enableStatefulSet: true
+            replicas: 1
+            resources:
+              limits:
+                cpu: 1
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 1Gi
+            livenessProbe:
+              initialDelaySeconds: 60
+              failureThreshold: 3
+              periodSeconds: 30
+              timeoutSeconds: 10
+            readinessProbe:
+              initialDelaySeconds: 60
+              failureThreshold: 3
+              periodSeconds: 30
+              timeoutSeconds: 10
             metrics:
               enabled: true
               serviceMonitor:
@@ -50,13 +70,33 @@
             replicas: 1
             autoscaling:
               enabled: false
+            resources:
+              limits:
+                cpu: 1
+                memory: 2Gi
+              requests:
+                cpu: 300m
+                memory: 256Mi
+            env:
+              - name: ARGOCD_EXEC_TIMEOUT
+                value: "5m"
             metrics:
               enabled: true
               serviceMonitor:
                 enabled: true
           server:
+            replicas: 1
             extraArgs:
             - --insecure
+            autoscaling:
+              enabled: false
+            resources:
+              limits:
+                cpu: 200m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
             service:
               externalIPs:
                 - "{{ argo_cd_host_ip }}"

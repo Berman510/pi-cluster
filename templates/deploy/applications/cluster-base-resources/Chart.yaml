@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cluster-base-resources
+description: > 
+  This chart sync cluster base resources that are needed for other charts to function
+type: application
+version: 0.1.0
