@@ -1,7 +1,8 @@
 # K3S Pi Cluster
+I use this repo to provision and deploy my home k3s cluster. I have 3 NanoPi R6S nodes, one with an attached external hardware RAID storage array. There are configurations to support single or multi-node environments. Tested using Debian Bullseye Core w/ kernel 6.1 arm64. Comments, suggestions and pull-requests highly encouraged! This repository is based on Jeff Geerling's [Pi-Cluster](https://github.com/geerlingguy/pi-cluster) repository and has been configured for my specific home setup.
 
 ### TODO:
-Update README with steps for auto_inventory.sh usage! Below steps are remnants of geerlingguy's pi-cluster repo and still mostly apply.
+Update README with steps for auto_inventory.sh usage (also make it work reliably...)!
 
 ## Usage
 
