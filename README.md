@@ -1,4 +1,4 @@
-# Raspberry Pi Cluster
+# K3S Pi Cluster
 
 ### TODO:
 Update README with steps for auto_inventory.sh usage! Below steps are remnants of geerlingguy's pi-cluster repo and still mostly apply.
