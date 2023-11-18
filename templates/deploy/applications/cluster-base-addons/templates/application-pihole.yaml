@@ -429,7 +429,7 @@ spec:
           DHCP_ACTIVE: "false"
           WEBTHEME: "lcars"
   sources: []
-  project: home
+  project: default
   syncPolicy:
     automated:
       prune: true

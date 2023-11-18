@@ -31,7 +31,7 @@ spec:
         nodeSelector:
           kubernetes.io/hostname: nanopi01
   sources: []
-  project: home
+  project: default
   syncPolicy:
     automated:
       prune: true

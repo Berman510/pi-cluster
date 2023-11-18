@@ -10,7 +10,7 @@ spec:
   destination:
     namespace: mimir
     server: 'https://kubernetes.default.svc'
-  project: home
+  project: default
   source:
     chart: mimir-distributed
     repoURL: https://grafana.github.io/helm-charts
@@ -110,7 +110,7 @@ spec:
               max_query_parallelism: 224
               max_global_series_per_user: 100000000
               ruler_max_rules_per_rule_group: 100
-              ruler_max_rule_groups_per_tenant: 200              
+              ruler_max_rule_groups_per_tenant: 200
               max_global_series_per_metric: 100000
             memberlist:
               abort_if_cluster_join_fails: false

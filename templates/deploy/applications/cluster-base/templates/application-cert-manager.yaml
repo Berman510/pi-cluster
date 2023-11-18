@@ -31,7 +31,7 @@ spec:
           timeout: 5m
 
   sources: []
-  project: home
+  project: default
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

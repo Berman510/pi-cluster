@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: kube-system
     server: "https://kubernetes.default.svc"
-  project: home
+  project: default
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: external-dns

@@ -44,7 +44,7 @@ spec:
             memory: 128Mi
         autoscaling:
           enabled: false
-  project: home
+  project: default
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

@@ -1,38 +1,48 @@
-#---
-#- name: Configure Argo-CD.
-#  hosts: control_plane
-#  gather_facts: false
-#  become: true
-#
-#  vars_files:
-#    - ../../config.yml
-#
-#  environment:
-#    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
-#    PATH: "~/go/bin:{{ ansible_env.PATH }}"
-#
-#  tasks:
-#    - name: Deploy Argo Projects
-#      kubernetes.core.k8s:
-#        state: present
-#        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-#      with_fileglob:
-#        - "../../templates/argo-cd/projects/home.yaml"
-#    - name: Deploy Argo Apps
-#      kubernetes.core.k8s:
-#        state: present
-#        definition: "{{ lookup('template', '{{ item }}') | from_yaml }}"
-#      with_fileglob:
-#        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack-crds.yaml"
-#        - "../../templates/argo-cd/applications/templates/kube-prometheus-stack.yaml"
-#        - "../../templates/argo-cd/applications/templates/cert-manager.yaml"
-#        - "../../templates/argo-cd/applications/templates/cert.yaml"
-#        - "../../templates/argo-cd/applications/templates/openspeedtest.yaml"
-#        - "../../templates/argo-cd/applications/templates/pihole.yaml"
-#        - "../../templates/argo-cd/applications/templates/iperf.yaml"
-#        - "../../templates/argo-cd/applications/templates/omada.yaml"
-#        #- "../../templates/argo-cd/applications/templates/mimir.yaml"
-#        #- "../../templates/argo-cd/applications/templates/loki.yaml"
-#        #- "../../templates/argo-cd/applications/ca-issuer.yaml"
-#        #- "../../templates/argo-cd/applications/unbound.yaml"
-#        #- "../../templates/argo-cd/applications/plex.yaml"
+- name: Find and Create Kubernetes Namespaces from YAML Files
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - config.yml
+  tasks:
+    - name: Extract unique namespace names from YAML files
+      shell: >
+        grep -E '^\s*namespace:' templates/argo-cd/applications/templates/*.yaml |
+        cut -d ':' -f3 |
+        grep -v '\"\"' |
+        grep -v '\.' |
+        sort | uniq
+      register: namespace_output
+      delegate_to: localhost
+
+    - name: Set a fact with the output
+      set_fact:
+        namespace_output: "{{ namespace_output.stdout }}"
+      delegate_to: localhost
+      run_once: true
+
+- name: Create namespaces
+  hosts: control_plane
+  gather_facts: no
+  vars_files:
+    - config.yml
+  environment:
+    K8S_AUTH_KUBECONFIG: /etc/rancher/k3s/k3s.yaml
+    PATH: "~/go/bin:{{ ansible_env.PATH }}"
+  tasks:
+    - name: Create namespaces
+      command: "echo kubectl create namespace {{ item | trim }}"
+      loop: "{{ hostvars['localhost'].namespace_output.split('\n') }}"
+      delegate_to: nanopi01
+      ignore_errors: yes
+      register: echo_output
+
+- name: Display dry-run output
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - config.yml
+  tasks:
+    - name: Display dry-run output
+      debug:
+        msg: "{{ item.stdout }}"
+      loop: "{{ hostvars['nanopi01'].echo_output.results }}"

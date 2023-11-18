@@ -10,7 +10,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: tempo
-  project: home
+  project: default
   source:
     chart: tempo-distributed
     repoURL: https://grafana.github.io/helm-charts
@@ -28,7 +28,7 @@ spec:
             maxReplicas: 4
             targetCPUUtilizationPercentage: 60
             targetMemoryUtilizationPercentage: 80
-          topologySpreadConstraints: {}  
+          topologySpreadConstraints: {}
           persistence:
             enabled: true
             storageClass: "nfs-client"
@@ -66,7 +66,7 @@ spec:
               # -- The maximum amount of time to spend compacting a single tenant before moving to the next
               max_time_per_tenant: 5m
               # -- The time between compaction cycles
-              compaction_cycle: 30s                         
+              compaction_cycle: 30s
         querier:
           replicas: 1
           autoscaling:
@@ -104,7 +104,7 @@ spec:
                 - tempo.{{ .Values.global.domain }}
                 secretName: my-cert-tls
           multitenancyEnabled: false
-          
+
   syncPolicy:
     automated: {}
     syncOptions:

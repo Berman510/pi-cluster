@@ -18,7 +18,7 @@ spec:
     targetRevision: kube-prometheus-stack-52.1.0
     directory:
       recurse: true
-  project: home
+  project: default
   syncPolicy:
     automated:
       prune: true
