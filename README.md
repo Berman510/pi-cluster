@@ -9,7 +9,6 @@ This repository is not entirely generalized. When customizing for your own envir
 
 - Update README with steps for auto_inventory.sh usage (also make it work reliably...)
 - Expand secrets via external-secrets chart (plus AWS-side setup)
-- More automation for bootstrapping and autodiscovery of new nodes
 - Generalize entire repo for mass-consumption
 - Correct http->https redirect
 - Correct traefik default tls
