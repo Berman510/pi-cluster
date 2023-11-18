@@ -1,0 +1,3 @@
+global:
+  domain: bermanoc.net
+  aws_region: us-west-2
