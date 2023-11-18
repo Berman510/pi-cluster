@@ -1,8 +1,19 @@
 # K3S Pi Cluster
-I use this repo to provision and deploy my home k3s cluster. I have 3 NanoPi R6S nodes, one with an attached external hardware RAID storage array. There are configurations to support single or multi-node environments. Tested using Debian Bullseye Core w/ kernel 6.1 arm64. Comments, suggestions and pull-requests highly encouraged! This repository is based on Jeff Geerling's [Pi-Cluster](https://github.com/geerlingguy/pi-cluster) repository and has been configured for my specific home setup. Note: I've added services like external-dns and cert-manager that require pre-provisioning secrets for. My prometheus configuration is also expecting a secret for the bearer token to attach to my separate HomeAssistant deployment. Be sure to add these secrets to the `secrets` folder. See notes below on how to [Configure Secrets Files](#configure-secrets-files). When customizing for your own environment, be sure to fork this repository and update the templates containing `repoURL` and `targetRevision` entries as well as entries in all the `Values.yaml` files with your desired values.
 
-### TODO:
-Update README with steps for auto_inventory.sh usage (also make it work reliably...)!
+I use this repo to provision and deploy my home k3s cluster. I have 3 NanoPi R6S nodes, one with an attached external hardware RAID storage array. There are configurations to support single or multi-node environments. Tested using Debian Bullseye Core w/ kernel 6.1 arm64. Comments, suggestions and pull-requests highly encouraged! This repository is based on Jeff Geerling's [Pi-Cluster](https://github.com/geerlingguy/pi-cluster) repository and has been configured for my specific home setup. Note: I've added services like external-dns and cert-manager that require pre-provisioning secrets for. My prometheus configuration is also expecting a secret for the bearer token to attach to my separate HomeAssistant deployment. Be sure to add these secrets to the `secrets` folder. See notes below on how to [Configure Secrets Files](#configure-secrets-files).
+
+### Note:
+This repository is not entirely generalized. When customizing for your own environment, be sure to fork this repository and update the templates containing `repoURL` and `targetRevision` entries as well as entries in all the `Values.yaml` files with your desired values.
+
+### TODO
+
+- Update README with steps for auto_inventory.sh usage (also make it work reliably...)
+- Expand secrets via external-secrets chart (plus AWS-side setup)
+- More automation for bootstrapping and autodiscovery of new nodes
+- Generalize entire repo for mass-consumption
+- Correct http->https redirect
+- Correct traefik default tls
+- Integrate crossplane for entire environment bootstrapping from ARP discovery through application deployment
 
 ## Usage
 
