@@ -14,6 +14,7 @@ This repository is not entirely generalized. When customizing for your own envir
 - Correct traefik default tls
 - Integrate crossplane for entire environment bootstrapping from ARP discovery through application deployment
 - Migrate homeassistant.bermanoc.net from RPi4b+ HAOS to cluster deployed chart with full supervisor/USB conbee/etc functionality.
+- Figure out how to incorporate OverlayFS with k3s server and agent. (OverlayFS allows support for snapshotting of file system, which supports SoC's lacking a proper power switch [loss of power when unplugging won't corrupt filesystem]) - This is a priority.
 
 ## Usage
 
