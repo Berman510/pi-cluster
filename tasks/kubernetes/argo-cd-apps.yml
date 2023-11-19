@@ -1,6 +1,5 @@
-
 ---
-- name: Deploy Argo-CD Apps.
+- name: Deploy Argo-CD Apps
   hosts: control_plane
   gather_facts: false
   become: true
@@ -13,9 +12,15 @@
     PATH: "~/go/bin:{{ ansible_env.PATH }}"
 
   tasks:
-    - name: Deploy entrypoint chart to Argo-CD.
+    - name: Clone pi-cluster repository
+      git:
+        repo: 'https://github.com/Berman510/pi-cluster.git'
+        dest: '/root/pi-cluster'
+        version: 'master' # or the branch/tag you want to use
+
+    - name: Deploy entrypoint chart to Argo-CD
       kubernetes.core.helm:
         release_name: entrypoint
-        chart_ref: templates/deploy/entrypoint
+        chart_ref: '/root/pi-cluster/templates/deploy/entrypoint'
         namespace: argocd
         state: present

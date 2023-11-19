@@ -51,7 +51,7 @@ spec:
           main:
             enabled: true
             hosts:
-              - host: plex.{{ .Values.global.domain }}
+              - host: "plex.{{ .Values.global.domain }}"
                 paths:
                   - path: /
                     pathType: ImplementationSpecific
