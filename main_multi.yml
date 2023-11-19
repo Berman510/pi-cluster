@@ -29,6 +29,7 @@
           - python3-setuptools
           - python3-cryptography
           - curl
+          - lm-sensors
         state: present
       become: true
 

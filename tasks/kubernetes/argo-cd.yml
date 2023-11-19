@@ -86,6 +86,8 @@
                 enabled: true
           server:
             replicas: 1
+            serviceAccount:
+              create: true
             extraArgs:
             - --insecure
             autoscaling:
@@ -97,23 +99,16 @@
               requests:
                 cpu: 100m
                 memory: 128Mi
-            service:
-              externalIPs:
-                - "{{ argo_cd_host_ip }}"
-              loadBalancerIP: "{{ argo_cd_host_ip }}"
-              type: "NodePort"
             metrics:
               enabled: true
               serviceMonitor:
                 enabled: true
             ingress:
               enabled: true
+              annotations:
+                - kubernetes.io/ingress.class: traefik
               hosts:
                 - "argocd.{{ domain }}"
-              paths:
-                - /
-              pathType: Prefix
-              https: false
 
 ## Below needs work - will deal with setting admin password via secret from secrets folder.
 ##TODO: FIX THE BELOW - DECODE NEW ADMIN PASSWORD FAILS BUT INITIAL DOESNT? ALSO MAKE THIS CONDITIONAL ON IF INITIAL SECRET EXISTS OR NOT. THIS ISNT USED FOR RESETTING ITS USED FOR INITIAL DEPLOYMENT. ALSO BROKE SERVER>SECRETKEY?
