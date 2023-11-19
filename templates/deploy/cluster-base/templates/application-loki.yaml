@@ -23,6 +23,11 @@ spec:
       name: loki
       jsonPointers:
         - /spec/relabeling/*/action
+    - group: "apps"
+      kind: "CustomResourceDefinition"
+      name: podmonitors.monitoring.coreos.com
+      jsonPointers:
+        - /metadata/annotations
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts

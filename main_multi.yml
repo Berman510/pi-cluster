@@ -195,9 +195,8 @@
       - name: Update pi-cluster in kubeconfig if exists
         shell: |
           yq e ".clusters[] |= (select(.name == \"{{ cluster_name }}\").cluster.server = \"https://{{ control_plane_ip }}:6443\")" -i {{ kubeconfig_path }}
-          yq e ".users[] |= (select(.name == \"{{ cluster_name }}\").user = {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.*)') | first | regex_replace('\"', '\\\\\"') }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.*)') | first | regex_replace('\"', '\\\\\"') }}\"})" -i {{ kubeconfig_path }}
+          yq e ".users[] |= (select(.name == \"{{ cluster_name }}\").user = {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.+)', '\\1') | default('') }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.+)', '\\1') | default('') }}\"})" -i {{ kubeconfig_path }}
         when: cluster_exists.stderr == ''
-
 
       - name: Add pi-cluster to kubeconfig if not exists
         shell: |
