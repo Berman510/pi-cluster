@@ -56,7 +56,7 @@ spec:
                   - path: /
                     pathType: ImplementationSpecific
         nodeSelector:
-          kubernetes.io/hostname: nanopi01
+          kubernetes.io/hostname: nanopi03
         persistence:
           config:
             enabled: true
