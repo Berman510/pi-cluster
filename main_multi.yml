@@ -167,35 +167,43 @@
 
 - name: Update local kube config with pi-cluster entry
   hosts: localhost
+  gather_facts: false
+
   vars:
-    kubeconfig_path: "~/.kube/config"
+    kubeconfig_path: "/Users/cberman/.kube/config"
     k3s_config_path: "kube_config.yaml"
     cluster_name: "pi-cluster"
+
   tasks:
-    - name: Read k3s config file
-      ansible.builtin.shell: "cat {{ k3s_config_path }}"
-      register: k3s_config_content
+      - name: Read k3s config file
+        ansible.builtin.shell: "cat {{ k3s_config_path }}"
+        register: k3s_config_content
 
-    - name: Replace server IP in k3s config
-      ansible.builtin.set_fact:
-        k3s_config_modified: "{{ k3s_config_content.stdout | replace('https://127.0.0.1:6443', 'https://' + groups['control_plane'][0] + ':6443') }}"
+      - name: Determine control plane host IP
+        set_fact:
+          control_plane_ip: "{{ hostvars[groups['control_plane'][0]]['ansible_host'] }}"
 
-    - name: Check if pi-cluster exists in kubeconfig
-      shell: "yq e '.clusters[] | select(.name == \"{{ cluster_name }}\")' {{ kubeconfig_path }}"
-      register: cluster_exists
-      ignore_errors: yes
+      - name: Replace server IP in k3s config
+        set_fact:
+          k3s_config_modified: "{{ k3s_config_content.stdout | replace('https://127.0.0.1:6443', 'https://' + control_plane_ip + ':6443') }}"
 
-    - name: Update pi-cluster in kubeconfig if exists
-      shell: |
-        yq e '.clusters[] |= (select(.name == "{{ cluster_name }}").cluster.server = "https://{{ control_plane_ip }}:6443")' -i {{ kubeconfig_path }}
-        yq e '.users[] |= (select(.name == "{{ cluster_name }}").user = ({"client-key-data": "{{ k3s_config_modified | regex_search('client-key-data: (.*)') | first }}", "client-certificate-data": "{{ k3s_config_modified | regex_search('client-certificate-data: (.*)') | first }}"))' -i {{ kubeconfig_path }}
-      when: cluster_exists.stderr == ''
+      - name: Check if pi-cluster exists in kubeconfig
+        shell: "yq e '.clusters[] | select(.name == \"{{ cluster_name }}\")' {{ kubeconfig_path }}"
+        register: cluster_exists
+        ignore_errors: yes
 
-    - name: Add pi-cluster to kubeconfig if not exists
-      shell: |
-        yq e '.clusters += [{"name": "{{ cluster_name }}", "cluster": {"server": "https://'{{ groups['control_plane'][0] }}':6443"}}]' -i {{ kubeconfig_path }}
-        yq e '.users += [{"name": "{{ cluster_name }}", "user": {"client-key-data": "{{ k3s_config_modified | regex_findall('client-key-data: (.*)')[0] }}", "client-certificate-data": "{{ k3s_config_modified | regex_findall('client-certificate-data: (.*)')[0] }}"}]' -i {{ kubeconfig_path }}
-      when: cluster_exists.stderr != ''
+      - name: Update pi-cluster in kubeconfig if exists
+        shell: |
+          yq e ".clusters[] |= (select(.name == \"{{ cluster_name }}\").cluster.server = \"https://{{ control_plane_ip }}:6443\")" -i {{ kubeconfig_path }}
+          yq e ".users[] |= (select(.name == \"{{ cluster_name }}\").user = {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.*)') | first | regex_replace('\"', '\\\\\"') }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.*)') | first | regex_replace('\"', '\\\\\"') }}\"})" -i {{ kubeconfig_path }}
+        when: cluster_exists.stderr == ''
+
+
+      - name: Add pi-cluster to kubeconfig if not exists
+        shell: |
+          yq e '.clusters += [{\"name\": \"{{ cluster_name }}\", \"cluster\": {\"server\": \"https://'{{ control_plane_ip }}':6443\"}}]' -i {{ kubeconfig_path }}
+          yq e '.users += [{\"name\": \"{{ cluster_name }}\", \"user\": {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.*)') | first }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.*)') | first }}\"}}]' -i {{ kubeconfig_path }}
+        when: cluster_exists.stderr != ''
 
 - name: Configure NFS clients
   hosts: all:!storage
