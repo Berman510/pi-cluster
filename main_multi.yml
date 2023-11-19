@@ -163,8 +163,8 @@
         dest: "./k3s.yaml"
         flat: yes
 
-- name: Configure the worker nodes.
-  hosts: nodes
+- name: Configure NFS clients
+  hosts: all:!storage
   gather_facts: false
   become: true
 
@@ -190,6 +190,15 @@
         passno: 0
       become: true
 
+- name: Configure the worker nodes.
+  hosts: nodes
+  gather_facts: false
+  become: true
+
+  vars_files:
+    - config.yml
+
+  tasks:
     - name: Install K3s on nodes (takes a while).
       ansible.builtin.shell: >-
         K3S_URL="https://{{ groups['control_plane'][0] }}:6443"
