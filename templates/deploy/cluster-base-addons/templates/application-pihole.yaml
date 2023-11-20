@@ -8,16 +8,6 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "-55"
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.pihole.middlewares=pihole"
-    - "traefik.http.middlewares.pihole.replacepath.path=/admin"
-    - "traefik.http.routers.pihole.entrypoints=web,websecure"
-    - "traefik.http.routers.pihole.rule=Path(`/pihole`)"
-    - "traefik.http.routers.pihole.tls=true"
-    - "traefik.http.routers.pihole.tls.certresolver=my-cert-tls"
-    - "traefik.http.services.pihole.loadbalancer.server.port=80"
-    - "traefik.port=80"
 spec:
   destination:
     namespace: dns
