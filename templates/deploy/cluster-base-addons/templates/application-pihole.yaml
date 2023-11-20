@@ -33,19 +33,19 @@ spec:
         - name: image.pullPolicy
           value: IfNotPresent
       values: |
-        ingress:
-          enabled: true
-          hosts:
-            - pihole.{{ .Values.global.domain }}
-          path: /admin
-          annotations:
-            kubernetes.io/ingress.class: "traefik"
-            cert-manager.io/cluster-issuer: "letsencrypt-prod"
-            traefik.ingress.kubernetes.io/router.tls: "true"
-          tls:
-            - hosts:
-              - pihole.{{ .Values.global.domain }}
-              secretName: my-cert-tls
+        #ingress:
+        #  enabled: true
+        #  hosts:
+        #    - pihole.{{ .Values.global.domain }}
+        #  path: /admin
+        #  annotations:
+        #    kubernetes.io/ingress.class: "traefik"
+        #    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        #    traefik.ingress.kubernetes.io/router.tls: "true"
+        #  tls:
+        #    - hosts:
+        #      - pihole.{{ .Values.global.domain }}
+        #      secretName: my-cert-tls
         serviceDns:
           type: LoadBalancer
         tolerations:

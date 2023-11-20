@@ -1,0 +1,37 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik-internal
+  name: pihole-dashboard
+  namespace: dns
+spec:
+  routes:
+  - kind: Rule
+    match: Host(`pihole.bermanoc.net`)
+    middlewares:
+    - name: dashboard-redirect
+    - name: dashboard-prefix
+    services:
+    - name: pihole-tcp
+      port: 80
+  tls: {}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: dashboard-redirect
+  namespace: dns
+spec:
+  redirectRegex:
+    regex: /admin/$
+    replacement: /
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: dashboard-prefix
+  namespace: dns
+spec:
+  addPrefix:
+    prefix: /admin
