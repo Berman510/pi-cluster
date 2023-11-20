@@ -23,9 +23,9 @@ spec:
     - name: pihole-tcp
       port: 80
   tls:
-    - hosts:
-      - pihole.{{ .Values.global.domain }}
-      secretName: my-cert-tls
+  - hosts:
+    - pihole.{{ .Values.global.domain }}
+    secretName: my-cert-tls
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
