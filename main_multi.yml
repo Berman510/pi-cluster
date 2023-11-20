@@ -194,14 +194,18 @@
 
       - name: Update pi-cluster in kubeconfig if exists
         shell: |
+          key_data=$(echo "{{ k3s_config_modified }}" | grep 'client-key-data' | cut -d ' ' -f 2-)
+          cert_data=$(echo "{{ k3s_config_modified }}" | grep 'client-certificate-data' | cut -d ' ' -f 2-)
           yq e ".clusters[] |= (select(.name == \"{{ cluster_name }}\").cluster.server = \"https://{{ control_plane_ip }}:6443\")" -i {{ kubeconfig_path }}
-          yq e ".users[] |= (select(.name == \"{{ cluster_name }}\").user = {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.+)', '\\1') | default('') }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.+)', '\\1') | default('') }}\"})" -i {{ kubeconfig_path }}
+          yq e ".users[] |= (select(.name == \"{{ cluster_name }}\").user = {\"client-key-data\": \"$key_data\", \"client-certificate-data\": \"$cert_data\"})" -i {{ kubeconfig_path }}
         when: cluster_exists.stderr == ''
 
       - name: Add pi-cluster to kubeconfig if not exists
         shell: |
-          yq e '.clusters += [{\"name\": \"{{ cluster_name }}\", \"cluster\": {\"server\": \"https://'{{ control_plane_ip }}':6443\"}}]' -i {{ kubeconfig_path }}
-          yq e '.users += [{\"name\": \"{{ cluster_name }}\", \"user\": {\"client-key-data\": \"{{ k3s_config_modified | regex_search('client-key-data: (.*)') | first }}\", \"client-certificate-data\": \"{{ k3s_config_modified | regex_search('client-certificate-data: (.*)') | first }}\"}}]' -i {{ kubeconfig_path }}
+          key_data=$(echo "{{ k3s_config_modified }}" | grep 'client-key-data' | cut -d ' ' -f 2-)
+          cert_data=$(echo "{{ k3s_config_modified }}" | grep 'client-certificate-data' | cut -d ' ' -f 2-)
+          yq e ".clusters += [{\"name\": \"{{ cluster_name }}\", \"cluster\": {\"server\": \"https://{{ control_plane_ip }}:6443\"}}]" -i {{ kubeconfig_path }}
+          yq e ".users += [{\"name\": \"{{ cluster_name }}\", \"user\": {\"client-key-data\": \"$key_data\", \"client-certificate-data\": \"$cert_data\"}}]" -i {{ kubeconfig_path }}
         when: cluster_exists.stderr != ''
 
 - name: Configure NFS clients
