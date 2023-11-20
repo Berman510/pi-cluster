@@ -8,6 +8,16 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: "-55"
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.pihole.middlewares=pihole"
+    - "traefik.http.middlewares.pihole.replacepath.path=/admin"
+    - "traefik.http.routers.pihole.entrypoints=web,websecure"
+    - "traefik.http.routers.pihole.rule=Path(`/pihole`)"
+    - "traefik.http.routers.pihole.tls=true"
+    - "traefik.http.routers.pihole.tls.certresolver=my-cert-tls"
+    - "traefik.http.services.pihole.loadbalancer.server.port=80"
+    - "traefik.port=80"
 spec:
   destination:
     namespace: dns
@@ -33,19 +43,19 @@ spec:
         - name: image.pullPolicy
           value: IfNotPresent
       values: |
-        #ingress:
-        #  enabled: true
-        #  hosts:
-        #    - pihole.{{ .Values.global.domain }}
-        #  path: /admin
-        #  annotations:
-        #    kubernetes.io/ingress.class: "traefik"
-        #    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        #    traefik.ingress.kubernetes.io/router.tls: "true"
-        #  tls:
-        #    - hosts:
-        #      - pihole.{{ .Values.global.domain }}
-        #      secretName: my-cert-tls
+        ingress:
+          enabled: true
+          hosts:
+            - pihole.{{ .Values.global.domain }}
+          path: /admin
+          annotations:
+            kubernetes.io/ingress.class: "traefik"
+            cert-manager.io/cluster-issuer: "letsencrypt-prod"
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          tls:
+            - hosts:
+              - pihole.{{ .Values.global.domain }}
+              secretName: my-cert-tls
         serviceDns:
           type: LoadBalancer
         tolerations:
