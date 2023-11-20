@@ -42,7 +42,10 @@ spec:
             kubernetes.io/ingress.class: "traefik"
             cert-manager.io/cluster-issuer: "letsencrypt-prod"
             traefik.ingress.kubernetes.io/router.tls: "true"
-          tls: {}
+          tls:
+            - hosts:
+              - prometheus.{{ .Values.global.domain }}
+              secretName: my-cert-tls
         serviceDns:
           type: LoadBalancer
         tolerations:
