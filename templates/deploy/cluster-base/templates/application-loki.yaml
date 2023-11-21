@@ -22,7 +22,7 @@ spec:
       kind: "PodLogs"
       name: loki
       jsonPointers:
-        - /spec/relabelings
+        - /spec/relabelings/...
     - group: "apps"
       kind: "CustomResourceDefinition"
       name: podmonitors.monitoring.coreos.com
