@@ -50,11 +50,11 @@ spec:
                 - host: pihole.{{ .Values.global.domain }}
                   http:
                     paths:
-                      - path: /admin
+                      - path: /
                         pathType: Prefix
                         backend:
                           service:
-                            name: pihole
+                            name: pihole-web
                             port:
                               number: 80
         serviceDns:
