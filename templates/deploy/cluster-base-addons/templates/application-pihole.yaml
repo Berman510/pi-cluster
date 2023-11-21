@@ -54,7 +54,7 @@ spec:
                         pathType: Prefix
                         backend:
                           service:
-                            name: pihole-web
+                            name: pihole
                             port:
                               number: 80
         serviceDns:
