@@ -46,17 +46,6 @@ spec:
             - hosts:
               - pihole.{{ .Values.global.domain }}
               secretName: my-cert-tls
-              rules:
-                - host: pihole.{{ .Values.global.domain }}
-                  http:
-                    paths:
-                      - path: /
-                        pathType: Prefix
-                        backend:
-                          service:
-                            name: pihole
-                            port:
-                              number: 80
         serviceDns:
           type: LoadBalancer
         tolerations:
