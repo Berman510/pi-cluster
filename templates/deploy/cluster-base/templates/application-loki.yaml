@@ -9,25 +9,14 @@ metadata:
     argocd.argoproj.io/sync-wave: "-55"
 spec:
   ignoreDifferences:
-    - group: "apps"
-      kind: "StatefulSet"
-      managedFieldsManagers:
-        - loki-minio
-    - group: "apps"
-      kind: "StatefulSet"
-      name: loki-minio
-      jsonPointers:
-        - /spec/volumeClaimTemplates
-    - group: "apps"
-      kind: "PodLogs"
-      name: loki
-      jsonPointers:
-        - /spec/relabelings/*
-    - group: "apps"
-      kind: "CustomResourceDefinition"
-      name: podmonitors.monitoring.coreos.com
-      jsonPointers:
-        - /metadata/annotations
+    - group: monitoring.coreos.com
+      kind: ServiceMonitor
+      jqPathExpressions:
+        - '.spec.endpoints[]?.relabelings[]?.action'
+    - group: apps
+      kind: StatefulSet
+      jqPathExpressions:
+        - '.spec.volumeClaimTemplates[]?'
   project: default
   source:
     repoURL: https://grafana.github.io/helm-charts
