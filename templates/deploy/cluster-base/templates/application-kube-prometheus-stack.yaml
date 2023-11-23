@@ -54,6 +54,7 @@ spec:
         alertmanager:
           enabled: true
         grafana:
+          namespaceOverride: "grafana"
           ingress:
             enabled: true
             hosts:
