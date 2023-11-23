@@ -10,9 +10,32 @@ spec:
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--log.level=DEBUG"
+      - "--certificatesresolvers.letsencrypt.acme.email={{ .Values.global.cert_email }}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnsChallenge.provider=route53"
     ports:
       traefik:
         expose: true
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
+    tls:
+      certificates:
+        - secretName: my-cert-tls
+          stores:
+            - default
+    certificatesResolvers:
+      letsencrypt:
+        acme:
+          email: "{{ .Values.global.cert_email }}"
+          server: "https://acme-v02.api.letsencrypt.org/directory"
+          storage: acme.json
+          dnsChallenge:
+            provider: route53
+            delayBeforeCheck: 60s
+          privateKeySecretRef:
+            name: letsencrypt-prod
+    globalArguments:
+      - "--certificatesresolvers.letsencrypt.acme.email={{ .Values.global.cert_email }}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnsChallenge.provider=route53"
