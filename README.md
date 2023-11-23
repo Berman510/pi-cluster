@@ -31,9 +31,61 @@ This repository is not entirely generalized. When customizing for your own envir
 - Enable SSH: Generate id_rsa_pi_cluster ssh keypair, then copy public keys to allowed_hosts on each node (e.g. `for i in {1..3}; do ssh-copy-id -i ~/.ssh/id_rsa_pi_cluster pi@nanopi0$i; done`) (TODO: add tasks to automate this - see `auto_inventory.sh` for framework)
 - Reboot all nodes.
 
-### Configure Secrets Files
+# Kubernetes Secrets Management
 
-- Update `secrets` folder with desired secrets - this will also create the target namespaces for the secrets. Secret file format is `secrets/<secret-name>.<target-namespace>.yml`, with key/value pairs in yaml format of `<key-name>: "<secret>"`.
+This Ansible playbook is designed to manage Kubernetes secrets. It processes local secrets files and creates corresponding secrets in a Kubernetes cluster.
+
+## Overview
+
+The playbook consists of two main parts:
+
+1. **Process secrets files and create a list of secrets**: This part runs locally and finds secret files, reads their contents, and prepares a list of secrets to be created in Kubernetes.
+
+2. **Create Kubernetes secrets on the control plane**: This part runs on the Kubernetes control plane. It ensures the necessary namespaces exist, templates the secret definitions, and applies them to the Kubernetes cluster.
+
+## Prerequisites
+
+- Ansible installed on the machine where the playbook will be executed.
+- Access to the Kubernetes control plane.
+- The secrets files should be located in the `../../secrets` directory.
+
+## Variables
+
+- `../../config.yml`: This file should contain any necessary configurations required by the playbook.
+- `K8S_AUTH_KUBECONFIG`: Path to the kubeconfig file. Default is `/etc/rancher/k3s/k3s.yaml`.
+- Secrets files should be named in the format `<name>.<namespace>.yml`.
+
+## Steps
+
+1. **Finding Secrets Files**:
+   - Locates all `.yml` files in the `../../secrets` directory.
+   - The secrets file naming convention is important for the correct processing.
+
+2. **Initialize Secrets List**:
+   - Initializes an empty list to store secrets information.
+
+3. **Read Secrets and Prepare List**:
+   - Reads each secrets file and appends its content to the `secrets_info` list.
+   - The secret name and namespace are derived from the file name.
+
+4. **Ensure Namespace Exists in Kubernetes**:
+   - Checks if the specified namespace exists for each secret in Kubernetes.
+   - If not, it creates the namespace.
+
+5. **Template Secret Definition**:
+   - Uses the `secret_template.j2` Jinja2 template to create secret definitions.
+   - Stores the templated definitions in `/tmp`.
+
+6. **Apply Secrets in Kubernetes**:
+   - Applies each templated secret definition to the Kubernetes cluster.
+
+## Usage
+
+To execute the playbook, run the following command:
+
+```shell
+ansible-playbook tasks/kubernetes/secrets.yaml
+
 
 ### SSH connection test
 
