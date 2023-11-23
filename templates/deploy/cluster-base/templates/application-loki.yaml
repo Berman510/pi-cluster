@@ -58,7 +58,7 @@ spec:
           persistence:
             storageClass: nfs-client
         loki:
-          config:
+          config: |
             scrape_configs:
             - job_name: kubernetes-pods
               relabel_configs:
