@@ -19,20 +19,6 @@ spec:
           enabled: true
         config:
           snippets:
-            pipelineStages:
-              - cri: {}
-              - docker:
-              - replace:
-                  expression: '^\d{1,2}:\d{1,2}:\d{1,2} \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{9}Z (stdout|stderr) F'
-                  replace:
-              - match:
-                  selector: '{app="eventrouter"}'
-                  stages:
-                  - json:
-                      expressions:
-                        namespace: event.metadata.namespace
-                  - labels:
-                      namespace: ""
             extraScrapeConfigs: |
               - job_name: journal
                 journal:
