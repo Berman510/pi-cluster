@@ -45,6 +45,16 @@ spec:
                     target_label: 'unit'
                   - source_labels: ['__journal__hostname']
                     target_label: 'hostname'
+              - job_name: kubernetes-pods
+                relabel_configs:
+                  - source_labels: [__meta_kubernetes_pod_node_name]
+                    target_label: node_name
+                  - source_labels: [__meta_kubernetes_pod_name]
+                    target_label: pod_name
+                  - source_labels: [__meta_kubernetes_namespace]
+                    target_label: namespace
+                  - source_labels: [__meta_kubernetes_cluster_name]
+                    target_label: cluster
           logLevel: info
           clients:
             - url: http://loki-gateway.loki.svc.cluster.local:80/loki/api/v1/push
