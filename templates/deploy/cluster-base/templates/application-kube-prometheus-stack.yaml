@@ -57,7 +57,7 @@ spec:
                 scheme: http
                 static_configs:
                   - targets:
-                    - '10.17.84.242:9182'
+                    - '10.17.84.242:10445'
         alertmanager:
           enabled: true
         grafana:
