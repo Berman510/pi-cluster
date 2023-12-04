@@ -51,6 +51,13 @@ spec:
                 static_configs:
                   - targets:
                     - 'omada-omada-exporter.omada.svc.cluster.local:9202'
+              - job_name: 'gamerig-exporter'
+                metrics_path: '/metrics'
+                scrape_interval: 60s
+                scheme: http
+                static_configs:
+                  - targets:
+                    - '10.17.84.242:9182'
         alertmanager:
           enabled: true
         grafana:
