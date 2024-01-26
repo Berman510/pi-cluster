@@ -67,11 +67,11 @@ spec:
               limits:
                 memory: 128Mi
         persistentVolumeClaim:
-          enabled: true
-          storageClass: nfs-client
-          accessModes:
-            - ReadWriteOnce
-          size: 800Mi
+          enabled: false
+          #storageClass: nfs-client
+          #accessModes:
+          #  - ReadWriteOnce
+          #size: 800Mi
         whitelist:
             - 0.client-channel.google.com
             - 1drv.com
