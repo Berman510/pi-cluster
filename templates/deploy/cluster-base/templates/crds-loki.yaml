@@ -1,0 +1,145 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: metricsinstances.monitoring.grafana.com
+  annotations:
+    controller-gen.org/version: v0.6.2
+    operator: grafana-operator
+    olm.gerrit: https://github.com/grafana/grafana-operator.git
+    olm.go-package: github.com/grafana/grafana-operator/pkg/operator/v1alpha1
+spec:
+  group: monitoring.grafana.com
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              template:
+                type: object
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: logsinstances.monitoring.grafana.com
+  annotations:
+    controller-gen.org/version: v0.6.2
+    operator: grafana-operator
+    olm.gerrit: https://github.com/grafana/grafana-operator.git
+    olm.go-package: github.com/grafana/grafana-operator/pkg/operator/v1alpha1
+spec:
+  group: monitoring.grafana.com
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              template:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    properties:
+                      instances:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            receiver:
+                              type: string
+                            jobID:
+                              type: string
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: integrations.monitoring.grafana.com
+  annotations:
+    controller-gen.org/version: v0.6.2
+    operator: grafana-operator
+    olm.gerrit: https://github.com/grafana/grafana-operator.git
+    olm.go-package: github.com/grafana/grafana-operator/pkg/operator/v1alpha1
+spec:
+  group: monitoring.grafana.com
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              template:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    properties:
+                      integrations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            name:
+                              type: string
+                            config:
+                              type: object
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: grafanaagents.monitoring.grafana.com
+  annotations:
+    controller-gen.org/version: v0.6.2
+    operator: grafana-operator
+    olm.gerrit: https://github.com/grafana/grafana-operator.git
+    olm.go-package: github.com/grafana/grafana-operator/pkg/operator/v1alpha1
+spec:
+  group: monitoring.grafana.com
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: false
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              template:
+                type: object
+                properties:
+                  spec:
+                    type: object
+                    properties:
+                      containers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            image:
+                              type: string
+                              pattern: "^[a-z0-9A-Z_.+-/]+$"
