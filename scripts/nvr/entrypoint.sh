@@ -1,12 +1,12 @@
 #!/bin/sh
 
-echo "RTSP_URL=${RTSP_URL}"
-echo "OUTPUT_DIR=${OUTPUT_DIR}"
-echo "DURATION=${RECORD_DURATION}"
-
 RTSP_URL=${RTSP_URL:-"rtsp://10.17.84.156/ch0_0.h264"}
 OUTPUT_DIR=${OUTPUT_DIR:-"/recordings"}
 DURATION=${RECORD_DURATION:-300}
+
+echo "RTSP_URL=${RTSP_URL}"
+echo "OUTPUT_DIR=${OUTPUT_DIR}"
+echo "DURATION=${RECORD_DURATION}"
 
 while true; do
     TIMESTAMP=$(date +%Y%m%d%H%M%S)
