@@ -11,6 +11,9 @@ spec:
     path: 'charts/nvr'
     helm:
       values: |
+        image:
+          repository: berman510/nvr
+          tag: 0.1.5
         ingress:
           enabled: true
           hosts:
