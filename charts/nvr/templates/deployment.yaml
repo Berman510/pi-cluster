@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nvr
-        image: some-nvr-image:latest
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         env:
         - name: RTSP_URL
           value: {{ .Values.rtsp.url }}

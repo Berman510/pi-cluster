@@ -1,3 +1,7 @@
+image:
+  repository: yourdockerhubusername/nvr
+  tag: latest
+
 nfs:
   server: 10.17.84.22
   path: /srv/nfs/recordings
