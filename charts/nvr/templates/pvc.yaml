@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: nvr-pvc
 spec:
-  storageClassName: nfs-client
+  storageClassName: local-path
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 2Ti
