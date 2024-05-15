@@ -29,7 +29,7 @@ spec:
                 - path: /
                   pathType: ImplementationSpecific
         nodeSelector:
-          kubernetes.io/hostname: nanopi02
+          kubernetes.io/hostname: nanopi03
   sources: []
   project: default
   syncPolicy:
