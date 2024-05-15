@@ -12,7 +12,7 @@ while true; do
     TIMESTAMP=$(date +%Y%m%d%H%M%S)
     FILENAME="$OUTPUT_DIR/recording_$TIMESTAMP.mp4"
     echo "Recording to $FILENAME"
-    if ! ffmpeg -loglevel debug -i "$RTSP_URL" -t "$DURATION" -c copy "$FILENAME" 2>&1 | tee -a /recordings/ffmpeg.log; then
+    if ! ffmpeg -i "$RTSP_URL" -t "$DURATION" -c copy "$FILENAME"; then
         echo "FFmpeg failed, retrying in 5 seconds..."
         sleep 5
     fi
