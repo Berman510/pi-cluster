@@ -1,6 +1,6 @@
 image:
   repository: bermanoc/nvr
-  tag: latest
+  tag: 0.1.0
 
 nfs:
   server: 10.17.84.22
