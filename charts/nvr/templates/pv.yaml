@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: 2Ti
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   nfs:
     path: /srv/nfs/recordings
     server: 10.17.84.22
