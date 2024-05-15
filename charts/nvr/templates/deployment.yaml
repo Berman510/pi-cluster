@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nvr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nvr
+  template:
+    metadata:
+      labels:
+        app: nvr
+    spec:
+      containers:
+      - name: nvr
+        image: some-nvr-image:latest
+        env:
+        - name: RTSP_URL
+          value: {{ .Values.rtsp.url }}
+        - name: RECORD_DURATION
+          value: "300"
+        volumeMounts:
+        - name: nvr-storage
+          mountPath: /recordings
+      volumes:
+      - name: nvr-storage
+        persistentVolumeClaim:
+          claimName: nvr-pvc

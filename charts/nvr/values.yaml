@@ -1,0 +1,12 @@
+nfs:
+  server: 10.17.84.22
+  path: /srv/nfs/recordings
+
+rtsp:
+  url: rtsp://10.17.84.156/ch0_0.h264
+
+storage:
+  size: 2Ti
+
+cron:
+  schedule: "0 * * * *"

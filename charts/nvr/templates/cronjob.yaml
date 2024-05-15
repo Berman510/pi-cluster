@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nvr-cleanup
+spec:
+  schedule: {{ .Values.cron.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cleanup
+            image: some-cleanup-image:latest
+            env:
+            - name: STORAGE_PATH
+              value: "/recordings"
+            - name: MAX_SIZE
+              value: "2147483648000"  # 2 TB in bytes
+            volumeMounts:
+            - name: nvr-storage
+              mountPath: /recordings
+          restartPolicy: OnFailure
+          volumes:
+          - name: nvr-storage
+            persistentVolumeClaim:
+              claimName: nvr-pvc
