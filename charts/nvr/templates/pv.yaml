@@ -4,9 +4,9 @@ metadata:
   name: nvr-pv
 spec:
   capacity:
-    storage: {{ .Values.storage.size }}
+    storage: 2Ti
   accessModes:
     - ReadWriteOnce
   nfs:
-    path: {{ .Values.nfs.path }}
-    server: {{ .Values.nfs.server }}
+    path: /srv/nfs/recordings
+    server: 10.17.84.22
