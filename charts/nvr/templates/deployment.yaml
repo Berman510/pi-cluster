@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
       - name: nvr
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         env:
         - name: RTSP_URL
-          value: {{ .Values.rtsp.url }}
+          value: "{{ .Values.rtsp.url }}"
         - name: RECORD_DURATION
           value: "300"
         volumeMounts:
