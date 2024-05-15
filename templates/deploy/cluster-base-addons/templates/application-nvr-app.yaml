@@ -9,6 +9,17 @@ spec:
     repoURL: 'https://github.com/Berman510/pi-cluster.git'
     targetRevision: HEAD
     path: 'charts/nvr'
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          hosts:
+            - host: nvr.{{ .Values.global.domain }}
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+        nodeSelector:
+          kubernetes.io/hostname: nanopi02
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
