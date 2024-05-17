@@ -6,20 +6,27 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/Berman510/pi-cluster.git'
+    repoURL: 'https://blakeblackshear.github.io/blakeshome-charts/'
     targetRevision: HEAD
-    path: 'charts/nvr'
+    path: 'charts/frigate'
     helm:
+      valuesFrom:
+        - secretKeyRef:
+            name: frigate-secret
+            key: password
+            targetPath: mqtt.password
       values: |
-        ingress:
-          enabled: true
-          hosts:
-            - host: nvr.{{ .Values.global.domain }}
-              paths:
-                - path: /
-                  pathType: ImplementationSpecific
-        nodeSelector:
-          kubernetes.io/hostname: nanopi02
+        mqtt:
+          host: "10.17.84.2"
+          port: 1883
+          user: hassio
+        cameras:
+          back:
+            ffmpeg:
+              inputs:
+                - path: rtsp://10.17.84.156/ch0_0.h264
+                  roles:
+                    - detect
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
