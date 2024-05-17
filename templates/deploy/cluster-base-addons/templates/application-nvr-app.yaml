@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nvr-app
+  name: frigate-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://blakeblackshear.github.io/blakeshome-charts/'
-    targetRevision: HEAD
-    path: 'charts/frigate'
+    targetRevision: 7.5.0
+    chart: frigate
     helm:
       valuesFrom:
         - secretKeyRef:
