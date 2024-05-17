@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: nvr
-        image: bermanoc/nvr:0.1.10
+        image: bermanoc/nvr:0.2.0
         env:
         - name: RTSP_URL
           value: "{{ .Values.rtsp.url }}"
