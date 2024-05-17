@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: cleanup
-            image: some-cleanup-image:latest
+            image: bermanoc/nvr-cleanup:0.1.0
             env:
             - name: STORAGE_PATH
               value: "/recordings"
