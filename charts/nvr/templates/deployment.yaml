@@ -23,6 +23,16 @@ spec:
         volumeMounts:
         - name: nvr-storage
           mountPath: /recordings
+      - name: cleanup
+        image: bermanoc/nvr-cleanup:0.1.0
+        env:
+        - name: MONITOR_DIR
+          value: "/recordings"
+        - name: MAX_SIZE
+          value: "2147483648000"
+        volumeMounts:
+        - name: nvr-storage
+          mountPath: /recordings
       volumes:
       - name: nvr-storage
         persistentVolumeClaim:
