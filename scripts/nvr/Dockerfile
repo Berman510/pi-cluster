@@ -1,6 +1,6 @@
 FROM alpine:3.19
 
-RUN apk add --no-cache ffmpeg
+RUN apk add --no-cache ffmpeg bash
 
 WORKDIR /app
 
