@@ -27,6 +27,15 @@ spec:
                 - path: rtsp://10.17.84.156/ch0_0.h264
                   roles:
                     - detect
+        ingress:
+          enabled: true
+          hosts:
+            - host: frigate.{{ .Values.global.domain }}
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+        nodeSelector:
+          kubernetes.io/hostname: nanopi03
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
