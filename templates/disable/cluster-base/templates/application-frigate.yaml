@@ -10,18 +10,13 @@ spec:
     targetRevision: 7.5.0
     chart: frigate
     helm:
-      valuesFrom:
-        - secretKeyRef:
-            name: frigate-secret
-            key: password
-            targetPath: mqtt_password
       values: |
         config: |
           mqtt:
             host: "10.17.84.2"
             port: 1883
             user: hassio
-            password: {{ .Values.mqtt_password }}
+            password: {{ .Values.secrets.mqtt_password }}
           cameras:
             back:
               ffmpeg:
@@ -29,15 +24,23 @@ spec:
                   - path: rtsp://10.17.84.156/ch0_0.h264
                     roles:
                       - detect
-          ingress:
-            enabled: true
-            hosts:
-              - host: frigate.{{ .Values.global.domain }}
-                paths:
-                  - path: /
-                    pathType: ImplementationSpecific
+        #ingress:
+        #  enabled: true
+        #  hosts:
+        #    - host: frigate.{{ .Values.global.domain }}
+        #      paths:
+        #        - path: /
         nodeSelector:
-          kubernetes.io/hostname: nanopi03
+          kubernetes.io/hostname: nanopi02
+        persistence:
+          media:
+            enabled: true
+            storageClass: nfs-client
+            size: "10Gi"
+          config:
+            enabled: true
+            storageClass: nfs-client
+            size: "10Gi"
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
