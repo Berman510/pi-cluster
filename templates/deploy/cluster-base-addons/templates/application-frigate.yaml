@@ -14,26 +14,28 @@ spec:
         - secretKeyRef:
             name: frigate-secret
             key: password
-            targetPath: mqtt.password
+            targetPath: mqtt_password
       values: |
-        mqtt:
-          host: "10.17.84.2"
-          port: 1883
-          user: hassio
-        cameras:
-          back:
-            ffmpeg:
-              inputs:
-                - path: rtsp://10.17.84.156/ch0_0.h264
-                  roles:
-                    - detect
-        ingress:
-          enabled: true
-          hosts:
-            - host: frigate.{{ .Values.global.domain }}
-              paths:
-                - path: /
-                  pathType: ImplementationSpecific
+        config: |
+          mqtt:
+            host: "10.17.84.2"
+            port: 1883
+            user: hassio
+            password: {{ .Values.mqtt_password }}
+          cameras:
+            back:
+              ffmpeg:
+                inputs:
+                  - path: rtsp://10.17.84.156/ch0_0.h264
+                    roles:
+                      - detect
+          ingress:
+            enabled: true
+            hosts:
+              - host: frigate.{{ .Values.global.domain }}
+                paths:
+                  - path: /
+                    pathType: ImplementationSpecific
         nodeSelector:
           kubernetes.io/hostname: nanopi03
   destination:
