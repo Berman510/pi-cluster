@@ -23,6 +23,9 @@ spec:
             enabled: true
             hosts:
               - host: "octoprint.{{ .Values.global.domain }}"
+                paths:
+                  - path: /
+                    pathType: Prefix
         nodeSelector:
           kubernetes.io/hostname: nanopi01
   sources: []
