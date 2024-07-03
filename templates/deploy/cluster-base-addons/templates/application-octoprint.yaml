@@ -14,14 +14,15 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://k8s-at-home.com/charts/'
-    targetRevision: 6.3.1
+    targetRevision: 6.4.2
     chart: octoprint
     helm:
       values: |
         ingress:
-          enabled: true
-          hosts:
-            - host: "octoprint.{{ .Values.global.domain }}"
+          main:
+            enabled: true
+            hosts:
+              - host: "octoprint.{{ .Values.global.domain }}"
         nodeSelector:
           kubernetes.io/hostname: nanopi01
   sources: []
