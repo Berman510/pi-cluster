@@ -1,5 +1,5 @@
 ---
-apiVersion: argoproj.io/v1
+apiVersion: argoproj.io/v1beta
 kind: Application
 metadata:
   name: octoprint
