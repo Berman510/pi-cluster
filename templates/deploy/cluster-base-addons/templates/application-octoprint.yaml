@@ -18,15 +18,15 @@ spec:
     chart: octoprint
     helm:
       values: |
-        ingress:
-          enabled: true
-          hosts:
-            - host: "octoprint.{{ .Values.global.domain }}"
-              paths:
-                - path: /
-                  pathType: ImplementationSpecific
-        nodeSelector:
-          kubernetes.io/hostname: nanopi01
+        #ingress:
+        #  enabled: true
+        #  hosts:
+        #    - host: "octoprint.{{ .Values.global.domain }}"
+        #      paths:
+        #        - path: /
+        #          pathType: ImplementationSpecific
+        #nodeSelector:
+        #  kubernetes.io/hostname: nanopi01
   sources: []
   project: default
   syncPolicy:
