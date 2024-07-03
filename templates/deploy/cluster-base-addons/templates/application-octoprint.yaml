@@ -1,0 +1,37 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: plex
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
+spec:
+  destination:
+    namespace: plex
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://halkeye.github.io/helm-charts/'
+    targetRevision: 0.1.1
+    chart: octoprint
+    helm:
+      values: |
+        ingress:
+          enabled: true
+          hosts:
+            - host: "octoprint.{{ .Values.global.domain }}"
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+        nodeSelector:
+          kubernetes.io/hostname: nanopi01
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
