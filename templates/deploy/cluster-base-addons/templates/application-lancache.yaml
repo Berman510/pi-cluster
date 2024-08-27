@@ -45,21 +45,21 @@ spec:
             repository: ghcr.io/joshuasing/lancache-dns
             tag: latest
             pullPolicy: Always
-        ingress:
-          main:
-            enabled: true
-            hosts:
-              - host: "lancache.{{ .Values.global.domain }}"
-                paths:
-                  - path: /
-                    pathType: ImplementationSpecific
-        persistence:
-          data:
-            enabled: true
-            mountPath: /data/cache
-          logs:
-            enabled: true
-            mountPath: /data/logs
+        #ingress:
+        #  main:
+        #    enabled: true
+        #    hosts:
+        #      - host: "lancache.{{ .Values.global.domain }}"
+        #        paths:
+        #          - path: /
+        #            pathType: ImplementationSpecific
+        #persistence:
+        #  data:
+        #    enabled: true
+        #    mountPath: /data/cache
+        #  logs:
+        #    enabled: true
+        #    mountPath: /data/logs
         nodeSelector:
           kubernetes.io/hostname: nanopi03
 
