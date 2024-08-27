@@ -1,0 +1,73 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lancache
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
+spec:
+  destination:
+    namespace: lancache
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://k8s-at-home.com/charts'
+    targetRevision: 0.6.2
+    chart: lancache
+    helm:
+      values: |
+        image:
+          repository: ghcr.io/joshuasing/lancache-monolithic
+          tag: latest
+          pullPolicy: Always
+        service:
+          main:
+            ports:
+              http:
+                port: 80
+              https:
+                enabled: true
+                port: 443
+          dns:
+            enabled: true
+            ports:
+              dns:
+                port:53
+        dnsConfig:
+          nameservers:
+            - 10.17.84.2
+        dns:
+          enabled: true
+          env: {}
+          image:
+            repository: ghcr.io/joshuasing/lancache-dns
+            tag: latest
+            pullPolicy: Always
+        ingress:
+          main:
+            enabled: true
+            hosts:
+              - host: "lancache.{{ .Values.global.domain }}"
+                paths:
+                  - path: /
+                    pathType: ImplementationSpecific
+        persistence:
+          data:
+            enabled: true
+            mountPath: /data/cache
+          logs:
+            enabled: true
+            mountPath: /data/logs
+        nodeSelector:
+          kubernetes.io/hostname: nanopi03
+
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
