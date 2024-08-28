@@ -18,6 +18,10 @@ spec:
     chart: homebridge
     helm:
       values: |
+        image:
+          repository: homebridge/homebridge
+          tag: latest
+          pullPolicy: IfNotPresent
         ingress:
           main:
             enabled: true
