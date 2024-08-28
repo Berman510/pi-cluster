@@ -25,17 +25,6 @@ spec:
           repository: homebridge/homebridge
           tag: latest
           pullPolicy: IfNotPresent
-        ingress:
-          main:
-            enabled: true
-            hosts:
-              - host: "homebridge.{{ .Values.global.domain }}"
-                paths: ["/"]
-        #    hosts:
-        #      - host: "homebridge.{{ .Values.global.domain }}"
-        #        paths:
-        #          - path: /
-        #            pathType: Prefix
         persistence:
           config:
             enabled: true
@@ -43,14 +32,13 @@ spec:
           nodeSelector:
             kubernetes.io/arch: arm64
             kubernetes.io/hostname: nanopi03
-        crds:
-          enabled: false
 
   sources: []
   project: default
   syncPolicy:
     automated:
       prune: true
+      allowEmpty: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
