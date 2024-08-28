@@ -22,14 +22,14 @@ spec:
           repository: homebridge/homebridge
           tag: latest
           pullPolicy: IfNotPresent
-        ingress:
-          main:
-            enabled: true
-            hosts:
-              - host: "homebridge.{{ .Values.global.domain }}"
-                paths:
-                  - path: /
-                    pathType: Prefix
+        #ingress:
+        #  main:
+        #    enabled: true
+        #    hosts:
+        #      - host: "homebridge.{{ .Values.global.domain }}"
+        #        paths:
+        #          - path: /
+        #            pathType: Prefix
         persistence:
           config:
             enabled: true
