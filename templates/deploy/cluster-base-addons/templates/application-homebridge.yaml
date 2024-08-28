@@ -29,7 +29,7 @@ spec:
               - host: "homebridge.{{ .Values.global.domain }}"
                 paths:
                   - path: /
-                    pathType: ImplementationSpecific
+                    pathType: Prefix
         persistence:
           config:
             enabled: true
