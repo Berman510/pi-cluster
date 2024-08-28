@@ -1,0 +1,35 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: octoprint
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-55"
+spec:
+  destination:
+    namespace: octoprint
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://k8s-at-home.com/charts/'
+    targetRevision: 6.4.2
+    chart: octoprint
+    helm:
+      values: |
+        ingress:
+          main:
+            enabled: true
+            hosts:
+              - host: "octoprint.{{ .Values.global.domain }}"
+        nodeSelector:
+          kubernetes.io/hostname: nanopi01
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
