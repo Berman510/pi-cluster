@@ -45,14 +45,14 @@ spec:
             repository: joshuasing/lancache-dns
             tag: latest
             pullPolicy: Always
-        #ingress:
-        #  main:
-        #    enabled: true
-        #    hosts:
-        #      - host: "lancache.{{ .Values.global.domain }}"
-        #        paths:
-        #          - path: /
-        #            pathType: ImplementationSpecific
+        ingress:
+          main:
+            enabled: true
+            hosts:
+              - host: "lancache.{{ .Values.global.domain }}"
+                paths:
+                  - path: /
+                    pathType: ImplementationSpecific
         persistence:
           data:
             enabled: false
