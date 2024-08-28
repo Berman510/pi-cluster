@@ -33,9 +33,10 @@ spec:
         persistence:
           config:
             enabled: true
-        nodeSelector:
-          kubernetes.io/arch: arm64
-          kubernetes.io/hostname: nanopi03
+        podOptions:
+          nodeSelector:
+            kubernetes.io/arch: arm64
+            kubernetes.io/hostname: nanopi03
 
   sources: []
   project: default
