@@ -25,6 +25,9 @@ spec:
         ingress:
           main:
             enabled: true
+            hosts:
+              - host: "homebridge.{{ .Values.global.domain }}"
+                paths: ["/"]
         #    hosts:
         #      - host: "homebridge.{{ .Values.global.domain }}"
         #        paths:
