@@ -13,7 +13,7 @@ spec:
     namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'oci://tccr.io/truecharts'
+    repoURL: 'oci://tccr.io/'
     targetRevision: 0.0.13
     chart: truecharts/homebridge
     helm:
