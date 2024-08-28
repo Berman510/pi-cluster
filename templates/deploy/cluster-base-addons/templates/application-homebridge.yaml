@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: 'oci://tccr.io/truecharts'
     targetRevision: 0.0.13
-    chart: oci://tccr.io/truecharts/homebridge
+    chart: truecharts/homebridge
     helm:
       values: |
         image:
