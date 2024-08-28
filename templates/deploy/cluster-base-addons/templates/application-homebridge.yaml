@@ -14,7 +14,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'tccr.io/truecharts'
-    targetRevision: 0.0.13
+    targetRevision: 7.6.0
     chart: homebridge
     helm:
       values: |
