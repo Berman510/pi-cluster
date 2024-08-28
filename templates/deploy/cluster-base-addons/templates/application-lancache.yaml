@@ -19,7 +19,7 @@ spec:
     helm:
       values: |
         image:
-          repository: ghcr.io/joshuasing/lancache-monolithic
+          repository: joshuasing/lancache-monolithic
           tag: latest
           pullPolicy: Always
         service:
@@ -42,7 +42,7 @@ spec:
           enabled: true
           env: {}
           image:
-            repository: ghcr.io/joshuasing/lancache-dns
+            repository: joshuasing/lancache-dns
             tag: latest
             pullPolicy: Always
         #ingress:
