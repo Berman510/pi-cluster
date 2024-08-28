@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: octoprint
+  name: homebridge
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,24 +10,24 @@ metadata:
     argocd.argoproj.io/sync-wave: "-55"
 spec:
   destination:
-    namespace: octoprint
+    namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://k8s-at-home.com/charts/'
-    targetRevision: 6.4.2
-    chart: octoprint
+    repoURL: 'https://k8s-at-home.com/charts'
+    targetRevision: 5.3.2
+    chart: homebridge
     helm:
       values: |
         ingress:
           main:
             enabled: true
             hosts:
-              - host: "octoprint.{{ .Values.global.domain }}"
-                paths:
-                  - path: /
-                    pathType: Prefix
-        nodeSelector:
-          kubernetes.io/hostname: nanopi01
+              - host: homebridge.{{ .Values.global.domain }}
+                paths: /
+        persistence:
+          config:
+            enabled: true
+
   sources: []
   project: default
   syncPolicy:
