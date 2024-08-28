@@ -21,7 +21,7 @@ spec:
         image:
           repository: joshuasing/lancache-monolithic
           tag: latest
-          pullPolicy: Always
+          pullPolicy: IfNotFound
         service:
           main:
             ports:
@@ -44,15 +44,7 @@ spec:
           image:
             repository: joshuasing/lancache-dns
             tag: latest
-            pullPolicy: Always
-        ingress:
-          main:
-            enabled: true
-            hosts:
-              - host: "lancache.{{ .Values.global.domain }}"
-                paths:
-                  - path: /
-                    pathType: ImplementationSpecific
+            pullPolicy: IfNotFound
         persistence:
           data:
             enabled: false
