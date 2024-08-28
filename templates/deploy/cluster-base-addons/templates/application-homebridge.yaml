@@ -21,9 +21,6 @@ spec:
         ingress:
           main:
             enabled: true
-            hosts:
-              - host: homebridge.{{ .Values.global.domain }}
-                paths: /
         persistence:
           config:
             enabled: true
