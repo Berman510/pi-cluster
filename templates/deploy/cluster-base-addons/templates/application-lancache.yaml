@@ -61,7 +61,7 @@ spec:
             enabled: false
             mountPath: /data/logs
         nodeSelector:
-          kubernetes.io/hostname: nanopi03
+          kubernetes.io/arch: arm64
 
   sources: []
   project: default
