@@ -13,9 +13,9 @@ spec:
     namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'https://charts.truecharts.org/'
+    repoURL: 'oci://tccr.io/truecharts'
     targetRevision: 0.0.13
-    chart: homebridge
+    chart: oci://tccr.io/truecharts/homebridge
     helm:
       values: |
         image:
