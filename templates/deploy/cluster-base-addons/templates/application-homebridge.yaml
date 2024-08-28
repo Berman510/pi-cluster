@@ -17,6 +17,9 @@ spec:
     targetRevision: 7.6.0
     chart: homebridge
     helm:
+      parameters:
+        - name: debug
+          value: "true"
       values: |
         image:
           repository: homebridge/homebridge
@@ -40,6 +43,8 @@ spec:
           nodeSelector:
             kubernetes.io/arch: arm64
             kubernetes.io/hostname: nanopi03
+        crds:
+          enabled: true
 
   sources: []
   project: default
