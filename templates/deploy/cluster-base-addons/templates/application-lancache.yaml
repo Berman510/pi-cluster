@@ -34,7 +34,7 @@ spec:
             enabled: true
             ports:
               dns:
-                port:53
+                port: 53
         dnsConfig:
           nameservers:
             - 10.17.84.2
@@ -53,13 +53,13 @@ spec:
         #        paths:
         #          - path: /
         #            pathType: ImplementationSpecific
-        #persistence:
-        #  data:
-        #    enabled: true
-        #    mountPath: /data/cache
-        #  logs:
-        #    enabled: true
-        #    mountPath: /data/logs
+        persistence:
+          data:
+            enabled: false
+            mountPath: /data/cache
+          logs:
+            enabled: false
+            mountPath: /data/logs
         nodeSelector:
           kubernetes.io/hostname: nanopi03
 
