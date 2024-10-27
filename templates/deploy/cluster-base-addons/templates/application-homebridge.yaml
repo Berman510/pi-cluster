@@ -20,6 +20,13 @@ spec:
       values: |
         env:
           TZ: "America/Los Angeles"
+        ingress:
+          enabled: true
+          hosts:
+            - host: homebridge.{{ .Values.global.domain }}
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
         persistence:
           config:
             enabled: true
