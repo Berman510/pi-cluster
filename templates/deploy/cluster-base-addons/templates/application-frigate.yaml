@@ -28,7 +28,6 @@ spec:
                       - detect
               record:
                 enabled: true
-                sync_recordings: true
                 retain:
                   days: 14
                   mode: all
