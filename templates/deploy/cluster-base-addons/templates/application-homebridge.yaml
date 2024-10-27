@@ -18,14 +18,8 @@ spec:
     chart: homebridge
     helm:
       values: |
-        ingress:
-          enabled: true
-        #image:
-        #  repository: homebridge/homebridge
-        #  tag: latest
-        #  pullPolicy: IfNotPresent
         env:
-          TZ: PST
+          TZ: "America/Los Angeles"
         persistence:
           config:
             enabled: true
