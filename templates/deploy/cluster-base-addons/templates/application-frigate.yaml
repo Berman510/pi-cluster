@@ -73,7 +73,7 @@ spec:
             - host: "frigate.{{ .Values.global.domain }}"
               paths:
                 - path: "/"
-                  portName: http
+                  portName: http-auth
           tls:
             - hosts:
               - frigate.{{ .Values.global.domain }}
