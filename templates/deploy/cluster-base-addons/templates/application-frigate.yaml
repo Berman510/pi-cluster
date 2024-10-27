@@ -20,6 +20,7 @@ spec:
           cameras:
             livingroom:
               ffmpeg:
+                hwaccel_args: preset-rk-h264
                 inputs:
                   - path: rtsp://10.17.84.156/ch0_0.h264
                     roles:
@@ -36,6 +37,10 @@ spec:
         nodeSelector:
           kubernetes.io/hostname: nanopi02
         persistence:
+          data:
+            enabled: true
+            storageClass: nfs-client
+            size: "10Gi"
           media:
             enabled: true
             storageClass: nfs-client
@@ -43,7 +48,14 @@ spec:
           config:
             enabled: true
             storageClass: nfs-client
-            size: "10Gi"
+            size: "250Mi"
+        ingress:
+          enabled: true
+          hosts:
+            - host: "frigate.{{ .Values.global.domain }}"
+              paths:
+                - path: "/"
+                  portName: http-auth
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
