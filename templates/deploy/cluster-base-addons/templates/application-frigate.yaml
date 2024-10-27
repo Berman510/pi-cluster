@@ -71,6 +71,11 @@ spec:
               paths:
                 - path: "/"
                   portName: http
+          tls:
+            - hosts:
+              - frigate.{{ .Values.global.domain }}
+              secretName: my-cert-tls
+
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
