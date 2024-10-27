@@ -11,32 +11,32 @@ spec:
     chart: frigate
     helm:
       values: |
-        config: |
-          mqtt:
-            host: 10.17.84.2
-            port: 1883
-            user: hassio
-            password: hassiopass
-          #cameras:
-          #  livingroom:
-          #    ffmpeg:
-          #      hwaccel_args:
-          #        - -c:v
-          #        - h264_v4l2m2m
-          #      inputs:
-          #        - path: rtsp://10.17.84.156/ch0_0.h264
-          #          roles:
-          #            - detect
-          #    record:
-          #      enabled: true
-          #      retain:
-          #        days: 14
-          #        mode: all
-          #      events:
-          #        retain:
-          #          default: 14
-          #          mode: active_objects
-          enabled: true
+        #config: |
+        #  mqtt:
+        #    host: 10.17.84.2
+        #    port: 1883
+        #    user: hassio
+        #    password: hassiopass
+        #  cameras:
+        #    livingroom:
+        #      ffmpeg:
+        #        hwaccel_args:
+        #          - -c:v
+        #          - h264_v4l2m2m
+        #        inputs:
+        #          - path: rtsp://10.17.84.156/ch0_0.h264
+        #            roles:
+        #              - detect
+        #      record:
+        #        enabled: true
+        #        retain:
+        #          days: 14
+        #          mode: all
+        #        events:
+        #          retain:
+        #            default: 14
+        #            mode: active_objects
+        #  enabled: true
         nodeSelector:
           kubernetes.io/hostname: nanopi02
         persistence:
