@@ -20,7 +20,6 @@ spec:
           cameras:
             livingroom:
               ffmpeg:
-                hwaccel_args: preset-rk-h265
                 inputs:
                   - path: rtsp://10.17.84.156/ch0_0.h264
                     roles:
