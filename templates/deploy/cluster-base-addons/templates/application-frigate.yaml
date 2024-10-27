@@ -21,8 +21,10 @@ spec:
             livingroom:
               ffmpeg:
                 hwaccel_args:
-                  - -c:v
-                  - h264_v4l2m2m
+                  - -hwaccel
+                  - rkmpp
+                  - hwaccel_output_format
+                  - drm_prime
                 inputs:
                   - path: rtsp://10.17.84.156/ch0_0.h264
                     roles:
