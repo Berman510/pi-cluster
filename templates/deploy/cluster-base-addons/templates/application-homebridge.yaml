@@ -13,18 +13,19 @@ spec:
     namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'tccr.io/truecharts'
-    targetRevision: 7.6.0
+    repoURL: 'https://k8s-at-home.com/charts'
+    targetRevision: 5.3.2
     chart: homebridge
     helm:
-      parameters:
-        - name: debug
-          value: "true"
       values: |
-        image:
-          repository: homebridge/homebridge
-          tag: latest
-          pullPolicy: IfNotPresent
+        ingress:
+          enabled: true
+        #image:
+        #  repository: homebridge/homebridge
+        #  tag: latest
+        #  pullPolicy: IfNotPresent
+        env:
+          TZ: PST
         persistence:
           config:
             enabled: true

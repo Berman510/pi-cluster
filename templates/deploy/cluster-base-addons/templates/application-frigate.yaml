@@ -42,7 +42,7 @@ spec:
                 Back_Door:
                   coordinates: 0.367,0.628,0.444,0.63,0.451,0.36,0.379,0.356,0.325,0.356,0.325,0.622
                   loitering_time: 10
-                Coffe_Station:
+                Coffee_Station:
                   coordinates: 0.178,0.457,0.176,0.644,0.265,0.636,0.27,0.466
                   loitering_time: 30
                 Kitchen:
