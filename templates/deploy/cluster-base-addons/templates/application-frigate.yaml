@@ -70,7 +70,7 @@ spec:
             - host: "frigate.{{ .Values.global.domain }}"
               paths:
                 - path: "/"
-                  portName: http-auth
+                  portName: http
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: nvr
