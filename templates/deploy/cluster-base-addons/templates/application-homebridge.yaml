@@ -15,6 +15,7 @@ spec:
   source:
     repoURL: 'tccr.io/truecharts/homebridge'
     targetRevision: 9.2.1
+    chart: homebridge
     helm:
       values: |
         env:
