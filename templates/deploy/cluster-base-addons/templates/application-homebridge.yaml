@@ -13,7 +13,7 @@ spec:
     namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'oci://tccr.io/truecharts/homebridge'
+    repoURL: 'tccr.io/truecharts/homebridge'
     targetRevision: 9.2.1
     helm:
       values: |
