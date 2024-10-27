@@ -66,6 +66,9 @@ spec:
             size: "250Mi"
         ingress:
           enabled: true
+          annotations:
+            kubernetes.io/ingress.class: "traefik"
+            cert-manager.io/cluster-issuer: "letsencrypt-prod"
           hosts:
             - host: "frigate.{{ .Values.global.domain }}"
               paths:
