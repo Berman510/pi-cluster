@@ -62,7 +62,7 @@ spec:
             storageClass: nfs-client
             size: "10Gi"
           config:
-            enabled: false
+            enabled: enabled
             storageClass: nfs-client
             size: "250Mi"
         ingress:
