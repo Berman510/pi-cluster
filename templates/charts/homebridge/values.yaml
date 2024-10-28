@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: oznu/homebridge
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: ClusterIP
+  port: 8581
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: homebridge.bermanoc.net
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+nodeSelector:
+  kubernetes.io/arch: arm64
+  kubernetes.io/hostname: nanopi03
+
+tolerations: []
+
+affinity: {}
+
+env:
+  TZ: "America/Los_Angeles"
