@@ -14,7 +14,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://github.com/Berman510/pi-cluster'
-    targetRevision: master
+    targetRevision: 0.1.1
     path: templates/charts/homebridge
     helm:
       values: |
