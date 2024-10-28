@@ -40,3 +40,7 @@ affinity: {}
 
 env:
   TZ: "America/Los_Angeles"
+
+serviceAccount:
+  create: true
+  name: "homebridge"

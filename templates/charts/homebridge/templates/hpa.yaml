@@ -1,4 +1,5 @@
-{{- if .Values.autoscaling.enabled }}
+{{- $autoscaling := .Values.autoscaling | default (dict "enabled" false) }}
+{{- if $autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -10,23 +11,13 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "homebridge.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ $autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ $autoscaling.maxReplicas | default 1 }}
   metrics:
-    {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
-    {{- end }}
+          averageUtilization: {{ $autoscaling.targetCPUUtilizationPercentage | default 80 }}
 {{- end }}

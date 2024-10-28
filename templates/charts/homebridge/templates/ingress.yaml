@@ -23,7 +23,7 @@ spec:
               service:
                 name: {{ include "homebridge.fullname" $ }}
                 port:
-                  number: {{ $root.Values.service.port }}
+                  number: {{ $.Values.service.port | default 80 }}
           {{- end }}
     {{- end }}
   {{- if .Values.ingress.tls }}
