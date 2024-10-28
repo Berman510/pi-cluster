@@ -4,10 +4,6 @@ kind: Application
 metadata:
   name: homebridge
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-  annotations:
-    argocd.argoproj.io/sync-wave: "-55"
 spec:
   destination:
     namespace: homebridge
