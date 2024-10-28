@@ -13,9 +13,9 @@ spec:
     namespace: homebridge
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: 'tccr.io/truecharts'
-    targetRevision: 9.2.1
-    chart: homebridge
+    repoURL: 'https://github.com/Berman510/pi-cluster'
+    targetRevision: 0.1.0
+    path: templates/charts/homebridge
     helm:
       values: |
         env:
